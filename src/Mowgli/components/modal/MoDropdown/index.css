@@ -1,0 +1,50 @@
+:host {
+  display: block;
+  width: fit-content;
+}
+
+#dd-btn {
+  position: relative;
+  z-index: 1;
+}
+
+:host(:state(opened)) > .container {
+  opacity: 1;
+  visibility: visible;
+}
+
+:host(:state(closed)) > .container {
+  visibility: hidden;
+}
+
+:host([side-bar]:state(opened)) > .container {
+  transform: translate(-1.5em, 1.25em);
+}
+
+:host([side-bar]) > .container {
+  transform: translate(100%, 1.25em);
+}
+
+.container {
+  opacity: 0;
+
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: flex-start;
+  height: 0px;
+
+  transition:
+    500ms ease transform,
+    500ms ease opacity;
+}
+
+.content {
+  position: absolute;
+  background: white;
+  padding: var(--mo-size-2);
+  display: block;
+  width: max-content;
+  border-radius: var(--mo-border-radius);
+  box-shadow: var(--mo-box-shadow);
+}

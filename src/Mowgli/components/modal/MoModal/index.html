@@ -1,0 +1,25 @@
+<slot name="open-btn" class="btn"></slot>
+<div id="modal-wrapper">
+  <div class="modal-container">
+    <dialog data-modal class="modal" id="modal">
+      <div class="modal-content">
+        <div class="mo-modal-head">
+          <slot name="head"></slot>
+        </div>
+
+        <div class="mo-modal-section mo-modal-body">
+          <slot name="body"></slot>
+        </div>
+
+        <div class="mo-modal-section mo-modal-foot">
+          <slot name="close-btn" class="btn">
+            <mo-button data-close-modal>Cancel</mo-button>
+          </slot>
+          <slot name="submit-btn" class="btn">
+            <mo-button data-close-modal>Submit</mo-button>
+          </slot>
+        </div>
+      </div>
+    </dialog>
+  </div>
+</div>

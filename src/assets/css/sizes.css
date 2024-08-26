@@ -1,0 +1,43 @@
+html {
+  /* REM Sizes */
+  --mo-size-1: 0.25rem;
+  --mo-size-2: 0.5rem;
+  --mo-size-3: 0.75rem;
+  --mo-size-4: 1rem;
+  --mo-size-5: 1.25rem;
+  --mo-size-6: 1.5rem;
+  --mo-size-7: 1.75rem;
+  --mo-size-8: 2rem;
+  --mo-size-9: 2.25rem;
+  --mo-size-10: 2.5rem;
+  --mo-size-11: 2.75rem;
+  --mo-size-12: 3rem;
+  --mo-size-13: 3.25rem;
+  --mo-size-14: 3.5rem;
+  --mo-size-15: 3.75rem;
+  --mo-size-16: 4rem;
+  --mo-size-17: 4.25rem;
+  --mo-size-18: 4.5rem;
+  --mo-size-19: 4.75rem;
+  --mo-size-20: 5rem;
+  --mo-size-21: 5.25rem;
+  --mo-size-22: 5.5rem;
+  --mo-size-23: 5.75rem;
+  --mo-size-24: 6rem;
+  --mo-size-25: 6.25rem;
+  --mo-size-26: 6.5rem;
+  --mo-size-27: 6.75rem;
+  --mo-size-28: 7rem;
+
+  /* Percent Sizes */
+  --mo-per-size-1: 10%;
+  --mo-per-size-2: 20%;
+  --mo-per-size-3: 30%;
+  --mo-per-size-4: 40%;
+  --mo-per-size-5: 50%;
+  --mo-per-size-6: 60%;
+  --mo-per-size-7: 70%;
+  --mo-per-size-8: 80%;
+  --mo-per-size-9: 90%;
+  --mo-per-size-10: 100%;
+}

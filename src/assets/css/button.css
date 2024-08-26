@@ -1,0 +1,13 @@
+html {
+  --btn-primary: var(--mo-green-500);
+  --btn-primary-hover: var(--mo-green-400);
+  --btn-primary-focus: var(--mo-green-100);
+
+  --btn-secondary: var(--mo-blue-600);
+  --btn-secondary-hover: var(--mo-blue-500);
+  --btn-secondary-focus: var(--mo-blue-100);
+
+  --btn-negative: var(--mo-red-600);
+  --btn-negative-hover: var(--mo-red-500);
+  --btn-negative-focus: var(--mo-red-100);
+}

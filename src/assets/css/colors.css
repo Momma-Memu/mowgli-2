@@ -1,0 +1,50 @@
+html {
+  /* ------- Color Definitions ------- */
+  --mo-white: #ffffff;
+  --mo-black: #000;
+  --mo-charcoal: #252525;
+
+  --mo-purple-200: hsl(240, 20%, 65%);
+  --mo-purple-300: hsl(240, 15%, 45%);
+  --mo-purple-400: hsl(240, 15%, 40%);
+  --mo-purple-500: hsl(240, 20%, 35%);
+  --mo-purple-600: hsl(240, 20%, 30%);
+  --mo-purple-700: hsl(240, 20%, 25%);
+
+  --mo-red-100: hsl(360, 20%, 60%);
+  --mo-red-200: hsl(360, 25%, 55%);
+  --mo-red-300: hsl(360, 30%, 50%);
+  --mo-red-400: hsl(360, 35%, 45%);
+  --mo-red-500: hsl(360, 40%, 40%);
+  --mo-red-600: hsl(360, 45%, 35%);
+  --mo-red-700: hsl(360, 50%, 30%);
+
+  --mo-brown-200: hsl(31, 20%, 50%);
+  --mo-brown-300: hsl(30, 25%, 45%);
+  --mo-brown-400: hsl(30, 35%, 40%);
+  --mo-brown-500: hsl(30, 25%, 35%);
+  --mo-brown-600: hsl(30, 30%, 30%);
+
+  --mo-blue-100: hsl(200, 10%, 55%);
+  --mo-blue-200: hsl(200, 15%, 50%);
+  --mo-blue-300: hsl(200, 20%, 45%);
+  --mo-blue-400: hsl(200, 25%, 40%);
+  --mo-blue-500: hsl(200, 30%, 35%);
+  --mo-blue-600: hsl(200, 35%, 25%);
+  --mo-blue-700: hsl(200, 40%, 20%);
+
+  --mo-green-100: hsl(155, 25%, 50%);
+  --mo-green-200: hsl(155, 30%, 45%);
+  --mo-green-300: hsl(155, 35%, 40%);
+  --mo-green-400: hsl(155, 40%, 35%);
+  --mo-green-500: hsl(155, 45%, 30%);
+  --mo-green-600: hsl(155, 50%, 25%);
+  --mo-green-700: hsl(155, 55%, 20%);
+
+  /* -------- Background Colors -------- */
+  --mo-bg-dark-gradient: linear-gradient(
+    130deg,
+    var(--mo-purple-500),
+    var(--mo-blue-600)
+  );
+}

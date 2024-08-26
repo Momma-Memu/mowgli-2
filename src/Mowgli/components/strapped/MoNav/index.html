@@ -1,0 +1,45 @@
+<div class="logo">M<img src="/logo.svg" alt="Mowgli App Logo" />wgli</div>
+
+<!-- <mo-nav-category>
+  <mo-icon mo-grow-hov mo-fa="fa-sharp-duotone fa-solid fa-chart-pie"></mo-icon>
+  <div class="nav-title">Dashboard</div>
+</mo-nav-category>
+
+<mo-nav-category>
+  <mo-icon mo-grow-hov mo-fa="fa-sharp-duotone fa-solid fa-cube"></mo-icon>
+  <div class="nav-title">Manage</div>
+</mo-nav-category> -->
+
+<div class="nav-items">
+  <mo-modal class="nav-item">
+    <div class="nav-title" slot="open-btn">Sign Up</div>
+    <div id="head" slot="head">Sign Up</div>
+    <div id="body" slot="body">Content</div>
+  </mo-modal>
+
+  <mo-modal class="nav-item">
+    <div class="nav-title" slot="open-btn">Sign In</div>
+    <div id="head" slot="head">Sign In</div>
+    <div id="session-body" slot="body"></div>
+    <!-- <form slot="body">
+      <mo-switch>Pinned</mo-switch>
+      <mo-field
+        label="Name"
+        name="Name"
+        placeholder="Enter text here..."
+        type="text"
+      ></mo-field>
+      <mo-field
+        label="Display Name"
+        name="displayName"
+        placeholder="Enter text here..."
+        type="text"
+      ></mo-field>
+    </form> -->
+  </mo-modal>
+</div>
+
+<mo-dropdown side-bar>
+  <mo-icon slot="button" mo-grow-hov mo-fa="fa-duotone fa-solid fa-bars"> </mo-icon>
+  <div slot="content">Hello There!</div>
+</mo-dropdown>

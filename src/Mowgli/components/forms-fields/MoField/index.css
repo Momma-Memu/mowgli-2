@@ -1,0 +1,50 @@
+:host {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-bottom: solid 3px var(--mo-blue-500);
+  border-radius: var(--mo-size-2);
+  padding: 0rem var(--mo-size-2);
+  margin-top: var(--mo-size-8);
+  background-color: color-mix(in srgb, var(--mo-blue-500) 35%, white);
+}
+
+:host(:focus) > .field-container > #field-label {
+  transform: translateY(-1.25em);
+}
+
+:host(:not(:state(empty))) > .field-container > #field-label {
+  transform: translateY(-1.25em);
+}
+
+.field-container {
+  display: flex;
+  flex-direction: column;
+  font: var(--mo-font-family);
+}
+
+#field-input {
+  font-size: var(--mo-size-4);
+  height: var(--mo-size-10);
+  background: none;
+  border: none;
+  outline: none;
+}
+
+#field-input::placeholder {
+  opacity: 0;
+}
+
+#field-input:focus::placeholder {
+  opacity: 0.5;
+}
+
+#field-label {
+  position: absolute;
+  transform: translateY(0.35em);
+  left: 0.5rem;
+  font-size: var(--mo-size-5);
+  transition: transform 400ms ease;
+  pointer-events: none;
+  /* 400ms ease font-size; */
+}

@@ -1,0 +1,64 @@
+@import url("./css/colors.css");
+@import url("./css/button.css");
+@import url("./css/sizes.css");
+@import url("./css/font.css");
+
+html {
+  /* Box Shadow Shape */
+  --mo-text-shadow: 0px 0.1rem 0.15rem #00000045;
+
+  /* 0.15rem 0.15rem 0.25rem 0.0rem #0006; */
+  --mo-box-shadow: 0.1rem 0.15rem 0.35rem 0.1rem #00000045;
+
+  --mo-shadow-light-shape: 0.1rem 0.1rem 0.35rem 0.1rem #00000045;
+  --mo-drop-shadow-bottom: drop-shadow(0px 0.1rem 0.15rem #00000045);
+  --mo-drop-shadow-bottom-dark: drop-shadow(0px 0.15rem 0.2rem #00000076);
+
+  --mo-drop-shadow-top: drop-shadow(0px -0.1rem 0.15rem #00000045);
+
+  /* Animations - Animation Properties */
+  --mo-spin: rotate(360deg);
+  --mo-spin-rev: rotate(0deg);
+  --mo-grow: scale(1.2);
+  --mo-shrink: scale(1);
+  --mo-flipX: scaleX(-1);
+  --mo-flipY: scaleY(-1);
+
+  /* Universally Shared */
+  --mo-border-radius: 0.35rem;
+  --mo-padding: 0.5rem;
+
+  box-sizing: border-box !important;
+}
+
+body {
+  padding: 0px;
+  margin: 0px;
+  overflow-x: hidden;
+}
+
+body,
+*:not(style) {
+  box-sizing: border-box !important;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-x: hidden;
+  min-height: 100vh;
+
+  height: 100vh;
+  width: 100vw;
+  max-width: 100vw;
+
+  padding: 0px;
+  margin: 0px;
+  background: var(--mo-bg-dark-gradient);
+}
+
+footer {
+  width: 100%;
+  margin-top: auto;
+}

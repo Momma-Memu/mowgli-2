@@ -1,0 +1,39 @@
+:host {
+  display: flex;
+  gap: 1rem;
+}
+
+.switch-container {
+  height: 1.5rem;
+  width: 2.5rem;
+  border-radius: 1rem;
+  border: solid 2px var(--mo-blue-600);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: 200ms ease background-color;
+}
+
+.switch-btn {
+  height: 1.5rem;
+  width: 1.5rem;
+  box-shadow: 0.02rem 0.03rem 0.25rem 0rem #000000ab;
+  position: relative;
+  border-radius: 3rem;
+  background: white;
+  transform: translateX(-0.25em);
+  transition: transform 300ms ease;
+}
+
+:host(:state(active)) > .switch-container {
+  background-color: var(--mo-blue-600);
+}
+
+:host(:state(active)) > .switch-container > .switch-btn {
+  transform: translateX(0.75em);
+}
+
+:host(:focus) > .switch-container {
+  outline: solid 1px var(--mo-blue-600);
+  outline-offset: var(--mo-size-1);
+}
