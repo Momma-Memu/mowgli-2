@@ -4,6 +4,7 @@
 import MoInternal from "./utils/MoInternal.js";
 import MoListener from "./utils/MoListener.js";
 import MoAttribute from "./utils/MoAttribute.js";
+import MoElementEvent from "./utils/MoElementEvent.js";
 // eslint-disable-next-line no-unused-vars
 import { KeyboardCode } from "./enums/KeyCodes.js";
 
@@ -19,9 +20,6 @@ export default class MoComponent extends HTMLElement {
 
   /** @type {MoListener[]} */
   #listeners = [];
-
-  /** @type {function} */
-  #onCreate;
 
   /**
    * @param {string | null} [styles=""]
@@ -42,19 +40,6 @@ export default class MoComponent extends HTMLElement {
   /** @returns {ShadowRoot} */
   get shadow() {
     return this.#shadow;
-  }
-
-  get onCreate() {
-    return this.#onCreate;
-  }
-
-  /** @param {function} callback */
-  set onCreate(callback) {
-    if (typeof callback === "function") {
-      this.#onCreate = callback;
-    } else {
-      throw new Error("On Create LifeCycle requires that the given param be a function.");
-    }
   }
 
   // ============== MoComponent's Lifecycle Methods ==============
@@ -87,7 +72,31 @@ export default class MoComponent extends HTMLElement {
     return this.shadow.querySelector(`slot[name='${name}']`);
   }
 
-  /**6
+  /**
+   * @param {string} name
+   * @returns {HTMLElement[]}
+  */
+  getElementsByName(name) {
+    return Object.values(this.shadow.querySelectorAll(name)) || [];
+  }
+
+  /**
+   * @param {string} name
+   * @param {*} data
+   * 
+  */
+  createEvent(name, data) {
+    return new MoElementEvent(name, data);
+  }
+
+  /**
+   * @param {MoElementEvent} event
+  */
+  emitEvent(event) {
+    this.dispatchEvent(event);
+  }
+
+  /**
    * @param {string | null} styles
    * @param {string | null} template
    */
@@ -167,9 +176,4 @@ export default class MoComponent extends HTMLElement {
 
   // ====================== Private Methods ======================
 
-  #callOnLoadCallback() {
-    if (typeof this.#onCreate === "function") {
-      this.#onCreate();
-    }
-  }
 }

@@ -1,18 +1,33 @@
 import MoComponent from "../../index";
 import styles from "./index.css?inline";
 import template from "./index.html?raw";
-import MowgliSession from "@/Mowgli/objects/internal/Session";
+import MowgliSession from "../../../objects/internal/Session";
 
 export default class MoNav extends MoComponent {
   constructor() {
     super(styles, template);
+    this.sessionObject = new MowgliSession();
     this.authenticated = this.addInternal("authenticated");
+    this.addEventListener("closed", this.#resetForm);
+    this.addEventListener("submit", this.#submitForm);
+  }
+
+  get signInForm() {
+    return this.getElementById("sign-in");
   }
 
   connectedCallback() {
-    const sessionObject = new MowgliSession();
-    console.log(this.shadow.getElementById("body"));
-    this.shadow.getElementById("session-body").appendChild(sessionObject.buildForm());
+    this.signInForm.appendChild(this.sessionObject.buildForm());
+  }
+
+  #resetForm() {
+    // console.log(event.target);
+  }
+
+  #submitForm() {
+    const values = this.sessionObject.form.values;
+    console.log(values)
+    this.sessionObject.post("", values);
   }
 }
 

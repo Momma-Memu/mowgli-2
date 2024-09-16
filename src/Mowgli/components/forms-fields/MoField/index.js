@@ -27,7 +27,7 @@ export default class MoField extends MoComponent {
   halfWidth = this.addInternal("half-width");
 
   #timeout;
-  #value = null;
+  #value = "";
 
   constructor() {
     super(styles, template);
@@ -69,11 +69,11 @@ export default class MoField extends MoComponent {
   // }
 
   get value() {
-    return this.fieldEl.value;
+    return this.#value;
   }
 
   set value(value) {
-    this.fieldEl.value = value;
+    this.#value = value;
   }
 
   // ================== Elements ==================
@@ -141,6 +141,8 @@ export default class MoField extends MoComponent {
    */
   #changeHandler(event, timeout) {
     event.stopPropagation();
+    this.#dirty.state = true;
+    this.value = event.target.value;
 
     if (event.target.value) {
       this.empty.state = false;
@@ -152,11 +154,29 @@ export default class MoField extends MoComponent {
       clearTimeout(this.#timeout);
 
       this.#timeout = setTimeout(() => {
-        // TODO: Create the Timeout Class and EventEmitter stuff...
+        this.#valid.state = this.#checkValidity();
       }, 500);
     } else {
-      //
+      this.#valid.state = this.#checkValidity();
     }
+  }
+
+  /** 
+   * - Returns True if this field is valid, else returns false.
+   * - Reports the validity of the field to the UI
+   * @returns {boolean} 
+   */
+  #checkValidity() {
+    // If required, check if field has a value, else this check passes.
+    const requiredCheck = this.required.state ? this.value : true;
+    
+    // If value is present, check if it passes the constraints within the validity object.
+    const validity = this.value ? this.fieldEl.validity.valid : true;
+    
+    // Report the current validity.
+    this.fieldEl.reportValidity();
+
+    return requiredCheck && validity;
   }
 
   // get dependentFieldName() {

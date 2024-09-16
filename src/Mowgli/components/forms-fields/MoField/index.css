@@ -9,6 +9,10 @@
   background-color: color-mix(in srgb, var(--mo-blue-500) 35%, white);
 }
 
+:host(:last-child) {
+  margin-bottom: var(--mo-size-8);
+}
+
 :host(:focus) > .field-container > #field-label {
   transform: translateY(-1.25em);
 }
@@ -29,6 +33,11 @@
   background: none;
   border: none;
   outline: none;
+}
+
+:host(:not(:state(valid)):state(dirty)) {
+  background-color: color-mix(in srgb, var(--mo-red-500) 35%, transparent);
+  border-color: var(--mo-red-500);
 }
 
 #field-input::placeholder {

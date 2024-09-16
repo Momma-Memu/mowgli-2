@@ -13,6 +13,9 @@ export default class MoModal extends MoComponent {
   #submitBtn = this.getSlotByName("submit-btn");
   #deleteBtn = this.getByClass("delete-btn");
 
+  #closeEvent = this.createEvent("closed", null);
+  #submitEvent = this.createEvent("submit", null);
+
   #timeout = null;
 
   constructor() {
@@ -34,6 +37,7 @@ export default class MoModal extends MoComponent {
     clearTimeout(this.#timeout);
 
     this.closing.state = true;
+    this.dispatchEvent(this.#closeEvent);
 
     this.#timeout = setTimeout(() => {
       this.closing.state = false;
@@ -42,13 +46,18 @@ export default class MoModal extends MoComponent {
     }, 300);
   }
 
+  #submit() {
+    this.dispatchEvent(this.#submitEvent);
+    this.close();
+  }
+
   connectedCallback() {
     this.addListener("click", () => this.open(), this.#openBtn);
     this.addListener("keyup", (event) =>
       this.keyUpHandler(event, "Escape", () => this.close())
     );
     this.addListener("click", () => this.close(), this.#closeBtn);
-    this.addListener("click", () => this.close(), this.#submitBtn);
+    this.addListener("click", () => this.#submit(), this.#submitBtn);
   }
 }
 

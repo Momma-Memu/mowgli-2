@@ -3,6 +3,8 @@ import FieldDefinition from "@/Mowgli/builders/FieldDefinition";
 import MoForm from "../../components/forms-fields/MoForm/index";
 
 export default class MowgliSession extends MowgliObject {
+  #form = new MoForm();
+
   constructor() {
     super("session", [
       new FieldDefinition("email", true, "Email", "email"),
@@ -10,9 +12,13 @@ export default class MowgliSession extends MowgliObject {
     ]);
   }
 
+  get form() {
+    return this.#form;
+  }
+
+  /** @returns {MoForm} */
   buildForm() {
-    const form = new MoForm();
-    form.build(this.fields);
-    return form;
+    this.#form.build(this.fields);
+    return this.#form;
   }
 }
