@@ -7,12 +7,12 @@ import FooterComponent from "./components/FooterComponent.vue";
 <template>
   <!-- <NavComponent></NavComponent> -->
   <mo-nav></mo-nav>
-  <h1></h1>
+  <!-- <h1></h1>
   <mo-icon
     mo-spin-hov
     mo-grow-hov
     mo-fa="fa-sharp-duotone fa-solid fa-gear-complex"
-  ></mo-icon>
+  ></mo-icon> -->
   <RouterView />
   <footer>
     <FooterComponent></FooterComponent>

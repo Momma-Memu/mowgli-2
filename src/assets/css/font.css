@@ -3,12 +3,10 @@ html {
   --mo-font-family: "Roboto", Verdana, Geneva, sans-serif;
 
   /* Font Styles */
-  font-style: normal;
   font-size: var(--mo-size-4);
-  font-optical-sizing: auto !important;
-  font-family: var(--mo-font-family) !important;
-  
+  /* font-family: var(--mo-font-family) !important; */
+  font-family: "Noto Sans", sans-serif;
   /* Letter Spacing - Rendering */
-  letter-spacing: normal !important;
+  /* letter-spacing: normal !important; */
   text-rendering: optimizeLegibility !important;
 }

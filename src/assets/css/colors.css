@@ -4,6 +4,8 @@ html {
   --mo-black: #000;
   --mo-charcoal: #252525;
 
+  /* yellow? #ffe88d*/
+
   --mo-purple-200: hsl(240, 20%, 65%);
   --mo-purple-300: hsl(240, 15%, 45%);
   --mo-purple-400: hsl(240, 15%, 40%);

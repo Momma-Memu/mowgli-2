@@ -3,7 +3,7 @@
   background-color: var(--mo-white);
   align-items: center;
   padding: 0rem var(--mo-padding);
-  height: 4rem;
+  height: 5rem;
   box-shadow: var(--mo-box-shadow);
   width: inherit;
   margin-bottom: var(--mo-size-5);
@@ -54,7 +54,7 @@ mo-dropdown {
   height: 100%;
   display: flex;
   align-items: center;
-  font-size: var(--mo-size-12);
+  font-size: var(--mo-size-14);
   filter: var(--mo-drop-shadow-bottom);
   cursor: pointer;
   margin-right: auto;
@@ -62,7 +62,7 @@ mo-dropdown {
 
 img {
   height: 80%;
-  margin: -1.25rem;
+  margin: -0.75rem;
 }
 
 .category {
