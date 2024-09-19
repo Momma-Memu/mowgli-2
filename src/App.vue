@@ -1,11 +1,22 @@
 <script setup>
-import { RouterView } from "vue-router";
+import { RouterView, useRouter } from "vue-router";
 import FooterComponent from "./components/FooterComponent.vue";
-// import NavComponent from "./components/NavComponent.vue";
+
+const router = useRouter();
+
+window.addEventListener("mowgli-route-event", (event) => {
+  try {
+    const newLocation = event.detail;
+    console.log(newLocation);
+    router.push(newLocation);
+  } catch(error) {
+    console.log(error);
+  }
+});
+
 </script>
 
 <template>
-  <!-- <NavComponent></NavComponent> -->
   <mo-nav></mo-nav>
   <!-- <h1></h1>
   <mo-icon

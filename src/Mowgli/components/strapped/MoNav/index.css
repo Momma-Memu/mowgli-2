@@ -26,21 +26,19 @@ form {
 
 .nav-item {
   color: var(--mo-blue-700);
-  font-size: var(--mo-size-5);
+  font-size: var(--mo-size-6);
   padding: var(--mo-size-2) var(--mo-size-4);
   cursor: pointer;
 }
 
 .nav-title {
-  opacity: 0.8;
+  opacity: 1;
   transition:
-    300ms transform ease,
-    300ms opacity ease;
+    200ms transform ease;
 }
 
 .nav-item:hover .nav-title {
-  opacity: 1;
-  transform: scale(1.1);
+  transform: translateY(-0.25rem)
 }
 
 mo-dropdown {

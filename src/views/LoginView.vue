@@ -1,9 +1,7 @@
 <script setup>
-// import CardComponent from "../components/card/CardComponent.vue";
 </script>
 
 <template>
-
     <div class="head">
       <div class="head-row-txt">
         <div class="headline">The most flexible all-in-one business management solution.</div>
@@ -57,10 +55,6 @@
         </div>
       </div>
     </section>
-
-
-        <!-- <p>Create and shape your data at will.</p> -->
-
 </template>
 <style>
 .head {

@@ -102,7 +102,12 @@ export default class MowgliObject {
    */
   async post(params = "", body) {
     const [response, data] = await this.#api.POST(params, body);
+    
     console.log(response, data);
+
+    this.#state.cache = data;
+
+    return [response, data];
     // return this.#handleResponse(response, data, this.#POST);
   }
 

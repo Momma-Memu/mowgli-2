@@ -24,10 +24,20 @@ export default class MoNav extends MoComponent {
     // console.log(event.target);
   }
 
-  #submitForm() {
-    const values = this.sessionObject.form.values;
-    console.log(values)
-    this.sessionObject.post("", values);
+  async #submitForm() {
+    const formData = this.sessionObject.form.values;
+    const [res, data] = await this.sessionObject.post("", formData);
+
+    if (res.ok && data) {
+      this.emitEvent(new CustomEvent("mowgli-route-event", {
+        detail: "/dashboard",
+        bubbles: true,
+        cancelable: false,
+        composed: true
+      }));
+    }
+
+    console.log(res.ok, data);
   }
 }
 

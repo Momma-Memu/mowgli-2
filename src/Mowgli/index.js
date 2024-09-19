@@ -14,6 +14,10 @@ export default class Mowgli {
     this.#init();
   }
 
+  // #routeHandler() {
+
+  // }
+
   #init() {
     this.#listener.addEventListener("get-state", (e) => {
       console.log(e, "HELLO!");
