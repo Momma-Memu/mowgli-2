@@ -1,43 +1,34 @@
 <div class="logo">M<img src="/logo.svg" alt="Mowgli App Logo" />wgli</div>
+<!-- 
+<div class="nav-items authenticated"></div>
 
-<!-- <mo-nav-category>
-  <mo-icon mo-grow-hov mo-fa="fa-sharp-duotone fa-solid fa-chart-pie"></mo-icon>
-  <div class="nav-title">Dashboard</div>
-</mo-nav-category>
-
-<mo-nav-category>
-  <mo-icon mo-grow-hov mo-fa="fa-sharp-duotone fa-solid fa-cube"></mo-icon>
-  <div class="nav-title">Manage</div>
-</mo-nav-category> -->
+</div> -->
 
 <div class="nav-items">
-  <mo-modal class="nav-item">
+  <mo-modal class="nav-item unauthenticated">
     <div class="nav-title" slot="open-btn">Sign Up</div>
     <div id="head" slot="head">Sign Up</div>
-    <div id="body" slot="body">Content</div>
+    <div slot="body">
+
+      <mo-switch>On / Off</mo-switch>
+    </div>
+
+    <!-- <mo-form id="sign-up" slot="body"></mo-form> -->
   </mo-modal>
 
-  <mo-modal class="nav-item">
+  <mo-modal class="nav-item unauthenticated">
     <div class="nav-title" slot="open-btn">Sign In</div>
     <div id="head" slot="head">Sign In</div>
     <mo-form id="sign-in" slot="body"></mo-form>
-    <!-- <div id="session-body" slot="body"></div> -->
-    <!-- <form slot="body">
-      <mo-switch>Pinned</mo-switch>
-      <mo-field
-        label="Name"
-        name="Name"
-        placeholder="Enter text here..."
-        type="text"
-      ></mo-field>
-      <mo-field
-        label="Display Name"
-        name="displayName"
-        placeholder="Enter text here..."
-        type="text"
-      ></mo-field>
-    </form> -->
   </mo-modal>
+
+  <div class="nav-item authenticated">
+    <div class="nav-title" slot="open-btn">Dashboard</div>
+  </div>
+
+  <div class="nav-item authenticated">
+    <div class="nav-title" slot="open-btn">Objects</div>
+  </div>
 </div>
 
 <mo-dropdown side-bar>

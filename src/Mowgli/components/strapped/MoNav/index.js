@@ -7,6 +7,7 @@ export default class MoNav extends MoComponent {
   constructor() {
     super(styles, template);
     this.sessionObject = new MowgliSession();
+    
     this.authenticated = this.addInternal("authenticated");
     this.addEventListener("closed", this.#resetForm);
     this.addEventListener("submit", this.#submitForm);
@@ -18,6 +19,7 @@ export default class MoNav extends MoComponent {
 
   connectedCallback() {
     this.signInForm.appendChild(this.sessionObject.buildForm());
+    this.authenticated.state = this.sessionObject.state || false;
   }
 
   #resetForm() {
@@ -29,6 +31,7 @@ export default class MoNav extends MoComponent {
     const [res, data] = await this.sessionObject.post("", formData);
 
     if (res.ok && data) {
+      this.authenticated.state = true;
       this.emitEvent(new CustomEvent("mowgli-route-event", {
         detail: "/dashboard",
         bubbles: true,

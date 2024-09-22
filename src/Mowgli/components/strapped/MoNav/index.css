@@ -13,16 +13,33 @@ form {
   width: 100%;
 }
 
+.authenticated {
+  display: none;
+}
+
+:host(:state(authenticated)) .authenticated {
+  display: block;
+}
+
+:host(:state(authenticated)) .unauthenticated {
+  display: none;
+}
+
 .nav-items {
   display: flex;
   border-left: solid 1px var(--mo-blue-700);
-  border-right: solid 1px var(--mo-blue-700);
+  /* border-right: solid 1px var(--mo-blue-700); */
   margin-right: var(--mo-size-3);
 }
 
-.nav-item:nth-child(odd) {
+.nav-item {
   border-right: solid 1px var(--mo-blue-700);
 }
+
+/* 
+.nav-item:nth-child(odd) {
+  border-right: solid 1px var(--mo-blue-700);
+} */
 
 .nav-item {
   color: var(--mo-blue-700);

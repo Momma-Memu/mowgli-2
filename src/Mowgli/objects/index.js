@@ -43,6 +43,10 @@ export default class MowgliObject {
     this.fields = fields;
   }
 
+  get state() {
+    return this.#state.cache;
+  }
+
   // /** @returns {Array<MowgliFieldDefinition>} fieldDefinitions */
   // get fieldDefinitions() {
   //   return this.#formManager.fieldDefinitions;
@@ -102,7 +106,7 @@ export default class MowgliObject {
    */
   async post(params = "", body) {
     const [response, data] = await this.#api.POST(params, body);
-    
+
     console.log(response, data);
 
     this.#state.cache = data;
