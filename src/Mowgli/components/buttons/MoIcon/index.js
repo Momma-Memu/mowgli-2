@@ -20,6 +20,7 @@ export default class MoIcon extends MoComponent {
     this.addAttribute("mo-flip-hov");
     this.addAttribute("mo-spin-hov");
     this.addAttribute("mo-grow-hov");
+    this.addInternal("mo-static");
   }
 
   get animating() {

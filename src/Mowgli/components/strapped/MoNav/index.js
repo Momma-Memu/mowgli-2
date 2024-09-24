@@ -3,23 +3,38 @@ import styles from "./index.css?inline";
 import template from "./index.html?raw";
 import MowgliSession from "../../../objects/internal/Session";
 
+// eslint-disable-next-line no-unused-vars
+import MoNavLink from "../../navigation/MoNavLink/index";
+
 export default class MoNav extends MoComponent {
   constructor() {
     super(styles, template);
     this.sessionObject = new MowgliSession();
-    
     this.authenticated = this.addInternal("authenticated");
-    this.addEventListener("closed", this.#resetForm);
-    this.addEventListener("submit", this.#submitForm);
+
+    this.addListener("closed", this.#resetForm);
+    this.addListener("submit", this.#submitForm);
+    this.addListener("mo-route-event-notify-siblings", this.#setChildren);
   }
 
   get signInForm() {
     return this.getElementById("sign-in");
   }
 
+  /** @returns {MoNavLink[]} */
+  get navItems() {
+    return this.getElementsByName("mo-nav-link");
+  }
+
   connectedCallback() {
     this.signInForm.appendChild(this.sessionObject.buildForm());
     this.authenticated.state = this.sessionObject.state || false;
+  }
+
+  #setChildren({ detail }) {
+    this.navItems.forEach(nav => {
+      nav.active = detail === nav.href;
+    });
   }
 
   #resetForm() {
@@ -32,12 +47,7 @@ export default class MoNav extends MoComponent {
 
     if (res.ok && data) {
       this.authenticated.state = true;
-      this.emitEvent(new CustomEvent("mowgli-route-event", {
-        detail: "/dashboard",
-        bubbles: true,
-        cancelable: false,
-        composed: true
-      }));
+      this.emitEvent(this.createEvent("mo-route-event", "/dashboard"));
     }
 
     console.log(res.ok, data);

@@ -96,7 +96,8 @@ export default class MowgliObject {
     // this.stateManager.fetched = true;
     const [response, data] = await this.#api.GET(params);
     this.#state.cache = data;
-    console.log(response, data);
+
+    return [response, data];
     // return this.#handleResponse(response, data, this.#GET);
   }
 
@@ -106,9 +107,6 @@ export default class MowgliObject {
    */
   async post(params = "", body) {
     const [response, data] = await this.#api.POST(params, body);
-
-    console.log(response, data);
-
     this.#state.cache = data;
 
     return [response, data];

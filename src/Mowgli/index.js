@@ -10,7 +10,6 @@ export default class Mowgli {
     window.mowgli = this;
     this.#listener = document.createElement("div");
     document.head.appendChild(this.#listener);
-    // console.log(document.getElementById("app"));
     this.#init();
   }
 

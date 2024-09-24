@@ -14,7 +14,6 @@ export default class MoForm extends MoComponent {
 
   /** @returns {HTMLFormElement} */
   get formEl() {
-    console.log(this.getElementById("fields"))
     return this.shadow.getElementById("mo-form");
   }
 
@@ -44,8 +43,8 @@ export default class MoForm extends MoComponent {
 
   /** - Resets each internal MoField to the initial state.  */
   reset() {
-    const fields = this.getElementsByName("mo-field");
-    console.log(fields);
+    // const fields = this.getElementsByName("mo-field");
+    // console.log(fields);
   }
 }
 

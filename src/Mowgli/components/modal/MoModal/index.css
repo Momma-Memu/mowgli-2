@@ -21,7 +21,7 @@
   inset: 0 0 0 0;
   outline: none;
   border: none;
-  border-radius: 1rem;
+  border-radius: var(--mo-border-radius);
   min-width: 320px;
   height: fit-content;
   box-shadow: 0.15rem 0.15rem 0.5rem 0.5rem rgba(0, 0, 0, 0.3);

@@ -36,7 +36,7 @@
   color: white;
   flex-wrap: wrap;
   gap: var(--mo-size-4);
-  background: var(--mo-green-600);
+  background: var(--mo-green-700);
   position: relative;
 }
 

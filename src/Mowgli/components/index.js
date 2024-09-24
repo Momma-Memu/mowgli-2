@@ -4,7 +4,7 @@
 import MoInternal from "./utils/MoInternal.js";
 import MoListener from "./utils/MoListener.js";
 import MoAttribute from "./utils/MoAttribute.js";
-import MoElementEvent from "./utils/MoElementEvent.js";
+import MoEvent from "./utils/MoEvent.js";
 // eslint-disable-next-line no-unused-vars
 import { KeyboardCode } from "./enums/KeyCodes.js";
 
@@ -83,14 +83,14 @@ export default class MoComponent extends HTMLElement {
   /**
    * @param {string} name
    * @param {*} data
-   * 
+   * @returns {MoEvent}
   */
   createEvent(name, data) {
-    return new MoElementEvent(name, data);
+    return new MoEvent(name, data);
   }
 
   /**
-   * @param {MoElementEvent} event
+   * @param {MoEvent} event
   */
   emitEvent(event) {
     this.dispatchEvent(event);

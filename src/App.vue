@@ -4,10 +4,9 @@ import FooterComponent from "./components/FooterComponent.vue";
 
 const router = useRouter();
 
-window.addEventListener("mowgli-route-event", (event) => {
+window.addEventListener("mo-route-event", (event) => {
   try {
     const newLocation = event.detail;
-    console.log(newLocation);
     router.push(newLocation);
   } catch(error) {
     console.log(error);

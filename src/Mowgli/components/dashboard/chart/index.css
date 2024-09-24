@@ -1,0 +1,15 @@
+:host {
+  border-radius: var(--mo-border-radius);
+  width: 100%;
+  box-shadow: var(--mo-box-shadow);
+  overflow: hidden;
+  display: block;
+  background-color: white;
+  padding: var(--mo-size-4);
+}
+
+.container {
+  position: relative;
+  width: inherit;
+  aspect-ratio: 2 / 1;
+}

@@ -1,8 +1,4 @@
 <div class="logo">M<img src="/logo.svg" alt="Mowgli App Logo" />wgli</div>
-<!-- 
-<div class="nav-items authenticated"></div>
-
-</div> -->
 
 <div class="nav-items">
   <mo-modal class="nav-item unauthenticated">
@@ -22,16 +18,26 @@
     <mo-form id="sign-in" slot="body"></mo-form>
   </mo-modal>
 
-  <div class="nav-item authenticated">
-    <div class="nav-title" slot="open-btn">Dashboard</div>
-  </div>
-
-  <div class="nav-item authenticated">
-    <div class="nav-title" slot="open-btn">Objects</div>
-  </div>
+  <mo-nav-link class="authenticated nav-item" mo-href="/dashboard">Dashboard</mo-nav-link>
 </div>
 
 <mo-dropdown side-bar>
   <mo-icon slot="button" mo-grow-hov mo-fa="fa-duotone fa-solid fa-bars"> </mo-icon>
-  <div slot="content">Hello There!</div>
+  <div class="dropdown-items" slot="content">
+    <mo-accordian class="authenticated">
+      Manage
+      <div slot="body">
+        HELLO!!!
+      </div>
+    </mo-accordian class="authenticated">
+    <mo-accordian>
+      Manage
+      <div slot="body">
+        <mo-nav-link class="accordian-item" mo-href="/objects">Objects</mo-nav-link>
+        <mo-nav-link class="accordian-item" mo-href="/users">Users</mo-nav-link>
+        <mo-nav-link class="accordian-item" mo-href="/roles">Roles</mo-nav-link>
+        <mo-nav-link class="accordian-item" mo-href="/forms">Forms</mo-nav-link>
+      </div>
+    </mo-accordian>
+  </div>
 </mo-dropdown>

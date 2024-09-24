@@ -1,9 +1,31 @@
 <script setup>
+import { onMounted } from "vue";
+import MowgliDashboard from '../Mowgli/objects/internal/Dashboard';
+import MoChart from '../Mowgli/components/dashboard/chart';
+
+const dashboard = new MowgliDashboard();
+let charts = dashboard.state ? Object.values(dashboard.state) : [];
+
+onMounted(async () => {
+  // TODO: NOT RENDERING ON FIRST RUN
+  // My guess? v-for isnn't enough to bind to this component and trigger a re-render...
+  if (!charts.length) {
+    const [res, data] = await dashboard.get();
+    console.log(res, data);
+    charts = Object.values(data);
+  }
+});
+
 </script>
 
 <template>
-  <div>HELLO!</div>
+  <div ref="container" class="container" v-for="chart in charts" :key="chart.id">
+    <mo-chart :chart=chart></mo-chart>
+  </div>
 </template>
 <style>
-
+.container {
+  padding: var(--mo-size-4);
+  width: 100%;
+}
 </style>

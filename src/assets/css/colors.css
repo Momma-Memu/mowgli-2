@@ -3,9 +3,11 @@ html {
   --mo-white: #ffffff;
   --mo-black: #000;
   --mo-charcoal: #252525;
+  --mo-gray: #b6b6b6;
 
   /* yellow? #ffe88d*/
 
+  --mo-purple-100: hsl(240, 15%, 70%);
   --mo-purple-200: hsl(240, 20%, 65%);
   --mo-purple-300: hsl(240, 15%, 45%);
   --mo-purple-400: hsl(240, 15%, 40%);
@@ -21,6 +23,7 @@ html {
   --mo-red-600: hsl(360, 55%, 35%);
   --mo-red-700: hsl(360, 60%, 30%);
 
+  --mo-brown-100: hsl(31, 15%, 55%);
   --mo-brown-200: hsl(31, 20%, 50%);
   --mo-brown-300: hsl(30, 25%, 45%);
   --mo-brown-400: hsl(30, 35%, 40%);
@@ -35,13 +38,13 @@ html {
   --mo-blue-600: hsl(200, 35%, 25%);
   --mo-blue-700: hsl(200, 40%, 20%);
 
-  --mo-green-100: hsl(155, 25%, 50%);
-  --mo-green-200: hsl(155, 30%, 45%);
-  --mo-green-300: hsl(155, 35%, 40%);
-  --mo-green-400: hsl(155, 40%, 35%);
-  --mo-green-500: hsl(155, 45%, 30%);
-  --mo-green-600: hsl(155, 50%, 25%);
-  --mo-green-700: hsl(155, 55%, 20%);
+  --mo-green-100: hsl(155, 20%, 55%);
+  --mo-green-200: hsl(155, 25%, 50%);
+  --mo-green-300: hsl(155, 30%, 45%);
+  --mo-green-400: hsl(155, 35%, 40%);
+  --mo-green-500: hsl(155, 40%, 35%);
+  --mo-green-600: hsl(155, 45%, 30%);
+  --mo-green-700: hsl(155, 50%, 25%);
 
   /* -------- Background Colors -------- */
   --mo-bg-dark-gradient: linear-gradient(

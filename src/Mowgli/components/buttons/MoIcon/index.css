@@ -80,3 +80,19 @@ i {
 :host([mo-flip-y-clk]:active) > i {
   transform: var(--mo-shrink) var(--mo-flipY) !important;
 }
+
+/* Static */
+
+:host(:state(mo-static)) {
+  pointer-events: none !important;
+}
+
+:host(:state(mo-static):active) > i {
+  transition: none;
+  transform: none !important;
+}
+
+:host(:state(mo-static)) > i {
+  transition: none;
+  transform: none !important;
+}
