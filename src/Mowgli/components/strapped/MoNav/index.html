@@ -24,20 +24,37 @@
 <mo-dropdown side-bar>
   <mo-icon slot="button" mo-grow-hov mo-fa="fa-duotone fa-solid fa-bars"> </mo-icon>
   <div class="dropdown-items" slot="content">
-    <mo-accordian class="authenticated">
-      Manage
-      <div slot="body">
-        HELLO!!!
-      </div>
-    </mo-accordian class="authenticated">
+
     <mo-accordian>
-      Manage
-      <div slot="body">
-        <mo-nav-link class="accordian-item" mo-href="/objects">Objects</mo-nav-link>
-        <mo-nav-link class="accordian-item" mo-href="/users">Users</mo-nav-link>
-        <mo-nav-link class="accordian-item" mo-href="/roles">Roles</mo-nav-link>
-        <mo-nav-link class="accordian-item" mo-href="/forms">Forms</mo-nav-link>
+      <div class="accordian-head">Records</div>
+      <div class="accordian-body" slot="body">
+        <mo-nav-link mo-borderless class="accordian-item" mo-href="/charts">Charts</mo-nav-link>
+        <mo-nav-link mo-borderless class="accordian-item" mo-href="/sources">Sources</mo-nav-link>
+        <mo-nav-link mo-borderless class="accordian-item" mo-href="/forms">Forms</mo-nav-link>
       </div>
     </mo-accordian>
+
+    <mo-accordian>
+      <div class="accordian-head">Management</div>
+      <div class="accordian-body" slot="body">
+        <mo-nav-link mo-borderless class="accordian-item" mo-href="/users">Users</mo-nav-link>
+        <mo-nav-link mo-borderless class="accordian-item" mo-href="/roles">Roles</mo-nav-link>
+      </div>
+    </mo-accordian>
+
+    <mo-accordian>
+      <div class="accordian-head">Settings</div>
+      <div class="accordian-body" slot="body">
+        <mo-nav-link mo-borderless class="accordian-item" mo-href="/acc-settings">Account</mo-nav-link>
+        <mo-nav-link mo-borderless class="accordian-item" mo-href="/app-settings">App Settings</mo-nav-link>
+        <mo-nav-link mo-borderless class="accordian-item" mo-href="/company">Company Profile</mo-nav-link>
+      </div>
+    </mo-accordian>
+
+    <div class="logout">
+      <mo-icon mo-fa="fa-sharp-duotone fa-solid fa-arrow-right-from-bracket"></mo-icon>
+      <span>Logout</span>
+    </div>
+
   </div>
 </mo-dropdown>

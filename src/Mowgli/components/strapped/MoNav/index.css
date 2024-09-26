@@ -26,9 +26,20 @@ form {
   display: none;
 }
 
+.unauthenticated:first-child {
+  margin-right: var(--mo-size-4);
+}
+
+.unauthenticated:hover {
+  text-decoration: underline;
+  text-underline-offset: var(--mo-size-2);
+  text-decoration-thickness: 2px;
+}
+
 .nav-items {
   display: flex;
   margin-right: var(--mo-size-3);
+  cursor: pointer;
 }
 
 .nav-items {
@@ -61,5 +72,65 @@ img {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+}
+
+.accordian-body {
+  width: 100%;
+}
+
+.accordian-item {
+  width: 100%;
+  padding-left: var(--mo-size-8);
+}
+
+.accordian-item {
+  border-top: solid 1px var(--mo-gray);
+}
+
+/* mo-accordian:nth-child(odd) {
+  background-color: color-mix(in srgb, var(--mo-purple-200) 25%, white);
+} */
+
+/* mo-accordian:nth-child(even) {
+  background-color: #e0e0e0;
+} */
+
+mo-accordian {
+  border-bottom: solid 1px var(--mo-gray);
+}
+
+.accordian-head {
+  min-width: 200px;
+}
+
+.accordian-item > mo-icon {
+  background-color: transparent;
+  font-size: var(--mo-size-6);
+  pointer-events: none;
+}
+
+.accordian-item:hover {
+  background-color: color-mix(in srgb, var(--mo-purple-200) 25%, white);
+}
+
+.logout {
+  font-weight: 500;
+  cursor: pointer;
+  padding: 0.5rem;
+  width: 100%;
+  font-size: var(--mo-size-6);
+  display: flex;
+  align-items: center;
+  gap: var(--mo-size-2);
+}
+
+.logout > mo-icon {
+  background-color: transparent;
+  font-size: var(--mo-size-6);
+  color: var(--mo-blue-700);
+  pointer-events: none;
+}
+
+.logout:hover {
+  background-color: color-mix(in srgb, var(--mo-purple-200) 25%, white);
 }

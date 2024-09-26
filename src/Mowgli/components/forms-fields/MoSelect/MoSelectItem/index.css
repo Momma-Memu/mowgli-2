@@ -1,0 +1,55 @@
+:host {
+  display: flex;
+  justify-content: center;
+  padding: var(--mo-size-2);
+  width: 100%;
+  align-items: center;
+  font-size: var(--mo-size-6);
+  color: var(--mo-charcoal);
+  background-color: color-mix(in srgb, var(--mo-green-500) 30%, white);
+  cursor: pointer;
+}
+
+.wrapper {
+  pointer-events: none;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-icon {
+  display: flex;
+  aspect-ratio: 1/1;
+  border-radius: var(--mo-size-2);
+  box-shadow: 0.1rem 0.15rem 0.35rem 0.02rem #85858545;
+  background-color: color-mix(in srgb, var(--mo-charcoal) 45%, transparent);
+}
+
+.icon {
+  font-size: var(--mo-size-6);
+
+  opacity: 0;
+  visibility: hidden;
+  background-color: transparent;
+
+  --fa-secondary-opacity: 1;
+  --fa-secondary-color: var(--mo-blue-700);
+}
+
+:host(:state(active)) .icon {
+  opacity: 1;
+  visibility: visible;
+}
+
+:host(:state(active)) .item-icon {
+  background-color: color-mix(in srgb, var(--mo-green-300) 90%, white);
+}
+
+:host(:nth-child(odd)) {
+  background-color: color-mix(in srgb, var(--mo-green-500) 10%, white); 
+}
+
+:host(:hover) {
+  background-color: color-mix(in srgb, var(--mo-blue-600) 10%, transparent);
+}

@@ -47,6 +47,12 @@ export default class MowgliObject {
     return this.#state.cache;
   }
 
+  buildQueryString(obj) {
+    const keys = Object.keys(obj);
+    //`?id=someID&product=bag`;
+    return "?" + keys.map(key => `${key}=${obj[key]}`).join("&")
+  }
+
   // /** @returns {Array<MowgliFieldDefinition>} fieldDefinitions */
   // get fieldDefinitions() {
   //   return this.#formManager.fieldDefinitions;

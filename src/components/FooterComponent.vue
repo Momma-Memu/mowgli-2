@@ -33,7 +33,7 @@
   display: flex;
   justify-content: space-between;
   padding: var(--mo-size-4);
-  color: white;
+  color: var(--mo-white);
   flex-wrap: wrap;
   gap: var(--mo-size-4);
   background: var(--mo-green-700);

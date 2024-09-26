@@ -4,6 +4,7 @@ import template from "./index.html?raw";
 
 export default class MoNavLink extends MoComponent {
   #active = this.addInternal("active");
+  #moBorderless = this.addAttribute("mo-borderless");
   #href = this.addAttribute("mo-href");
 
   constructor() {

@@ -21,13 +21,13 @@
   inset: 0 0 0 0;
   outline: none;
   border: none;
-  border-radius: var(--mo-border-radius);
+  /* border-radius: var(--mo-border-radius); */
   min-width: 320px;
   height: fit-content;
-  box-shadow: 0.15rem 0.15rem 0.5rem 0.5rem rgba(0, 0, 0, 0.3);
+  /* box-shadow: 0.15rem 0.15rem 0.5rem 0.5rem rgba(0, 0, 0, 0.3); */
   z-index: 2;
   padding: 0;
-  overflow: hidden;
+  /* overflow: hidden; */
   background: transparent;
   width: 100%;
   max-width: 650px;
@@ -35,6 +35,12 @@
 
 .modal::backdrop {
   opacity: 0;
+}
+
+.modal-content {
+  border-radius: var(--mo-border-radius);
+  overflow: hidden;
+  box-shadow: 0.15rem 0.15rem 0.5rem 0.5rem rgba(0, 0, 0, 0.3);
 }
 
 .mo-modal-head {
@@ -50,7 +56,7 @@
 .mo-modal-section {
   display: flex;
   padding: 0.75rem;
-  background-color: white;
+  background-color: var(--mo-white);
   width: 100%;
 }
 

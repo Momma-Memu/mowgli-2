@@ -19,6 +19,12 @@ export default class MowgliAPI {
     this.#baseUrl += baseUrl;
   }
 
+  buildQueryString(obj) {
+    const keys = Object.keys(obj);
+    //`?id=someID&product=bag`;
+    return keys.map(key => `?${key}=${obj[key]}`).join("&")
+  }
+
   /** - GET Method Fetch Request.
    * @param {string} params - URL Route/Path parameters. */
   async GET(params = "") {
@@ -53,6 +59,7 @@ export default class MowgliAPI {
     }
 
     try {
+      console.log(`${this.#baseUrl}/${url}`);
       const response = await window.fetch(`${this.#baseUrl}/${url}`, options);
 
       if (response.status >= 400) {

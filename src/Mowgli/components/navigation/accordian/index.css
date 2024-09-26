@@ -1,18 +1,26 @@
 :host {
-  display: flex;
+  width: 100%;
+  user-select: none;
+
+  /* display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: var(--mo-size-4);
+  font-size: var(--mo-size-4); */
 }
 
-.container {
+.head-container {
+  font-weight: 500;
   cursor: pointer;
+  padding: 0.5rem;
 }
 
-.wrapper {
+.head-container:hover {
+  background-color: color-mix(in srgb, var(--mo-purple-200) 25%, white);
+}
+
+.head-wrapper {
   display: flex;
-  gap: 1rem;
 
   color: var(--mo-blue-700);
   font-size: var(--mo-size-6);
@@ -20,16 +28,17 @@
   justify-content: center;
   align-items: center;
   pointer-events: none;
+  width: max-content;
 }
 
 mo-icon {
-  font-size: var(--mo-size-6);
   transition: transform 200ms ease;
   padding: 0px;
   background: none;
+  margin-right: var(--mo-size-2);
 }
 
-.content-wrapper {
+.body-container {
   position: relative;
   
   width: 100%;
@@ -41,14 +50,14 @@ mo-icon {
   align-items: center;
 }
 
-.content {
+.body-content {
   display: none;
 
   flex-direction: column;
   
   justify-content: center;
   align-items: center;
-
+  width: 100%;
   transition: 200ms ease opacity;
 }
 
@@ -56,7 +65,7 @@ mo-icon {
   transform: rotate(180deg);
 }
 
-:host(:state(opened)) .content {
+:host(:state(opened)) .body-content {
   display: flex;
   position: relative;
   pointer-events: unset;

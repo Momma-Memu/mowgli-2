@@ -43,6 +43,7 @@ export default class MoNav extends MoComponent {
 
   async #submitForm() {
     const formData = this.sessionObject.form.values;
+    console.log(formData);
     const [res, data] = await this.sessionObject.post("", formData);
 
     if (res.ok && data) {

@@ -1,4 +1,5 @@
 import MoField from "../components/forms-fields/MoField/index";
+import MoSelect from "../components/forms-fields/MoSelect/index";
 
 export default class FieldDefinition {
   #name = "";
@@ -11,6 +12,8 @@ export default class FieldDefinition {
   #required = true;
   #defaultValue = "";
   #halfWidth = false;
+  #options = [];
+  #apiRoute = "";
 
   /**
    * @param {string} name
@@ -20,6 +23,8 @@ export default class FieldDefinition {
    * @param {string} label
    * @param {boolean} required
    * @param {*} defaultValue
+   * @param {string} api
+   * @param {Any[]} options
    */
   constructor(
     name,
@@ -28,7 +33,9 @@ export default class FieldDefinition {
     type = "text",
     placeholder = "",
     defaultValue = "",
-    halfWidth = false
+    halfWidth = false,
+    apiRoute = "",
+    options = []
   ) {
     this.#name = name;
     this.#required = required;
@@ -37,6 +44,8 @@ export default class FieldDefinition {
     this.#placeholder = placeholder;
     this.#defaultValue = defaultValue;
     this.#halfWidth = halfWidth;
+    this.#apiRoute = apiRoute;
+    this.#options = options;
   }
 
   /* --------------- Getters / Setters --------------- */
@@ -92,6 +101,23 @@ export default class FieldDefinition {
     this.#halfWidth = value;
   }
 
+  get apiRoute() {
+    return this.#apiRoute;
+  }
+
+  set apiRoute(value) {
+    this.#apiRoute = value;
+  }
+
+  get options() {
+    return this.#options;
+  }
+
+  set options(value) {
+    this.#options = value;
+  }
+
+
   /* -------------------- Methods -------------------- */
 
   /**
@@ -102,20 +128,47 @@ export default class FieldDefinition {
    * @returns {MoField}
    */
   buildHTML() {
-    const field = new MoField();
+    if (this.#type === "select") {
+      const select = new MoSelect();
 
-    field.name.attribute = this.#name;
-    field.required.state = this.#required;
-    field.label.attribute = this.#displayName;
-    field.type.attribute = this.#type;
-    field.placeholder.attribute = this.#placeholder || this.#displayName;
-    field.halfWidth.state = this.#halfWidth;
+      select.name = this.#name;
+      select.required.state = this.#required;
+      select.label.attribute = this.#displayName;
+      select.type.attribute = "text";
 
-    if (this.#defaultValue) {
-      field.value = this.#defaultValue;
+      select.placeholder.attribute = this.#placeholder || this.#displayName;
+      select.halfWidth.state = this.#halfWidth;
+
+      if (this.#defaultValue) {
+        select.value = this.#defaultValue;
+      }
+
+      if (this.#apiRoute) {
+        select.apiRoute = this.#apiRoute;
+      }
+
+      if (this.#options) {
+        select.options = this.#options;
+      }
+  
+      return select;
+    } else {
+      const field = new MoField();
+  
+      field.name = this.#name;
+      field.required.state = this.#required;
+      field.label.attribute = this.#displayName;
+      field.type.attribute = this.#type;
+      field.placeholder.attribute = this.#placeholder || this.#displayName;
+      field.halfWidth.state = this.#halfWidth;
+  
+      if (this.#defaultValue) {
+        field.value = this.#defaultValue;
+      }
+  
+      return field;
     }
 
-    return field;
   }
 }
 

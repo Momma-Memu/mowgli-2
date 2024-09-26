@@ -167,7 +167,7 @@ li {
   border-radius: var(--mo-size-2);
   height: fit-content;
   
-  background-color: white;
+  background-color: var(--mo-white);
   box-shadow: var(--mo-box-shadow);
 }
 

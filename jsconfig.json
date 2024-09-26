@@ -5,5 +5,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules", "dist", ".vscode", "public", "assets"]
+  "exclude": ["node_modules", "dist", ".vscode", "public", "assets", "fontawesome"]
 }

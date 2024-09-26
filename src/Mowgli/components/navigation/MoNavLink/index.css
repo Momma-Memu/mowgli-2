@@ -3,6 +3,7 @@
   color: var(--mo-blue-700);
   font-size: inherit;
   padding: var(--mo-size-2) var(--mo-size-4);
+  display: block;
 }
 
 .container {
@@ -27,4 +28,12 @@
 
 :host(:state(active)) .container {
   border-bottom-color: var(--mo-blue-700);
+}
+
+:host([mo-borderless]:hover) .content {
+  transform: none !important;
+}
+
+:host([mo-borderless]) .container {
+  border: none;
 }

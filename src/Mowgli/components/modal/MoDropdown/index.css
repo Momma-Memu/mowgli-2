@@ -22,12 +22,12 @@
   visibility: hidden;
 }
 
-:host([side-bar]:state(opened)) > .container {
-  transform: translate(calc(-100% + -0.5rem), 1.5rem);
+:host([side-bar]:state(opened)) .content {
+  transform: translate(calc(-50% + 1rem), 2rem);
 }
 
-:host([side-bar]) > .container {
-  transform: translate(100%, 1.5rem);
+:host([side-bar]) .content {
+  transform: translate(65%, 2rem);
 }
 
 .container {
@@ -46,10 +46,15 @@
 }
 
 .content {
+  overflow: hidden;
+  background-color: var(--mo-white);
+
   position: absolute;
-  background: white;
-  padding: var(--mo-size-4);
-  display: block;
+
   border-radius: var(--mo-border-radius);
   box-shadow: var(--mo-box-shadow);
+
+  transition:
+    500ms ease transform,
+    500ms ease opacity;
 }

@@ -22,7 +22,7 @@ export default class MoField extends MoComponent {
 
   label = this.addAttribute("label");
   placeholder = this.addAttribute("placeholder");
-  name = this.addAttribute("name");
+  #name = this.addAttribute("name");
   type = this.addAttribute("type");
   halfWidth = this.addInternal("half-width");
 
@@ -32,6 +32,14 @@ export default class MoField extends MoComponent {
   constructor() {
     super(styles, template);
     this.empty.state = true;
+  }
+
+  get name() {
+    return this.#name.attribute;
+  }
+
+  set name(value) {
+    this.#name.attribute = value;
   }
 
   // static get observedAttributes() {
@@ -155,10 +163,12 @@ export default class MoField extends MoComponent {
 
       this.#timeout = setTimeout(() => {
         this.#valid.state = this.#checkValidity();
+        this.emitEvent(this.createEvent("field-changed", this.value));
       }, 500);
     } else {
       this.#valid.state = this.#checkValidity();
     }
+
   }
 
   /** 

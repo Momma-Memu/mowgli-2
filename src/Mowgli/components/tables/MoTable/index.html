@@ -1,0 +1,17 @@
+<div class="head">
+  <div class="head-title">
+    <slot></slot>
+  </div>
+  
+  <mo-modal class="nav-item unauthenticated">
+    <div class="nav-title" slot="open-btn">
+      <mo-button>Create</mo-button>
+    </div>
+    <div id="head" slot="head">Create</div>
+    <mo-form id="mo-form" slot="body"></mo-form>
+  </mo-modal>
+</div>
+
+<div class="body">
+  <div></div>
+</div>

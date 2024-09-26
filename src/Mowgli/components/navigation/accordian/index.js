@@ -16,7 +16,9 @@ export default class MoAccordian extends MoComponent {
   }
 
   connectedCallback() {
-    this.addListener("click", () => this.#openClose());
+    const btn = this.getByClass("head-container");
+
+    this.addListener("click", () => this.#openClose(), btn);
   }
 
   #openClose() {
