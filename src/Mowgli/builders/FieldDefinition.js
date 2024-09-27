@@ -35,7 +35,7 @@ export default class FieldDefinition {
     defaultValue = "",
     halfWidth = false,
     apiRoute = "",
-    options = []
+    options = [],
   ) {
     this.#name = name;
     this.#required = required;
@@ -117,7 +117,6 @@ export default class FieldDefinition {
     this.#options = value;
   }
 
-
   /* -------------------- Methods -------------------- */
 
   /**
@@ -172,6 +171,10 @@ export class FieldType {
   number = "number";
   date = "date";
   switch = "switch";
+  
   select = "select";
+  searchSelect = "search-select";
+
   multiSelect = "multi-select";
+  mutliSearchSelect = "multi-search-select";
 }

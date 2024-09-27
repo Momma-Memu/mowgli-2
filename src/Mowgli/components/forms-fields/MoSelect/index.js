@@ -1,6 +1,7 @@
 import MoComponent from "../../index";
 import styles from "./index.css?inline";
 import template from "./index.html?raw";
+// import { FieldType } from "../../enums/KeyCodes";
 
 import MoSelectItem from "./MoSelectItem/index";
 
@@ -62,6 +63,11 @@ export default class MoSelect extends MoComponent {
     this.#valueId = valueId;
   }
 
+  // /** @type {keyof FieldType} code */
+  // get type() {
+  //   return this.#type;
+  // }
+
   get multi() {
     return this.#multi.state;
   }
@@ -79,6 +85,8 @@ export default class MoSelect extends MoComponent {
   }
 
   connectedCallback() {
+    // if (this.type === "")
+
     // this.field.name = this.name;
     // this.field.required.state = this.required.state;
     // this.field.label.attribute = this.label.attribute;

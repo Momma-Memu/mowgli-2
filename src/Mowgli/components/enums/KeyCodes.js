@@ -13,11 +13,14 @@ export class KeyboardCode {
  */
 export class FieldType {
   text = "text";
+  email = "email";
   number = "number";
   date = "date";
   switch = "switch";
   select = "select";
   multiSelect = "multi-select";
+  searchSelect = "search-select";
+  searchMultiSelect = "search-multi-select";
 }
 
 export class MoAttributeType {

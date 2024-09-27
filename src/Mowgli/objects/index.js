@@ -1,9 +1,10 @@
 import MowgliAPI from "../API/index";
+// import FieldDefinition from "../builders/FieldDefinition";
 import MowgliCache from "../state/cache/index";
 
 
 // eslint-disable-next-line no-unused-vars
-// import FieldDefinition from "../builders/FieldDefinition";
+import FieldDefinition from "../builders/FieldDefinition";
 
 // import MowgliState from "../StateManager/MowgliState";
 // import MowgliFieldDefinition from "../MowgliFormManager/MowgliFieldDefinition";
@@ -44,6 +45,8 @@ export default class MowgliObject {
   constructor(api, fields = []) {
     this.#api = new MowgliAPI(api);
     this.#state = new MowgliCache(api);
+
+    /** @type {FieldDefinition} */
     this.fields = fields;
   }
 
