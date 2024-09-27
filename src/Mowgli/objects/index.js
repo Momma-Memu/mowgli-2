@@ -1,6 +1,10 @@
 import MowgliAPI from "../API/index";
 import MowgliCache from "../state/cache/index";
 
+
+// eslint-disable-next-line no-unused-vars
+// import FieldDefinition from "../builders/FieldDefinition";
+
 // import MowgliState from "../StateManager/MowgliState";
 // import MowgliFieldDefinition from "../MowgliFormManager/MowgliFieldDefinition";
 // import MowgliFormManager from "../MowgliFormManager";
@@ -51,6 +55,17 @@ export default class MowgliObject {
     const keys = Object.keys(obj);
     //`?id=someID&product=bag`;
     return "?" + keys.map(key => `${key}=${obj[key]}`).join("&")
+  }
+  
+  /** 
+   * @param {MowgliObject} mowgliObject - The MowgliObject that is responsible for interfacing with the API.
+   * @param {string} routeParams - Optional API params.
+   * @returns {Any[]} Returns a list of Select field options.
+  */
+  async fetchOptions(mowgliObject, routeParams = "") {
+    const [res, data] = await mowgliObject.get(routeParams);
+    
+    return res.ok ? data : [];
   }
 
   // /** @returns {Array<MowgliFieldDefinition>} fieldDefinitions */

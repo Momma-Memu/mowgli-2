@@ -2,8 +2,9 @@
 // import MowgliSources from '../Mowgli/objects/internal/Sources';
 // const sourceObject = new MowgliSources();
 
-import MowgliSources from '@/Mowgli/objects/internal/sources/Source';
+import MowgliSources from '../Mowgli/objects/internal/sources/Source';
 const sourceObject = new MowgliSources();
+
 </script>
 
 <template>

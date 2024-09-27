@@ -25,13 +25,17 @@ export default class MoForm extends MoComponent {
   /** @returns {{}} */
   get values() {
     const rawValue = {};
-    this.fields.forEach(field => rawValue[field.name.attribute] = field.value);
     
+    console.log(this.fields)
+    
+    this.fields.forEach(field => rawValue[field.name] = field.value);
+    
+
     return rawValue;
   }
 
   connectedCallback() {
-    this.getElementsByName("mo-field");
+    // this.getElementsByName("mo-field");
   }
 
   /** @param {FieldDefinition[]} fields  */

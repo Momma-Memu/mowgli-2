@@ -125,50 +125,40 @@ export default class FieldDefinition {
    * - Creates a new instance of the MoField HTMLElement class.
    * - Sets the starting properties from the values of this FieldDefinition's properties.
    *
-   * @returns {MoField}
+   * @returns {MoField | MoSelect}
    */
   buildHTML() {
-    if (this.#type === "select") {
-      const select = new MoSelect();
+    const moField = this.#getElement();
+    const field = this.#getField(moField);
 
-      select.name = this.#name;
-      select.required.state = this.#required;
-      select.label.attribute = this.#displayName;
-      select.type.attribute = "text";
+    field.name = this.#name;
+    field.required.state = this.#required;
+    field.label.attribute = this.#displayName;
+    field.type.attribute = this.#type;
 
-      select.placeholder.attribute = this.#placeholder || this.#displayName;
-      select.halfWidth.state = this.#halfWidth;
+    field.placeholder.attribute = this.#placeholder || this.#displayName;
+    field.halfWidth.state = this.#halfWidth;
 
-      if (this.#defaultValue) {
-        select.value = this.#defaultValue;
-      }
-
-      if (this.#apiRoute) {
-        select.apiRoute = this.#apiRoute;
-      }
-
-      if (this.#options) {
-        select.options = this.#options;
-      }
-  
-      return select;
-    } else {
-      const field = new MoField();
-  
-      field.name = this.#name;
-      field.required.state = this.#required;
-      field.label.attribute = this.#displayName;
-      field.type.attribute = this.#type;
-      field.placeholder.attribute = this.#placeholder || this.#displayName;
-      field.halfWidth.state = this.#halfWidth;
-  
-      if (this.#defaultValue) {
-        field.value = this.#defaultValue;
-      }
-  
-      return field;
+    if (this.#defaultValue) {
+      field.value = this.#defaultValue;
     }
 
+    if (moField instanceof MoSelect) {
+      moField.apiRoute = this.#apiRoute;
+      moField.buildOptions(this.options);
+    }
+
+    return moField;
+  }
+
+  #getElement() {
+    return this.#type === "select" ? new MoSelect() : new MoField();
+  }
+
+
+  /** @param {MoSelect | MoField} element  */
+  #getField(element) {
+    return this.#type === "select" ? element.field : element;
   }
 }
 

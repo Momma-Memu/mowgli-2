@@ -2,6 +2,8 @@ import MoComponent from "../../index";
 import styles from "./index.css?inline";
 import template from "./index.html?raw";
 
+import MoSelectItem from "./MoSelectItem/index";
+
 export default class MoSelect extends MoComponent {
   #value = "";
   #valueId = "";
@@ -26,27 +28,10 @@ export default class MoSelect extends MoComponent {
   type = this.addAttribute("type");
   halfWidth = this.addInternal("half-width");
 
-  // active = this.addInternal("active");
-
   constructor() {
     super(styles, template);
 
     this.setAttribute("tabindex", 0);
-
-    // this.addListener("click", () => this.active.state = !this.active.state);
-
-    // this.addListener("field-changed", (event) => {
-    //   event.preventDefault();
-      
-    //   this.value = event.detail;
-    //   // console.log(this.apiRoute, this.value);
-
-
-
-    //   // if (this.apiRoute) {
-    //   //   this.#fetchOptions();
-    //   // }
-    // });
   }
 
   get name() {
@@ -94,22 +79,31 @@ export default class MoSelect extends MoComponent {
   }
 
   connectedCallback() {
-    this.field.name = this.name;
-    this.field.required.state = this.required.state;
-    this.field.label.attribute = this.label.attribute;
-    this.field.type.attribute = this.type.attribute;
-    this.field.placeholder.attribute = this.placeholder.attribute || this.label.attribute;
-    this.field.halfWidth.state = this.halfWidth.attribute;
+    // this.field.name = this.name;
+    // this.field.required.state = this.required.state;
+    // this.field.label.attribute = this.label.attribute;
+    // this.field.type.attribute = this.type.attribute;
+    // this.field.placeholder.attribute = this.placeholder.attribute || this.label.attribute;
+    // this.field.halfWidth.state = this.halfWidth.attribute;
+
+    // console.log(this.options, this.label.attribute, this.placeholder.attribute)
   }
 
   buildOptions(options) {
-    const container = this.getByClass("selection-box");
+    this.options = options;
 
-    const htmlString = options.map((option => {
-      return (`<mo-select-item id="${option.id}">${option.displayName}</mo-select-item>`);
-    })).join("");
+    const container = this.shadow.getElementById("options");
 
-    container.innerHTML = htmlString;
+    if (this.options) {
+      this.options.forEach((option) => {
+        const item = new MoSelectItem();
+        item.setAttribute("id", option.id);
+        item.displayName = option.displayName;
+  
+        container.appendChild(item);
+      });
+
+    }
   }
 }
 

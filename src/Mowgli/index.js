@@ -9,7 +9,7 @@ export default class Mowgli {
   constructor() {
     window.mowgli = this;
     this.#listener = document.createElement("div");
-    document.head.appendChild(this.#listener);
+    // document.head.appendChild(this.#listener);
     this.#init();
   }
 
@@ -18,8 +18,8 @@ export default class Mowgli {
   // }
 
   #init() {
-    this.#listener.addEventListener("get-state", (e) => {
-      console.log(e, "HELLO!");
-    });
+    // this.#listener.addEventListener("get-state", (e) => {
+    //   console.log(e, "HELLO!");
+    // });
   }
 }

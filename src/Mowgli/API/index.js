@@ -59,7 +59,6 @@ export default class MowgliAPI {
     }
 
     try {
-      console.log(`${this.#baseUrl}/${url}`);
       const response = await window.fetch(`${this.#baseUrl}/${url}`, options);
 
       if (response.status >= 400) {
