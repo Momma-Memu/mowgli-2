@@ -6,13 +6,6 @@ import styles from "./index.css?inline";
 import template from "./index.html?raw";
 
 export default class MoField extends MoComponent {
-  // #change = new CustomEvent('mo-field-change', {
-  //   detail: "Input Field Changed Event.",
-  //   bubbles: true,
-  //   cancelable: false,
-  //   composed: true
-  // });
-
   #dirty = this.addInternal("dirty");
   #valid = this.addInternal("valid");
 
@@ -99,22 +92,14 @@ export default class MoField extends MoComponent {
   // =============== Public Methods ===============
 
   connectedCallback() {
+    this.#createField(this.type.attribute);
     this.#updateAttributes();
-    const field = this.fieldEl;
 
-    if (this.type === "date") {
-      this.addListener("change", (event) => this.#changeHandler(event), field);
+    if (this.type.attribute === "date" || this.type.attribute === "select") {
+      this.addListener("change", (event) => this.#changeHandler(event), this.fieldEl);
     } else {
-      this.addListener("keyup", (event) => this.#changeHandler(event, true), field);
+      this.addListener("keyup", (event) => this.#changeHandler(event, true), this.fieldEl);
     }
-
-    // #addEventListeners() {
-    //   if (this.type === "select" || this.type === "multi-select" || this.type === "search-select" || this.type === "date") {
-    //     this.field.addEventListener("change", this.#fieldListener);
-    //   } else {
-    //     this.field.addEventListener("keyup", this.#fieldListener);
-    //   }
-    // }
   }
 
   #updateAttributes() {
@@ -124,7 +109,7 @@ export default class MoField extends MoComponent {
     if (label) {
       this.ariaLabel = this.label.attribute;
 
-      label.setAttribute("for", this.name.attribute);
+      label.setAttribute("for", this.name);
       label.innerHTML = this.label.attribute;
     }
 
@@ -137,8 +122,11 @@ export default class MoField extends MoComponent {
         field.setAttribute("disabled", this.required.state);
       }
 
-      field.setAttribute("name", this.name.attribute);
-      field.setAttribute("type", this.type.attribute);
+      if (this.type.attribute !== "select") {
+        field.setAttribute("name", this.name);
+        field.setAttribute("type", this.type.attribute);
+      }
+
       field.setAttribute("placeholder", this.placeholder.attribute);
     }
   }
@@ -158,6 +146,8 @@ export default class MoField extends MoComponent {
       this.empty.state = true;
     }
 
+    console.log(this.name, this.value, this.empty.state);
+
     if (timeout) {
       clearTimeout(this.#timeout);
 
@@ -168,25 +158,34 @@ export default class MoField extends MoComponent {
     } else {
       this.#valid.state = this.#checkValidity();
     }
-
   }
 
-  /** 
+  /**
    * - Returns True if this field is valid, else returns false.
    * - Reports the validity of the field to the UI
-   * @returns {boolean} 
+   * @returns {boolean}
    */
   #checkValidity() {
     // If required, check if field has a value, else this check passes.
     const requiredCheck = this.required.state ? this.value : true;
-    
+
     // If value is present, check if it passes the constraints within the validity object.
     const validity = this.value ? this.fieldEl.validity.valid : true;
-    
+
     // Report the current validity.
     this.fieldEl.reportValidity();
 
     return requiredCheck && validity;
+  }
+
+  #createField() {
+    const templateId = this.type.attribute === "select" ? this.type.attribute : "default";
+    const clone = this.buildTemplate(templateId);
+    const fieldWrapper = this.getByClass("field-container");
+
+    if (fieldWrapper) {
+      fieldWrapper.appendChild(clone);
+    }
   }
 
   // get dependentFieldName() {

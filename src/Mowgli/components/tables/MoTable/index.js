@@ -6,7 +6,7 @@ import template from "./index.html?raw";
 import MowgliObject from "@/Mowgli/objects/index";
 
 export default class MoTable extends MoComponent {
-  #items = [];
+  // #items = [];
 
   /** @type {MowgliObject} */
   moObject;
@@ -16,13 +16,13 @@ export default class MoTable extends MoComponent {
     this.addAttribute("mo-name");
   }
 
-  get items() {
-    return this.#items;
-  }
+  // get items() {
+  //   return this.#items;
+  // }
 
-  set items(items) {
-    this.#items = items;
-  }
+  // set items(items) {
+  //   this.#items = items;
+  // }
 
   get form() {
     return this.getElementById("mo-form");
@@ -34,7 +34,6 @@ export default class MoTable extends MoComponent {
   connectedCallback() {
     // console.log(this.items, this.moObject);
     this.form.appendChild(this.moObject.buildForm());
-    
   }
 }
 

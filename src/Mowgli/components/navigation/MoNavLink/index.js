@@ -10,7 +10,6 @@ export default class MoNavLink extends MoComponent {
   constructor() {
     super(styles, template);
 
-    
     this.uniqueID = this.getId;
     this.addListener("click", (event) => this.#route(event));
   }
@@ -59,10 +58,10 @@ export default class MoNavLink extends MoComponent {
   /** @param {Event} event  */
   #route(event) {
     event.preventDefault();
-    
+
     const destination = event.target.getAttribute("mo-href");
     this.active = false;
-    
+
     this.emitEvent(this.createEvent("mo-route-event", destination));
     this.emitEvent(this.createEvent("mo-route-event-notify-siblings", destination));
   }

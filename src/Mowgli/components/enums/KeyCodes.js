@@ -18,9 +18,9 @@ export class FieldType {
   date = "date";
   switch = "switch";
   select = "select";
-  multiSelect = "multi-select";
-  searchSelect = "search-select";
-  searchMultiSelect = "search-multi-select";
+  // multiSelect = "multi-select";
+  // searchSelect = "search-select";
+  // searchMultiSelect = "search-multi-select";
 }
 
 export class MoAttributeType {

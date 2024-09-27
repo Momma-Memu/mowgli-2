@@ -1,7 +1,15 @@
-<mo-field id="mo-search-field"></mo-field>
+<!-- <mo-field id="mo-search-field"></mo-field> -->
 
 <div class="select-wrapper">
   <mo-icon class="select-icon" mo-static mo-fa="fa-sharp-duotone fa-solid fa-angle-up"></mo-icon>
 </div>
 
-<div  id="options" class="selection-box"></div>
+<div id="options" class="selection-box">
+  <slot>
+    <!-- <mo-select-item aria-disabled="true">Select an option...</mo-select-item>
+    <mo-select-item>BIG OL' DUMP!</mo-select-item>
+    <mo-select-item>BIG OL' DUMP!</mo-select-item>
+    <mo-select-item>BIG OL' DUMP!</mo-select-item>
+    <mo-select-item>BIG OL' DUMP!</mo-select-item> -->
+  </slot>
+</div>

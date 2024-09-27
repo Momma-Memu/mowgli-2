@@ -33,6 +33,7 @@
   background: none;
   border: none;
   outline: none;
+  appearance: none;
 }
 
 :host(:not(:state(valid)):state(dirty)) {
@@ -56,4 +57,30 @@
   transition: transform 400ms ease;
   pointer-events: none;
   /* 400ms ease font-size; */
+}
+
+/* -------------- SELECT STYLES -------------- */
+
+/* :host([type="select"]) #field-input {
+  content-visibility: hidden;
+}
+
+:host([type="select"]) #field-input:focus {
+  content-visibility: visible;
+}
+
+:host([type="select"]:not(:state(empty))) #field-input {
+  content-visibility: visible;
+} */
+
+option {
+  background-color: color-mix(in srgb, var(--mo-green-300) 90%, white);
+}
+
+option:nth-child(odd) {
+  background-color: color-mix(in srgb, var(--mo-green-500) 10%, white);
+}
+
+option {
+  background-color: yellow;
 }

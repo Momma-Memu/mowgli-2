@@ -19,6 +19,7 @@ export default class MoAccordian extends MoComponent {
     const btn = this.getByClass("head-container");
 
     this.addListener("click", () => this.#openClose(), btn);
+    // this.addListener("click", (event) => this.#checkTarget(event));
   }
 
   #openClose() {
@@ -31,6 +32,15 @@ export default class MoAccordian extends MoComponent {
       }, 200);
     } else {
       this.closed.state = false;
+    }
+  }
+
+  /** @param {Event} event  */
+  #checkTarget({ target }) {
+    console.log(target);
+
+    if (target && target.tagName === "mo-nav-link") {
+      console.log(target);
     }
   }
 }

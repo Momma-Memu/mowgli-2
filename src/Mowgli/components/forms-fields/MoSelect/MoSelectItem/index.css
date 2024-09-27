@@ -4,10 +4,20 @@
   padding: var(--mo-size-2);
   width: 100%;
   align-items: center;
-  font-size: var(--mo-size-6);
+  font-size: var(--mo-size-5);
   color: var(--mo-charcoal);
   background-color: color-mix(in srgb, var(--mo-green-500) 30%, white);
   cursor: pointer;
+}
+
+:host([aria-disabled]),
+:host([disabled]) {
+  color: var(--mo-dark-gray);
+  pointer-events: none;
+}
+
+:host([aria-disabled]) .icon {
+  display: none;
 }
 
 .wrapper {
@@ -27,7 +37,7 @@
 }
 
 .icon {
-  font-size: var(--mo-size-6);
+  font-size: var(--mo-size-5);
 
   opacity: 0;
   visibility: hidden;
@@ -47,9 +57,9 @@
 }
 
 :host(:nth-child(odd)) {
-  background-color: color-mix(in srgb, var(--mo-green-500) 10%, white); 
+  background-color: color-mix(in srgb, var(--mo-green-500) 10%, white);
 }
 
 :host(:hover) {
-  background-color: color-mix(in srgb, var(--mo-blue-600) 10%, transparent);
+  background-color: color-mix(in srgb, var(--mo-blue-500) 30%, white);
 }

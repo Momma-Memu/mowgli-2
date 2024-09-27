@@ -10,7 +10,7 @@ export default class MoSelectItem extends MoComponent {
   constructor() {
     super(styles, template);
 
-    this.addListener("click", () => this.#updateState());
+    // this.addListener("click", () => this.#updateState());
   }
 
   get nameEl() {
@@ -44,7 +44,6 @@ export default class MoSelectItem extends MoComponent {
   }
 
   #updateState() {
-
     this.active = !this.active;
   }
 }

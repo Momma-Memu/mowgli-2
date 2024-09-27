@@ -20,6 +20,8 @@ export default class MoDropdown extends MoComponent {
     if (btn) {
       this.addListener("click", () => this.#openClose(), btn);
     }
+
+    this.addListener("click", (event) => this.#checkTarget(event));
   }
 
   #openClose() {
@@ -32,6 +34,13 @@ export default class MoDropdown extends MoComponent {
       }, 500);
     } else {
       this.closed.state = false;
+    }
+  }
+
+  /** @param {Event} event  */
+  #checkTarget({ target }) {
+    if (target && target.tagName === "MO-NAV-LINK") {
+      this.#openClose();
     }
   }
 }

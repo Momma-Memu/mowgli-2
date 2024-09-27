@@ -12,7 +12,7 @@ export default class MoSelect extends MoComponent {
   apiRoute = "";
   options = [];
 
-  #multi = this.addInternal("mo-multi");
+  #allowMulti = this.addInternal("mo-multi");
   #search = this.addInternal("mo-search");
 
   // #dirty = this.addInternal("dirty");
@@ -68,12 +68,12 @@ export default class MoSelect extends MoComponent {
   //   return this.#type;
   // }
 
-  get multi() {
-    return this.#multi.state;
+  get allowMulti() {
+    return this.#allowMulti.state;
   }
 
-  set multi(state) {
-    this.#multi.state = state;
+  set allowMulti(state) {
+    this.#allowMulti.state = state;
   }
 
   get search() {
@@ -86,31 +86,28 @@ export default class MoSelect extends MoComponent {
 
   connectedCallback() {
     // if (this.type === "")
-
     // this.field.name = this.name;
     // this.field.required.state = this.required.state;
     // this.field.label.attribute = this.label.attribute;
     // this.field.type.attribute = this.type.attribute;
     // this.field.placeholder.attribute = this.placeholder.attribute || this.label.attribute;
     // this.field.halfWidth.state = this.halfWidth.attribute;
-
     // console.log(this.options, this.label.attribute, this.placeholder.attribute)
   }
 
   buildOptions(options) {
-    this.options = options;
+    // this.options = options;
 
     const container = this.shadow.getElementById("options");
 
-    if (this.options) {
-      this.options.forEach((option) => {
+    if (options) {
+      options.forEach((option) => {
         const item = new MoSelectItem();
         item.setAttribute("id", option.id);
         item.displayName = option.displayName;
-  
+
         container.appendChild(item);
       });
-
     }
   }
 }

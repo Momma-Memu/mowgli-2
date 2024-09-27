@@ -9,7 +9,6 @@ import MowgliSourceType from "./SourceType";
 export default class MowgliSources extends MowgliObject {
   #form = new MoForm();
   options = new MowgliSourceType();
-  
 
   constructor() {
     const name = new FieldDefinition("name", true, "Name", "text");
@@ -17,16 +16,14 @@ export default class MowgliSources extends MowgliObject {
     const type = new FieldDefinition("type", true, "Source Type", "select", "Search...", null, false);
 
     super("sources");
-      // new FieldDefinition("name", true, "Name", "text"),
-      // new FieldDefinition("description", true, "Description", "text"),
-      // new FieldDefinition("type", true, "Source Type", "select", "", null, false, "source-options/types"),
-      // new FieldDefinition("type", true, "Source Type", "select", "Search...", null, false),
-      // new FieldDefinition("source", true, "Source Value", "select", "", null, false, "sources/subtypes"),
+    // new FieldDefinition("name", true, "Name", "text"),
+    // new FieldDefinition("description", true, "Description", "text"),
+    // new FieldDefinition("type", true, "Source Type", "select", "", null, false, "source-options/types"),
+    // new FieldDefinition("type", true, "Source Type", "select", "Search...", null, false),
+    // new FieldDefinition("source", true, "Source Value", "select", "", null, false, "sources/subtypes"),
     // ]);
 
     this.fields = [name, description, type];
-
-    console.log(this.options.state);
     type.options = this.options.state;
   }
 

@@ -110,7 +110,7 @@ mo-accordian {
 }
 
 .accordian-item:hover {
-  background-color: color-mix(in srgb, var(--mo-purple-200) 25%, white);
+  background-color: color-mix(in srgb, var(--mo-blue-200) 25%, white);
 }
 
 .logout {
@@ -121,6 +121,7 @@ mo-accordian {
   font-size: var(--mo-size-6);
   display: flex;
   align-items: center;
+  color: var(--mo-blue-700);
   gap: var(--mo-size-2);
 }
 
@@ -132,5 +133,6 @@ mo-accordian {
 }
 
 .logout:hover {
-  background-color: color-mix(in srgb, var(--mo-purple-200) 25%, white);
+  background-color: color-mix(in srgb, var(--mo-blue-500) 15%, white);
+  /* background-color: color-mix(in srgb, var(--mo-purple-200) 25%, white); */
 }

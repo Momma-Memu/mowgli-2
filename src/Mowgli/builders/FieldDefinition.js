@@ -35,7 +35,7 @@ export default class FieldDefinition {
     defaultValue = "",
     halfWidth = false,
     apiRoute = "",
-    options = [],
+    options = []
   ) {
     this.#name = name;
     this.#required = required;
@@ -127,8 +127,10 @@ export default class FieldDefinition {
    * @returns {MoField | MoSelect}
    */
   buildHTML() {
-    const moField = this.#getElement();
-    const field = this.#getField(moField);
+    // const moField = this.#getElement();
+    // const field = this.#getField(moField);
+
+    const field = new MoField();
 
     field.name = this.#name;
     field.required.state = this.#required;
@@ -142,18 +144,18 @@ export default class FieldDefinition {
       field.value = this.#defaultValue;
     }
 
-    if (moField instanceof MoSelect) {
-      moField.apiRoute = this.#apiRoute;
-      moField.buildOptions(this.options);
-    }
+    // if (moField instanceof MoSelect) {
+    //   moField.apiRoute = this.#apiRoute;
+    //   moField.buildOptions(this.options);
+    // }
 
-    return moField;
+    // return moField;
+    return field;
   }
 
   #getElement() {
     return this.#type === "select" ? new MoSelect() : new MoField();
   }
-
 
   /** @param {MoSelect | MoField} element  */
   #getField(element) {
@@ -171,7 +173,7 @@ export class FieldType {
   number = "number";
   date = "date";
   switch = "switch";
-  
+
   select = "select";
   searchSelect = "search-select";
 

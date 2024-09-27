@@ -1,10 +1,17 @@
+:host {
+  display: flex;
+  align-items: center;
+}
+
 .selection-box {
   display: none;
   overflow: scroll;
   position: absolute;
+  /* align-self: self-end; */
 
-  max-height: calc(50% + var(--mo-size-4));
+  /* max-height: calc(50% + var(--mo-size-4)); */
   width: calc(100% - 1.5rem);
+  top: calc(100% + 0.5rem);
 
   box-shadow: var(--mo-box-shadow);
   border-radius: var(--mo-border-radius);
@@ -13,11 +20,11 @@
 
 :host(:focus-within) > .selection-box {
   display: unset;
-  position: absolute;
+  /* position: absolute; */
 }
 
 .select-icon {
-  position: absolute;
+  /* position: absolute; */
   background-color: unset;
   transition: transform 300ms ease;
   --fa-secondary-opacity: 1;

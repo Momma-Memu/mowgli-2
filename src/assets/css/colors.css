@@ -4,6 +4,7 @@ html {
   --mo-black: #000;
   --mo-charcoal: #252525;
   --mo-gray: #b6b6b6;
+  --mo-dark-gray: #6f6f6f;
 
   /* yellow? #ffe88d*/
 
@@ -47,9 +48,5 @@ html {
   --mo-green-700: hsl(155, 50%, 25%);
 
   /* -------- Background Colors -------- */
-  --mo-bg-dark-gradient: linear-gradient(
-    130deg,
-    var(--mo-purple-500),
-    var(--mo-blue-600)
-  );
+  --mo-bg-dark-gradient: linear-gradient(130deg, var(--mo-purple-500), var(--mo-blue-600));
 }

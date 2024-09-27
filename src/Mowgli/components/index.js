@@ -45,6 +45,7 @@ export default class MoComponent extends HTMLElement {
   // ============== MoComponent's Lifecycle Methods ==============
 
   disconnectedCallback() {
+    console.log("HERE", this);
     this.#listeners.forEach((listener) => listener.clean());
     this.#listeners = [];
   }
@@ -75,7 +76,7 @@ export default class MoComponent extends HTMLElement {
   /**
    * @param {string} name
    * @returns {HTMLElement[]}
-  */
+   */
   getElementsByName(name) {
     return Object.values(this.shadow.querySelectorAll(name)) || [];
   }
@@ -84,14 +85,14 @@ export default class MoComponent extends HTMLElement {
    * @param {string} name
    * @param {*} data
    * @returns {MoEvent}
-  */
+   */
   createEvent(name, data) {
     return new MoEvent(name, data);
   }
 
   /**
    * @param {MoEvent} event
-  */
+   */
   emitEvent(event) {
     this.dispatchEvent(event);
   }
@@ -174,6 +175,23 @@ export default class MoComponent extends HTMLElement {
     }
   }
 
-  // ====================== Private Methods ======================
+  /**
+   * @param {string} templateId
+   * @returns {HTMLTemplateElement | null}
+   */
+  getTemplate(templateId = "") {
+    return this.shadow.querySelector(`template#${templateId}`) || this.shadow.querySelector(`template`);
+  }
 
+  /**
+   * @param {string} templateId
+   * @returns {Node | null}
+   */
+  buildTemplate(templateId) {
+    const template = this.getTemplate(templateId);
+
+    return template !== null ? template.content.cloneNode(true) : null;
+  }
+
+  // ====================== Private Methods ======================
 }

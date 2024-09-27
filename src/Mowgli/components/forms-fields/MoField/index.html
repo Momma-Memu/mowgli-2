@@ -1,4 +1,15 @@
 <div class="field-container">
   <label id="field-label" for=""></label>
-  <input id="field-input" tabindex="0" type="text" />
+
+  <template id="default">
+    <input id="field-input" tabindex="0" type="text" />
+  </template>
+
+  <template id="select">
+    <mo-select id="field-input"></mo-select>
+    <!-- <select id="field-input" tabindex="0">
+      <option value="" disabled selected>Select...</option>
+      <option value="Option A">Option A</option>
+    </select> -->
+  </template>
 </div>
