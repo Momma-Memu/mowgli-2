@@ -1,5 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import { FieldType } from "../../enums/KeyCodes";
+// eslint-disable-next-line no-unused-vars
+import MoSelect from "../MoSelect/index";
 
 import MoComponent from "../../index";
 import styles from "./index.css?inline";
@@ -7,25 +9,35 @@ import template from "./index.html?raw";
 
 export default class MoField extends MoComponent {
   #dirty = this.addInternal("dirty");
+  #empty = this.addInternal("empty");
   #valid = this.addInternal("valid");
 
-  empty = this.addInternal("empty");
-  disabled = this.addInternal("disabled");
-  required = this.addInternal("required");
+  #disabled = this.addInternal("disabled");
+  #required = this.addInternal("required");
 
-  label = this.addAttribute("label");
-  placeholder = this.addAttribute("placeholder");
+
   #name = this.addAttribute("name");
-  type = this.addAttribute("type");
-  halfWidth = this.addInternal("half-width");
+  #label = this.addAttribute("label");
+  #placeholder = this.addAttribute("placeholder");
+  #type = this.addAttribute("type");
+  #halfWidth = this.addInternal("half-width");
 
-  #timeout;
-  #value = "";
+  #options = this.addState();
+  
+  #timeout = this.addTimeout(500);
+
+  #value = this.addState();
 
   constructor() {
     super(styles, template);
-    this.empty.state = true;
+    this.empt
+    this.#empty.state = true;
   }
+  // static get observedAttributes() {
+  //   return ["label", "placeholder", "name", "type"];
+  // }
+
+  // ================= Attributes =================
 
   get name() {
     return this.#name.attribute;
@@ -35,46 +47,98 @@ export default class MoField extends MoComponent {
     this.#name.attribute = value;
   }
 
-  // static get observedAttributes() {
-  //   return ["label", "placeholder", "name", "type"];
-  // }
-
-  // ================= Attributes =================
-
-  // get halfWidth() {
-  //   return this.#halfWidth.attribute;
-  // }
-
-  // set halfWidth(halfWidth) {
-  //   this.#halfWidth.attribute = halfWidth;
-  // }
-
-  // get placeholder() {
-  //   return this.ariaPlaceholder;
-  // }
-
-  // set placeholder(placeholder) {
-  //   this.ariaPlaceholder = placeholder;
-  //   this.#placeholder.attribute = placeholder;
-  //   this.fieldEl.placeholder = placeholder;
-  // }
-
-  // get type() {
-  //   return this.#type.attribute;
-  // }
-
-  // /** @param {keyof FieldType} type  */
-  // set type(type) {
-  //   this.#type.attribute = type;
-  //   this.fieldEl.setAttribute("type", type);
-  // }
-
-  get value() {
-    return this.#value;
+  get label() {
+    return this.#label.attribute;
   }
 
-  set value(value) {
-    this.#value = value;
+  set label(value) {
+    this.#label.attribute = value;
+  }
+
+  get placeholder() {
+    return this.#placeholder.attribute;
+  }
+
+  set placeholder(value) {
+    this.#placeholder.attribute = value;
+  }
+
+  get halfWidth() {
+    return this.#halfWidth.attribute;
+  }
+
+  set halfWidth(halfWidth) {
+    this.#halfWidth.attribute = halfWidth;
+  }
+
+  get type() {
+    return this.#type.attribute;
+  }
+
+  /** @param {keyof FieldType} type  */
+  set type(type) {
+    this.#type.attribute = type;
+  }
+
+  // ================= Internals ==================
+
+  get required() {
+    return this.#required.state;
+  }
+
+  set required(value) {
+    this.#required.state = value;
+  }
+
+  get disabled() {
+    return this.#disabled.state;
+  }
+
+  set disabled(value) {
+    this.#disabled.state = value;
+  }
+
+  get dirty() {
+    return this.#dirty.state;
+  }
+
+  set dirty(value) {
+    this.#dirty.state = value;
+  }
+
+
+  get empty() {
+    return this.#empty.state;
+  }
+
+  set empty(value) {
+    this.#empty.state = value;
+  }
+
+  get valid() {
+    return this.#valid.state;
+  }
+
+  set valid(value) {
+    this.#valid.state = value;
+  }
+
+  // =================== State ===================
+
+  get options() {
+    return this.#options.state;
+  }
+
+  set options(state) {
+    this.#options.state = state;
+  }
+
+  get value() {
+    return this.#value.state;
+  }
+
+  set value(data) {
+    this.#value.state = data;
   }
 
   // ================== Elements ==================
@@ -84,7 +148,7 @@ export default class MoField extends MoComponent {
     return this.getElementById("field-label");
   }
 
-  /** @returns {HTMLInputElement} */
+  /** @returns {HTMLInputElement | MoSelect} */
   get fieldEl() {
     return this.getElementById("field-input");
   }
@@ -92,10 +156,10 @@ export default class MoField extends MoComponent {
   // =============== Public Methods ===============
 
   connectedCallback() {
-    this.#createField(this.type.attribute);
+    this.#createField(this.type);
     this.#updateAttributes();
 
-    if (this.type.attribute === "date" || this.type.attribute === "select") {
+    if (this.type === "date" || this.type === "select") {
       this.addListener("change", (event) => this.#changeHandler(event), this.fieldEl);
     } else {
       this.addListener("keyup", (event) => this.#changeHandler(event, true), this.fieldEl);
@@ -107,27 +171,27 @@ export default class MoField extends MoComponent {
     const label = this.labelEl;
 
     if (label) {
-      this.ariaLabel = this.label.attribute;
+      this.ariaLabel = this.label;
 
       label.setAttribute("for", this.name);
-      label.innerHTML = this.label.attribute;
+      label.innerHTML = this.label;
     }
 
     if (field) {
-      if (this.required.state) {
-        field.setAttribute("required", this.required.state);
+      if (this.required) {
+        field.setAttribute("required", this.required);
       }
 
-      if (this.disabled.state) {
-        field.setAttribute("disabled", this.required.state);
+      if (this.disabled) {
+        field.setAttribute("disabled", this.required);
       }
 
-      if (this.type.attribute !== "select") {
+      if (this.type !== "select") {
         field.setAttribute("name", this.name);
-        field.setAttribute("type", this.type.attribute);
+        field.setAttribute("type", this.type);
       }
 
-      field.setAttribute("placeholder", this.placeholder.attribute);
+      field.setAttribute("placeholder", this.placeholder);
     }
   }
 
@@ -137,28 +201,25 @@ export default class MoField extends MoComponent {
    */
   #changeHandler(event, timeout) {
     event.stopPropagation();
-    this.#dirty.state = true;
+    this.dirty = true;
     this.value = event.target.value;
 
     if (event.target.value) {
-      this.empty.state = false;
+      this.empty = false;
     } else {
-      this.empty.state = true;
+      this.empty = true;
     }
-
-    console.log(this.name, this.value, this.empty.state);
 
     if (timeout) {
-      clearTimeout(this.#timeout);
-
-      this.#timeout = setTimeout(() => {
-        this.#valid.state = this.#checkValidity();
+      this.#timeout.sleep(() => {
+        this.valid = this.#checkValidity();
         this.emitEvent(this.createEvent("field-changed", this.value));
-      }, 500);
+      });
     } else {
-      this.#valid.state = this.#checkValidity();
+      this.valid = this.#checkValidity();
     }
   }
+  
 
   /**
    * - Returns True if this field is valid, else returns false.
@@ -167,7 +228,7 @@ export default class MoField extends MoComponent {
    */
   #checkValidity() {
     // If required, check if field has a value, else this check passes.
-    const requiredCheck = this.required.state ? this.value : true;
+    const requiredCheck = this.required ? this.value : true;
 
     // If value is present, check if it passes the constraints within the validity object.
     const validity = this.value ? this.fieldEl.validity.valid : true;
@@ -179,176 +240,19 @@ export default class MoField extends MoComponent {
   }
 
   #createField() {
-    const templateId = this.type.attribute === "select" ? this.type.attribute : "default";
-    const clone = this.buildTemplate(templateId);
     const fieldWrapper = this.getByClass("field-container");
+    
+    const templateId = this.type === "select" ? this.type : "default";
+    const clone = this.buildTemplate(templateId);
 
     if (fieldWrapper) {
       fieldWrapper.appendChild(clone);
     }
+
+    if (this.type === "select") {
+      this.fieldEl.options = this.options;
+    }
   }
-
-  // get dependentFieldName() {
-  //   return this.getAttribute("depentent-field-name");
-  // }
-
-  // set dependentFieldName(value) {
-  //   this.setAttribute("depentent-field-name", value);
-  // }
-
-  // get controllerFieldName() {
-  //   return this.getAttribute("controller-field-name");
-  // }
-
-  // set controllerFieldName(value) {
-  //   this.setAttribute("controller-field-name", value);
-  // }
-
-  // /**
-  //  * - HTMLELement used for capturing user input values.
-  //  * @returns {HTMLInputElement | HTMLSelectElement | MoSearchSelect}
-  //  */
-  // get field() {
-  //   if (this.#field) {
-  //     return this.#field;
-  //   } else {
-  //     const inputEl = this.shadowRoot.querySelector("input");
-  //     const selectEl = this.shadowRoot.querySelector("select");
-  //     const multiSelectEl = this.shadowRoot.querySelector("mo-multi-select");
-  //     const searchSelect = this.shadowRoot.querySelector("mo-search-select");
-
-  //     this.#field = inputEl || selectEl || multiSelectEl || searchSelect;
-
-  //     return this.#field;
-  //   }
-  // }
-
-  // set field(field) {
-  //   this.#field = field;
-  // }
-
-  // /**
-  //  * - HTMLELement used for capturing user input values.
-  //  * @returns {HTMLLabelElement}
-  //  */
-  // get label() {
-  //   if (this.#label) {
-  //     return this.#label;
-  //   } else {
-  //     this.#label = this.shadowRoot.querySelector("label");
-
-  //     return this.#field;
-  //   }
-  // }
-
-  // set label(label) {
-  //   this.#label = label;
-  // }
-
-  // attributeChangedCallback(prop, oldVal, newVal) {
-  //   if (prop === "type") {
-  //     this.#appendFieldTemplate();
-  //     this.field.setAttribute("type", this.type);
-
-  //     if ((this.templateType === "select" || this.templateType === "multi-select" || this.templateType === "search-select") && this.options) {
-  //       this.#appendSelectOptions();
-  //     }
-  //   }
-
-  //   if (prop === "name" && this.field && this.label) {
-  //     this.field.setAttribute("name", this.name);
-  //     this.label.setAttribute("for", this.name);
-  //   }
-
-  //   if (prop === "aria-label" && this.label) {
-  //     this.label.innerHTML = this.ariaLabel;
-  //   }
-
-  //   if (prop === "placeholder" && this.field) {
-  //     if (this.templateType === "select") {
-  //       this.field.firstElementChild.setAttribute("placeholder", this.placeholder);
-  //     }
-
-  //     // if (this.type === "multi-select") {
-  //     //   this.field.setAttribute("placeholder", this.placeholder);
-  //     // }
-
-  //     this.field.setAttribute("placeholder", this.placeholder);
-  //   }
-
-  //   if (prop === "required" && this.field) {
-  //     if (this.required === "true") {
-  //       this.field.setAttribute("required", this.required);
-  //     } else if (this.required === "false") {
-  //       this.field.removeAttribute("required");
-  //     }
-  //   }
-  // }
-
-  // connectedCallback() {
-  //   this.#addEventListeners();
-  // }
-
-  // disconnectedCallback() {
-  //   this.#removeEventListeners();
-  // }
-
-  // #handleFieldEventTimeout() {
-  //   if (this.templateType === "standard" && this.type !== "date") {
-  //     clearTimeout(this.#validateTimeout);
-
-  //     this.#validateTimeout = setTimeout(() => {
-  //       this.#handleFieldEvent();
-  //     }, 400);
-  //   } else {
-  //     this.#handleFieldEvent();
-  //   }
-  // }
-
-  // #handleFieldEvent() {
-  //   this.value = this.field.value;
-  //   this.dirty = true;
-
-  //   this.field.setAttribute("dirty", true);
-  //   this.valid = this.field.validity.valid;
-
-  //   this.dispatchEvent(this.#change);
-  // }
-
-  // #appendSelectOptions() {
-  //   const options = this.options.split(",");
-
-  //   this.field.append(...options.map(el => {
-  //     const option = document.createElement("option");
-  //     option.setAttribute("id", el);
-  //     option.setAttribute("value", el);
-  //     option.innerHTML = el;
-
-  //     return option;
-  //   }));
-  // }
-
-  // #removeEventListeners() {
-  //   if (this.type === "select" || this.type === "date") {
-  //     this.field.removeEventListener("change", this.#fieldListener);
-  //   } else {
-  //     this.field.removeEventListener("keyup", this.#fieldListener);
-  //   }
-  // }
-
-  // #appendFieldTemplate() {
-  //   if (this.templateType === "hidden") {
-  //     this.shadowRoot.appendChild(this.#hiddenTemplate.content.cloneNode(true))
-  //   } else if (this.templateType === "standard") {
-  //     this.shadowRoot.appendChild(this.#standardTemplate.content.cloneNode(true));
-  //   } else if (this.templateType === "select") {
-  //     this.shadowRoot.appendChild(this.#selectTemplate.content.cloneNode(true));
-  //   } else if (this.templateType === "multi-select") {
-  //     this.shadowRoot.appendChild(this.#multiSelectTemplate.content.cloneNode(true));
-  //   } else if (this.templateType === "search-select") {
-  //     this.shadowRoot.appendChild(this.#searchSelectTemplate.content.cloneNode(true));
-  //   }
-  // }
 }
 
 customElements.define("mo-field", MoField);

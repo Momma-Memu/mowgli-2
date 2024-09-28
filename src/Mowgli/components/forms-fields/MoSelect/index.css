@@ -7,9 +7,8 @@
   display: none;
   overflow: scroll;
   position: absolute;
-  /* align-self: self-end; */
 
-  /* max-height: calc(50% + var(--mo-size-4)); */
+  max-height: calc(var(--mo-size-12) * 4);
   width: calc(100% - 1.5rem);
   top: calc(100% + 0.5rem);
 
@@ -20,11 +19,9 @@
 
 :host(:focus-within) > .selection-box {
   display: unset;
-  /* position: absolute; */
 }
 
 .select-icon {
-  /* position: absolute; */
   background-color: unset;
   transition: transform 300ms ease;
   --fa-secondary-opacity: 1;
@@ -39,4 +36,11 @@
 
 :host(:focus-within) .select-icon {
   transform: rotate(180deg);
+}
+
+.selected-items {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-self: center;
 }

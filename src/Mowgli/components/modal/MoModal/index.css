@@ -2,6 +2,7 @@
   position: absolute;
   opacity: 0;
   transition: opacity 300ms ease;
+  cursor: default;
 }
 
 :host(:state(opened)) .modal-container {
@@ -21,13 +22,10 @@
   inset: 0 0 0 0;
   outline: none;
   border: none;
-  /* border-radius: var(--mo-border-radius); */
   min-width: 320px;
   height: fit-content;
-  /* box-shadow: 0.15rem 0.15rem 0.5rem 0.5rem rgba(0, 0, 0, 0.3); */
   z-index: 2;
   padding: 0;
-  /* overflow: hidden; */
   background: transparent;
   width: 100%;
   max-width: 650px;
@@ -39,7 +37,6 @@
 
 .modal-content {
   border-radius: var(--mo-border-radius);
-  /* overflow: hidden; */
   box-shadow: 0.15rem 0.15rem 0.5rem 0.5rem rgba(0, 0, 0, 0.3);
 }
 

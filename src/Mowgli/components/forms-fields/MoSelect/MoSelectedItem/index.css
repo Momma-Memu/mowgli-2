@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  width: fit-content;
+  color: var(--mo-charcoal);
+  cursor: pointer;
+  background-color: var(--mo-white);
+  padding: var(--mo-size-2);
+  border-radius: var(--mo-border-radius);
+  position: relative;
+  box-shadow: var(--mo-box-shadow);
+}
+
+.icon {
+  opacity: 0;
+  visibility: hidden;
+  
+  pointer-events: none;
+  background-color: unset;
+
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  font-size: var(--mo-size-6);
+  filter: var(--mo-drop-shadow-bottom);
+
+  --fa-secondary-opacity: 1;
+  --fa-secondary-color: var(--mo-red-200);
+  --fa-primary-color: var(--mo-white);
+}
+
+:host(:hover)> .icon {
+  visibility: visible;
+  opacity: 1;
+}

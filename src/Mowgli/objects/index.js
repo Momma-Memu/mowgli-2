@@ -5,6 +5,7 @@ import MowgliCache from "../state/cache/index";
 
 // eslint-disable-next-line no-unused-vars
 import FieldDefinition from "../builders/FieldDefinition";
+import MoForm from "../components/forms-fields/MoForm/index";
 
 // import MowgliState from "../StateManager/MowgliState";
 // import MowgliFieldDefinition from "../MowgliFormManager/MowgliFieldDefinition";
@@ -17,13 +18,9 @@ export default class MowgliObject {
   // #UIFetchReqListener = (event) => this.#processUIFetchRequest(event);
   // #authEvent = new MowgliEvent("mowgli-auth-event");
 
-  // #GET = "GET";
-  // #DELETE = "DELETE";
-  // #POST = "POST";
-  // #PUT = "PUT";
-
   #api;
   #state;
+
   // #stateManager;
   // #formManager;
   // #listManager;
@@ -117,6 +114,10 @@ export default class MowgliObject {
    * @param {string} params - URL Route/Path parameters.
    */
   async get(params = "") {
+    if (this.state) {
+      return [{ ok: true, status: 200 }, this.state];
+    }
+
     // this.stateManager.fetched = true;
     const [response, data] = await this.#api.GET(params);
     this.#state.cache = data;
@@ -155,6 +156,14 @@ export default class MowgliObject {
     const [response, data] = await this.#api.DELETE(params);
     console.log(response, data);
     // return this.#handleResponse(response, data, this.#DELETE);
+  }
+
+  /** @returns {MoForm} */
+  buildForm() {
+    const form = new MoForm();
+    form.build(this.fields);
+
+    return form;
   }
 
   // /**

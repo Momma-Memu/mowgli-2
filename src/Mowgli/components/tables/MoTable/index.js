@@ -24,16 +24,18 @@ export default class MoTable extends MoComponent {
   //   this.#items = items;
   // }
 
-  get form() {
-    return this.getElementById("mo-form");
+  get modalBody() {
+    return this.getElementById("modal-body");
   }
 
   // static get observedAttributes() {
   // }
 
   connectedCallback() {
-    // console.log(this.items, this.moObject);
-    this.form.appendChild(this.moObject.buildForm());
+    if (this.moObject) {
+      this.form = this.moObject.buildForm();
+      this.modalBody.appendChild(this.form);
+    }
   }
 }
 

@@ -7,11 +7,20 @@ export default class MoDropdown extends MoComponent {
   closed = this.addInternal("closed");
 
   #timeout = null;
+  #globalListenerID = "";
 
   constructor() {
     super(styles, template);
 
     this.addAttribute("side-bar");
+  }
+
+  static get observedAttributes() {
+    return ["aria-hidden"];
+  }
+
+  get container() {
+    return this.getByClass("container");
   }
 
   connectedCallback() {
@@ -24,9 +33,16 @@ export default class MoDropdown extends MoComponent {
     this.addListener("click", (event) => this.#checkTarget(event));
   }
 
+  attributeChangedCallback(prop, prev, curr) {
+    if (prop === "aria-hidden" && curr !== prev) {
+      this.#addRemoveGlobalListener();
+    }
+  }
+
   #openClose() {
     clearTimeout(this.#timeout);
     this.opened.state = !this.opened.state;
+    this.ariaHidden = this.opened.state;
 
     if (!this.opened.state) {
       this.#timeout = setTimeout(() => {
@@ -41,6 +57,24 @@ export default class MoDropdown extends MoComponent {
   #checkTarget({ target }) {
     if (target && target.tagName === "MO-NAV-LINK") {
       this.#openClose();
+    }
+  }
+
+  /** @param {Event} event  */
+  #checkAppTarget(event) {
+    event.stopPropagation();
+
+    if (this.opened.state && !event.composedPath().includes(this)) {
+      this.#openClose();
+    }
+  }
+
+  #addRemoveGlobalListener() {
+    if (this.opened.state) {
+      this.#globalListenerID = this.addListener("click", (event) => this.#checkAppTarget(event), window);
+    } else {
+      this.removeListener(this.#globalListenerID);
+      this.#globalListenerID = "";
     }
   }
 }

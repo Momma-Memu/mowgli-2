@@ -1,5 +1,4 @@
 import MoField from "../components/forms-fields/MoField/index";
-import MoSelect from "../components/forms-fields/MoSelect/index";
 
 export default class FieldDefinition {
   #name = "";
@@ -124,42 +123,28 @@ export default class FieldDefinition {
    * - Creates a new instance of the MoField HTMLElement class.
    * - Sets the starting properties from the values of this FieldDefinition's properties.
    *
-   * @returns {MoField | MoSelect}
+   * @returns {MoField}
    */
   buildHTML() {
-    // const moField = this.#getElement();
-    // const field = this.#getField(moField);
-
     const field = new MoField();
 
     field.name = this.#name;
-    field.required.state = this.#required;
-    field.label.attribute = this.#displayName;
-    field.type.attribute = this.#type;
+    field.required = this.#required;
+    field.label = this.#displayName;
+    field.type = this.#type;
 
-    field.placeholder.attribute = this.#placeholder || this.#displayName;
-    field.halfWidth.state = this.#halfWidth;
+    field.placeholder = this.#placeholder || this.#displayName;
+    field.halfWidth = this.#halfWidth;
 
     if (this.#defaultValue) {
       field.value = this.#defaultValue;
     }
 
-    // if (moField instanceof MoSelect) {
-    //   moField.apiRoute = this.#apiRoute;
-    //   moField.buildOptions(this.options);
-    // }
+    if (this.#type === "select") {
+      field.options = this.#options;
+    }
 
-    // return moField;
     return field;
-  }
-
-  #getElement() {
-    return this.#type === "select" ? new MoSelect() : new MoField();
-  }
-
-  /** @param {MoSelect | MoField} element  */
-  #getField(element) {
-    return this.#type === "select" ? element.field : element;
   }
 }
 

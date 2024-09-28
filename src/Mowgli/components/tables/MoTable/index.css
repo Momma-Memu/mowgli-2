@@ -21,3 +21,7 @@
   font-size: var(--mo-size-10);
   color: var(--mo-blue-700);
 }
+
+#modal-body {
+  width: 100%;
+}

@@ -4,6 +4,7 @@ import template from "./index.html?raw";
 
 // eslint-disable-next-line no-unused-vars
 import FieldDefinition from "../../../builders/FieldDefinition";
+
 // eslint-disable-next-line no-unused-vars
 import MoField from "../MoField/index";
 
@@ -14,7 +15,7 @@ export default class MoForm extends MoComponent {
 
   /** @returns {HTMLFormElement} */
   get formEl() {
-    return this.shadow.getElementById("mo-form");
+    return this.shadow.getElementById("form");
   }
 
   /** @returns {MoField[]} */
@@ -26,10 +27,7 @@ export default class MoForm extends MoComponent {
   get values() {
     const rawValue = {};
     
-    console.log(this.fields)
-    
     this.fields.forEach(field => rawValue[field.name] = field.value);
-    
 
     return rawValue;
   }

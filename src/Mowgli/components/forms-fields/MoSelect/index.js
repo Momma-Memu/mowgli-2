@@ -1,19 +1,20 @@
 import MoComponent from "../../index";
 import styles from "./index.css?inline";
 import template from "./index.html?raw";
+import MoSelectedItem from "./MoSelectedItem/index";
 // import { FieldType } from "../../enums/KeyCodes";
 
 import MoSelectItem from "./MoSelectItem/index";
 
 export default class MoSelect extends MoComponent {
-  #value = "";
-  #valueId = "";
+  // #value = "";
+  // #valueId = "";
 
-  apiRoute = "";
-  options = [];
+  // apiRoute = "";
+  // options = [];
 
-  #allowMulti = this.addInternal("mo-multi");
-  #search = this.addInternal("mo-search");
+  // #allowMulti = this.addInternal("mo-multi");
+  // #search = this.addInternal("mo-search");
 
   // #dirty = this.addInternal("dirty");
   // #valid = this.addInternal("valid");
@@ -21,94 +22,115 @@ export default class MoSelect extends MoComponent {
   // empty = this.addInternal("empty");
   // disabled = this.addInternal("disabled");
 
-  required = this.addInternal("required");
+  // required = this.addInternal("required");
 
-  label = this.addAttribute("label");
-  placeholder = this.addAttribute("placeholder");
-  #name = this.addAttribute("name");
-  type = this.addAttribute("type");
-  halfWidth = this.addInternal("half-width");
+  // label = this.addAttribute("label");
+  // placeholder = this.addAttribute("placeholder");
+  // #name = this.addAttribute("name");
+  // type = this.addAttribute("type");
+  // halfWidth = this.addInternal("half-width");
+
+  #options = this.addState();
+  // #selected = this.addState([]);
 
   constructor() {
     super(styles, template);
 
-    this.setAttribute("tabindex", 0);
+    // this.setAttribute("tabindex", 0);
+    this.addListener("mo-item-selected", (event) => this.#updateOptions(event));
   }
 
-  get name() {
-    return this.#name.attribute;
+  get options() {
+    return this.#options.state;
   }
 
-  set name(value) {
-    this.#name.attribute = value;
+  set options(value) {
+    this.#options.state = value;
+    this.#buildOptions();
   }
 
-  get field() {
-    return this.getElementById("mo-search-field");
-  }
-
-  get value() {
-    return this.#value;
-  }
-
-  set value(value) {
-    this.#value = value;
-  }
-
-  get valueId() {
-    return this.#valueId;
-  }
-
-  set valueId(valueId) {
-    this.#valueId = valueId;
-  }
-
-  // /** @type {keyof FieldType} code */
-  // get type() {
-  //   return this.#type;
+  // get name() {
+  //   return this.#name.attribute;
   // }
 
-  get allowMulti() {
-    return this.#allowMulti.state;
-  }
+  // set name(value) {
+  //   this.#name.attribute = value;
+  // }
 
-  set allowMulti(state) {
-    this.#allowMulti.state = state;
-  }
+  // get field() {
+  //   return this.getElementById("mo-search-field");
+  // }
 
-  get search() {
-    return this.#search.state;
-  }
+  // get value() {
+  //   return this.#value;
+  // }
 
-  set search(state) {
-    this.#search.state = state;
-  }
+  // set value(value) {
+  //   this.#value = value;
+  // }
 
-  connectedCallback() {
-    // if (this.type === "")
-    // this.field.name = this.name;
-    // this.field.required.state = this.required.state;
-    // this.field.label.attribute = this.label.attribute;
-    // this.field.type.attribute = this.type.attribute;
-    // this.field.placeholder.attribute = this.placeholder.attribute || this.label.attribute;
-    // this.field.halfWidth.state = this.halfWidth.attribute;
-    // console.log(this.options, this.label.attribute, this.placeholder.attribute)
-  }
+  // get valueId() {
+  //   return this.#valueId;
+  // }
 
-  buildOptions(options) {
-    // this.options = options;
+  // set valueId(valueId) {
+  //   this.#valueId = valueId;
+  // }
 
+  // get allowMulti() {
+  //   return this.#allowMulti.state;
+  // }
+
+  // set allowMulti(state) {
+  //   this.#allowMulti.state = state;
+  // }
+
+  // get search() {
+  //   return this.#search.state;
+  // }
+
+  // set search(state) {
+  //   this.#search.state = state;
+  // }
+
+  // connectedCallback() {
+  //   console.log(this.options);
+  // }
+
+  #buildOptions() {
     const container = this.shadow.getElementById("options");
 
-    if (options) {
-      options.forEach((option) => {
+    if (this.options) {
+      this.options.forEach((option) => {
         const item = new MoSelectItem();
-        item.setAttribute("id", option.id);
+        
+        item.valueId = option.id;
         item.displayName = option.displayName;
 
         container.appendChild(item);
       });
     }
+  }
+
+  /** @param {CustomEvent} event */
+  #updateOptions(event) {
+    const { id, displayName, state } = event.detail;
+    console.log(id, displayName, state);
+
+    if (state) {
+      this.#appendSelectedItem(id, displayName);
+    }
+  }
+
+  //
+  #appendSelectedItem(id, displayName) {
+    const selected = this.getByClass("selected-items");
+    const item = new MoSelectedItem();
+
+    item.valueId = id;
+    item.displayName = displayName;
+
+    selected.appendChild(item);
   }
 }
 

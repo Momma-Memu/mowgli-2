@@ -11,13 +11,14 @@ export default class MoNav extends MoComponent {
     super(styles, template);
     this.sessionObject = new MowgliSession();
     this.authenticated = this.addInternal("authenticated");
+    this.authenticated.state = this.sessionObject.state || false;
 
     this.addListener("closed", this.#resetForm);
     this.addListener("submit", this.#submitForm);
     this.addListener("mo-route-event-notify-siblings", this.#setChildren);
   }
 
-  get signInForm() {
+  get modalBody() {
     return this.getElementById("sign-in");
   }
 
@@ -27,8 +28,8 @@ export default class MoNav extends MoComponent {
   }
 
   connectedCallback() {
-    this.signInForm.appendChild(this.sessionObject.buildForm());
-    this.authenticated.state = this.sessionObject.state || false;
+    this.form = this.sessionObject.buildForm();
+    this.modalBody.appendChild(this.form);
   }
 
   #setChildren({ detail }) {
@@ -42,8 +43,7 @@ export default class MoNav extends MoComponent {
   }
 
   async #submitForm() {
-    const formData = this.sessionObject.form.values;
-    console.log(formData);
+    const formData = this.form.values;
     const [res, data] = await this.sessionObject.post("", formData);
 
     if (res.ok && data) {

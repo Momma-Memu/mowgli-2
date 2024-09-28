@@ -2,14 +2,13 @@ import MoComponent from "../../../index";
 import styles from "./index.css?inline";
 import template from "./index.html?raw";
 
-export default class MoSelectItem extends MoComponent {
-  #active = this.addInternal("active");
+export default class MoSelectedItem extends MoComponent {
   #displayName = this.addAttribute("displayName");
 
   constructor() {
     super(styles, template);
 
-    this.addListener("click", () => this.#updateState());
+    this.addListener("click", () => this.#removeSelf());
   }
 
   get nameEl() {
@@ -33,17 +32,9 @@ export default class MoSelectItem extends MoComponent {
     this.nameEl.innerHTML = this.#displayName.attribute;
   }
 
-  get active() {
-    return this.#active.state;
-  }
-
-  set active(value) {
-    this.#active.state = value;
-  }
-
-  #updateState() {
-    this.active = !this.active;
-    this.emitEvent(this.createEvent("mo-item-selected", { id: this.valueId, displayName: this.displayName, state: this.active }));
+  #removeSelf() {
+    this.emitEvent(this.createEvent("mo-item-removed", { id: this.valueId, displayName: this.displayName }));
+    this.destroySelf();
   }
 }
-customElements.define("mo-select-item", MoSelectItem);
+customElements.define("mo-selected-item", MoSelectedItem);

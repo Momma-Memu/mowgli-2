@@ -5,6 +5,9 @@ import MoInternal from "./utils/MoInternal.js";
 import MoListener from "./utils/MoListener.js";
 import MoAttribute from "./utils/MoAttribute.js";
 import MoEvent from "./utils/MoEvent.js";
+import MoState from "./utils/MoState.js";
+import MoSleep from "./utils/MoSleep.js";
+
 // eslint-disable-next-line no-unused-vars
 import { KeyboardCode } from "./enums/KeyCodes.js";
 
@@ -18,8 +21,14 @@ export default class MoComponent extends HTMLElement {
   /** @type {ElementInternals} */
   #internals;
 
-  /** @type {MoListener[]} */
-  #listeners = [];
+  /** @type {Object.<string, MoListener>} */
+  #listeners = {};
+
+  /** @type {MoState[]} */
+  #state = [];
+
+  /** @type {MoSleep[]} */
+  #timeouts = [];
 
   /**
    * @param {string | null} [styles=""]
@@ -31,7 +40,6 @@ export default class MoComponent extends HTMLElement {
 
     this.#internals = this.attachInternals();
     this.#shadow = this.attachShadow({ mode: mode });
-    // this.#getFiles(styles, template);
     this.render(styles, template);
   }
 
@@ -45,9 +53,23 @@ export default class MoComponent extends HTMLElement {
   // ============== MoComponent's Lifecycle Methods ==============
 
   disconnectedCallback() {
-    console.log("HERE", this);
-    this.#listeners.forEach((listener) => listener.clean());
-    this.#listeners = [];
+    this.destroySelf();
+  }
+
+  destroySelf() {
+    Object.values(this.#listeners).forEach((listener) => listener.clean());
+    this.#listeners = null;
+
+    this.#state.forEach((slice) => slice.clean());
+    this.#state = null;
+
+    this.#timeouts.forEach((timeout) => timeout.clean());
+    this.#timeouts = null;
+
+    this.#moInternals = null;
+    this.#internals = null;
+
+    this.remove();
   }
 
   // ====================== Public Methods ======================
@@ -91,6 +113,7 @@ export default class MoComponent extends HTMLElement {
   }
 
   /**
+   * Calls the "dispatchEvent()" method.
    * @param {MoEvent} event
    */
   emitEvent(event) {
@@ -130,6 +153,28 @@ export default class MoComponent extends HTMLElement {
   }
 
   /**
+   * @param {any} state
+   * @returns {MoState}
+   */
+  addState(state) {
+    const slice = new MoState(state);
+    this.#state.push(slice);
+
+    return slice;
+  }
+
+  /**
+   * @param {number} time
+   * @returns {MoSleep}
+   */
+  addTimeout(time) {
+    const timeout = new MoSleep(time);
+    this.#timeouts.push(timeout);
+
+    return timeout;
+  }
+
+  /**
    * This method will add an EventListener onto a specified element,
    * and will return a class instance to interface with that event.
    *
@@ -139,11 +184,30 @@ export default class MoComponent extends HTMLElement {
    * @param {keyof HTMLElementEventMap} type
    * @param {EventListenerOrEventListenerObject} listener
    * @param {HTMLElement} element
+   * @returns {string} The ID of the listener, which is needed to manually remove the listener. Listeners are automatically removed during unmount.
    */
   addListener(type, listener, element = this) {
-    // const listener = () => callback();
-    this.#listeners.push(new MoListener(element, type, listener));
+    const listenerID = this.#genId();
+    this.#listeners[listenerID] = new MoListener(element, type, listener)
+
+    // this.#listeners.push(new MoListener(element, type, listener));
     element.addEventListener(type, listener);
+    return listenerID;
+  }
+
+  /** 
+   * This method will remove the EventListener that has a matching listener ID.
+   * 
+   * - If no listener exists with the given ID, this method ignores the removal.
+   * - All references to the EventListener, it's callback, target, and ID are cleaned.
+   * 
+   * @param {string} listenerID  
+   */
+  removeListener(listenerID) {
+    if (this.#listeners[listenerID]) {
+      this.#getListener(listenerID).clean();
+      delete this.#listeners[listenerID];
+    }
   }
 
   /**
@@ -194,4 +258,23 @@ export default class MoComponent extends HTMLElement {
   }
 
   // ====================== Private Methods ======================
+
+  /** @returns {string} */
+  #genId() {
+    let uniqueID = crypto.randomUUID();
+
+    while (this.#listeners[uniqueID]) {
+      uniqueID = crypto.randomUUID();
+    }
+
+    return uniqueID;
+  }
+
+  /** 
+   * @param {string} id 
+   * @returns {MoListener}
+   */
+  #getListener(id) {
+    return this.#listeners[id];
+  }
 }

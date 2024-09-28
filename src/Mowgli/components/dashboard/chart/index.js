@@ -31,7 +31,7 @@ export default class MoChart extends MoComponent {
         datasets: [{
           label: this.chart.name,
           data: this.#getDataPoints(),
-          fill: false,
+          fill: true,
           borderColor: enums.line.borderColor[0],
           // backgroundColor: this.#backgroundColor(),
           tension: 0.1
