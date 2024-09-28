@@ -8,7 +8,7 @@ export default class MoSelectedItem extends MoComponent {
   constructor() {
     super(styles, template);
 
-    this.addListener("click", () => this.#removeSelf());
+    this.addListener("click", () => this.removeItem());
   }
 
   get nameEl() {
@@ -20,7 +20,7 @@ export default class MoSelectedItem extends MoComponent {
   }
 
   set valueId(id) {
-    this.setAttribute("id", id);
+    this.setAttribute("id", id + "-selected");
   }
 
   get displayName() {
@@ -32,8 +32,13 @@ export default class MoSelectedItem extends MoComponent {
     this.nameEl.innerHTML = this.#displayName.attribute;
   }
 
-  #removeSelf() {
-    this.emitEvent(this.createEvent("mo-item-removed", { id: this.valueId, displayName: this.displayName }));
+  removeItem() {
+    this.emitEvent(this.createEvent("mo-item-removed", { 
+      id: this.valueId.split("-selected")[0], 
+      displayName: this.displayName, 
+      state: false 
+    }));
+
     this.destroySelf();
   }
 }

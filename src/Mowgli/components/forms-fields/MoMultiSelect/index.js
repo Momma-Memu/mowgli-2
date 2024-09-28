@@ -2,11 +2,9 @@ import MoComponent from "../../index";
 import styles from "./index.css?inline";
 import template from "./index.html?raw";
 import MoSelectedItem from "./MoSelectedItem/index";
-// import { FieldType } from "../../enums/KeyCodes";
-
 import MoSelectItem from "./MoSelectItem/index";
 
-export default class MoSelect extends MoComponent {
+export default class MoMultiSelect extends MoComponent {
   // #value = "";
   // #valueId = "";
 
@@ -36,8 +34,8 @@ export default class MoSelect extends MoComponent {
   constructor() {
     super(styles, template);
 
-    // this.setAttribute("tabindex", 0);
     this.addListener("mo-item-selected", (event) => this.#updateOptions(event));
+    this.addListener("mo-item-removed", (event) => this.#updateOptions(event));
   }
 
   get options() {
@@ -117,12 +115,24 @@ export default class MoSelect extends MoComponent {
     const { id, displayName, state } = event.detail;
     console.log(id, displayName, state);
 
+    const selectable = this.shadow.getElementById(id);
+    const selected = this.shadow.getElementById(id + "-selected");
+
     if (state) {
       this.#appendSelectedItem(id, displayName);
+    } else {
+      selectable.active = false;
+      
+      if (selected) {
+        selected.removeItem();
+      }
     }
   }
 
-  //
+  /** 
+   * @param {string} id
+   * @param {string} displayName
+   */
   #appendSelectedItem(id, displayName) {
     const selected = this.getByClass("selected-items");
     const item = new MoSelectedItem();
@@ -134,4 +144,4 @@ export default class MoSelect extends MoComponent {
   }
 }
 
-customElements.define("mo-select", MoSelect);
+customElements.define("mo-multi-select", MoMultiSelect);

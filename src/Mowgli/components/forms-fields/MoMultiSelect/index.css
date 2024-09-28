@@ -43,4 +43,5 @@
   width: 100%;
   justify-content: flex-start;
   align-self: center;
+  gap: var(--mo-size-1);
 }

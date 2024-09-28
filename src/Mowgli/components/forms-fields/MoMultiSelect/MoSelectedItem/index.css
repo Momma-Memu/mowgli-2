@@ -27,6 +27,8 @@
   --fa-secondary-opacity: 1;
   --fa-secondary-color: var(--mo-red-200);
   --fa-primary-color: var(--mo-white);
+
+  transition: 100ms ease opacity;
 }
 
 :host(:hover)> .icon {

@@ -61,7 +61,7 @@
 
 /* -------------- SELECT STYLES -------------- */
 
-/* :host([type="select"]) #field-input {
+:host([type="select"]) #field-input {
   content-visibility: hidden;
 }
 
@@ -71,7 +71,7 @@
 
 :host([type="select"]:not(:state(empty))) #field-input {
   content-visibility: visible;
-} */
+}
 
 option {
   background-color: color-mix(in srgb, var(--mo-green-300) 90%, white);
@@ -83,4 +83,12 @@ option:nth-child(odd) {
 
 option {
   background-color: yellow;
+}
+
+/* ----------- SEARCH SELECT STYLES ----------- */
+
+#hidden-select {
+  visibility: hidden;
+  position: absolute;
+  pointer-events: none;
 }

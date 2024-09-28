@@ -1,7 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 import { FieldType } from "../../enums/KeyCodes";
-// eslint-disable-next-line no-unused-vars
-import MoSelect from "../MoSelect/index";
 
 import MoComponent from "../../index";
 import styles from "./index.css?inline";
@@ -30,7 +28,6 @@ export default class MoField extends MoComponent {
 
   constructor() {
     super(styles, template);
-    this.empt
     this.#empty.state = true;
   }
   // static get observedAttributes() {
@@ -148,7 +145,7 @@ export default class MoField extends MoComponent {
     return this.getElementById("field-label");
   }
 
-  /** @returns {HTMLInputElement | MoSelect} */
+  /** @returns {HTMLInputElement | HTMLSelectElement} */
   get fieldEl() {
     return this.getElementById("field-input");
   }
@@ -250,7 +247,26 @@ export default class MoField extends MoComponent {
     }
 
     if (this.type === "select") {
-      this.fieldEl.options = this.options;
+      // this.fieldEl.options = this.options;
+      this.#buildOptions()
+    }
+  }
+
+  #buildOptions() {
+    const container = this.shadow.getElementById("field-input");
+
+    if (this.options) {
+      this.options.forEach((option) => {
+        const item = document.createElement("option");
+        item.value = option.id;
+        item.innerHTML = option.displayName
+        // const item = new MoSelectItem();
+        
+        // item.valueId = option.id;
+        // item.displayName = option.displayName;
+
+        container.appendChild(item);
+      });
     }
   }
 }
