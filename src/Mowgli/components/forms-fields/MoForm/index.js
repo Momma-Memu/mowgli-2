@@ -20,7 +20,7 @@ export default class MoForm extends MoComponent {
 
   /** @returns {MoField[]} */
   get fields() {
-    return this.getElementsByName("mo-field").concat(this.getElementsByName("mo-select"));
+    return this.getElementsByName("mo-field");
   }
 
   /** @returns {{}} */

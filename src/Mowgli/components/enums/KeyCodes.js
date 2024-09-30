@@ -18,8 +18,8 @@ export class FieldType {
   date = "date";
   switch = "switch";
   select = "select";
+  "search-select" = "search-select";
   // multiSelect = "multi-select";
-  // searchSelect = "search-select";
   // searchMultiSelect = "search-multi-select";
 }
 

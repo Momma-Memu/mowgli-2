@@ -13,6 +13,12 @@ export default class FieldDefinition {
   #halfWidth = false;
   #options = [];
   #apiRoute = "";
+  #dependentField = null;
+  #controllingField = null;
+  #disabled = false;
+
+  /** @type {MoField} */
+  #field = new MoField();;
 
   /**
    * @param {string} name
@@ -48,6 +54,7 @@ export default class FieldDefinition {
   }
 
   /* --------------- Getters / Setters --------------- */
+  
   get name() {
     return this.#name;
   }
@@ -116,6 +123,14 @@ export default class FieldDefinition {
     this.#options = value;
   }
 
+  get field() {
+    return this.#field
+  }
+
+  set field(field) {
+    this.#field = field;
+  }
+
   /* -------------------- Methods -------------------- */
 
   /**
@@ -126,25 +141,29 @@ export default class FieldDefinition {
    * @returns {MoField}
    */
   buildHTML() {
-    const field = new MoField();
+    // this.field = new MoField();
 
-    field.name = this.#name;
-    field.required = this.#required;
-    field.label = this.#displayName;
-    field.type = this.#type;
+    this.field.name = this.#name;
+    this.field.required = this.#required;
+    this.field.label = this.#displayName;
+    this.field.type = this.#type;
 
-    field.placeholder = this.#placeholder || this.#displayName;
-    field.halfWidth = this.#halfWidth;
+    this.field.placeholder = this.#placeholder || this.#displayName;
+    this.field.halfWidth = this.#halfWidth;
 
     if (this.#defaultValue) {
-      field.value = this.#defaultValue;
+      this.field.value = this.#defaultValue;
     }
 
     if (this.#type === "select") {
-      field.options = this.#options;
+      this.field.options = this.#options;
     }
 
-    return field;
+    if (this.#type === "search-select") {
+      this.field.apiRoute = this.apiRoute;
+    }
+
+    return this.field;
   }
 }
 
@@ -160,7 +179,7 @@ export class FieldType {
   switch = "switch";
 
   select = "select";
-  searchSelect = "search-select";
+  "search-select" = "search-select";
 
   multiSelect = "multi-select";
   mutliSearchSelect = "multi-search-select";

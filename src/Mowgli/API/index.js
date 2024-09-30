@@ -22,7 +22,7 @@ export default class MowgliAPI {
   buildQueryString(obj) {
     const keys = Object.keys(obj);
     //`?id=someID&product=bag`;
-    return keys.map(key => `?${key}=${obj[key]}`).join("&")
+    return "?" + keys.map(key => `${key}=${obj[key]}`).join("&");
   }
 
   /** - GET Method Fetch Request.

@@ -30,6 +30,9 @@ export default class MoComponent extends HTMLElement {
   /** @type {MoSleep[]} */
   #timeouts = [];
 
+  /** @type {function[]} */
+  #cleanUpCallbacks = [];
+
   /**
    * @param {string | null} [styles=""]
    * @param {string | null} [template=""]
@@ -65,6 +68,9 @@ export default class MoComponent extends HTMLElement {
 
     this.#timeouts.forEach((timeout) => timeout.clean());
     this.#timeouts = null;
+
+    this.#cleanUpCallbacks.forEach(callback => callback());
+    this.#cleanUpCallbacks = null;
 
     this.#moInternals = null;
     this.#internals = null;
@@ -172,6 +178,11 @@ export default class MoComponent extends HTMLElement {
     this.#timeouts.push(timeout);
 
     return timeout;
+  }
+
+  /** @param {function} callback  */
+  addCleanUpCallback(callback) {
+    this.#cleanUpCallbacks.push(callback);
   }
 
   /**

@@ -8,13 +8,18 @@
   <template id="select">
     <!-- <mo-select id="field-input" tabindex="0"></mo-select> -->
     <select id="field-input" tabindex="0">
-      <option value="" disabled selected>Select...</option>
+      <option value="" disabled selected>Select an option</option>
     </select>
   </template>
 
   <template id="search-select">
-    <input id="field-input" tabindex="0" type="text" />
-    
-    <select id="hidden-select"></select>
+      <input id="field-input" tabindex="0" type="text" />
+      <select id="hidden-field" size="1">
+        <option class="placeholder-option" value="" disabled selected>Select an option</option>
+      </select>
+  </template>
+
+  <template id="switch">
+    <mo-switch id="field-input"></mo-switch>
   </template>
 </div>

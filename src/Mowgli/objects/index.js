@@ -6,6 +6,7 @@ import MowgliCache from "../state/cache/index";
 // eslint-disable-next-line no-unused-vars
 import FieldDefinition from "../builders/FieldDefinition";
 import MoForm from "../components/forms-fields/MoForm/index";
+import SymbioticField from "../managers/SymbioticField";
 
 // import MowgliState from "../StateManager/MowgliState";
 // import MowgliFieldDefinition from "../MowgliFormManager/MowgliFieldDefinition";
@@ -54,7 +55,7 @@ export default class MowgliObject {
   buildQueryString(obj) {
     const keys = Object.keys(obj);
     //`?id=someID&product=bag`;
-    return "?" + keys.map(key => `${key}=${obj[key]}`).join("&")
+    return "?" + keys.map(key => `${key}=${obj[key]}`).join("&");
   }
   
   /** 
@@ -118,7 +119,6 @@ export default class MowgliObject {
       return [{ ok: true, status: 200 }, this.state];
     }
 
-    // this.stateManager.fetched = true;
     const [response, data] = await this.#api.GET(params);
     this.#state.cache = data;
 
@@ -144,7 +144,7 @@ export default class MowgliObject {
    */
   async put(params = "", body) {
     const [response, data] = await this.#api.PUT(params, body);
-    console.log(response, data);
+    return [response, data];
     // return this.#handleResponse(response, data, this.#PUT);
   }
 
@@ -154,16 +154,29 @@ export default class MowgliObject {
    */
   async delete(params = "") {
     const [response, data] = await this.#api.DELETE(params);
-    console.log(response, data);
+    return [response, data];
     // return this.#handleResponse(response, data, this.#DELETE);
   }
 
   /** @returns {MoForm} */
   buildForm() {
     const form = new MoForm();
-    form.build(this.fields);
+    const htmlFields = this.fields.map(field => field.buildHTML());
+
+    htmlFields.forEach(field => {
+      form.shadow.appendChild(field);
+    });
 
     return form;
+  }
+
+  /** 
+   * @param {FieldDefinition} parent
+   * @param {FieldDefinition} child
+   * @param {string} childProperty
+   */
+  buildDependency(parent, child, childProperty = "") {
+    return new SymbioticField(parent, child, childProperty);
   }
 
   // /**

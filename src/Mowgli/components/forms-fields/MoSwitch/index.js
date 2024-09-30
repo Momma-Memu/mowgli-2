@@ -3,27 +3,32 @@ import styles from "./index.css?inline";
 import template from "./index.html?raw";
 
 export default class MoSwitch extends MoComponent {
-  #value = false;
+  #value = this.addInternal("active");
 
   constructor() {
     super(styles, template);
-
-    this.active = this.addInternal("active");
-    this.label = this.addAttribute("mo-label");
   }
 
+  /** @returns {boolean} */
   get value() {
-    return this.#value;
+    return this.#value.state;
   }
 
+  /** @param {boolean} state  */
   set value(state) {
-    this.#value = state;
+    this.#value.state = state;
   }
 
   connectedCallback() {
     const btn = this.getElementById("switch-field");
-    this.addListener("click", () => (this.active.state = !this.active.state), btn);
+
+    this.addListener("click", () => this.#handleChange(), btn);
     this.addListener("keyup", (event) => this.keyUpHandler(event, "Enter"), btn);
+  }
+
+  #handleChange() {
+    this.value = !this.value;
+    this.emitEvent(this.createEvent("change", this.value));
   }
 }
 

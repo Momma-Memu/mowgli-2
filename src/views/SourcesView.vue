@@ -1,7 +1,7 @@
 <script setup>
 import MowgliSources from "../Mowgli/objects/internal/sources/Source";
-const sourceObject = new MowgliSources();
 
+const sourceObject = new MowgliSources();
 </script>
 
 <template>
