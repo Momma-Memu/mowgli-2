@@ -1,17 +1,16 @@
 <div class="head">
-  <div class="head-title">
-    <slot></slot>
+  <div id="head-text-container">
+    <div class="head-title"><slot></slot></div>
+    <div id="head-title-subtext"></div>
   </div>
   
-  <mo-modal>
-    <div class="nav-title" slot="open-btn">
-      <mo-button>Create</mo-button>
+  <mo-modal id="table-modal">
+    <div slot="open-btn">
+      <mo-button id="btn">Create</mo-button>
     </div>
     <div id="head" slot="head">Create</div>
     <div id="modal-body" slot="body"></div>
   </mo-modal>
 </div>
 
-<div class="body">
-  <div></div>
-</div>
+<div class="table-container"></div>

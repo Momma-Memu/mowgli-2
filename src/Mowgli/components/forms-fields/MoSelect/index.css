@@ -1,0 +1,59 @@
+:host {
+  width: 100%;
+  display: flex;
+  position: relative;
+  height: var(--mo-size-10);
+  cursor: pointer;
+}
+
+:host(:state(empty)) > select, :host(:state(disabled)) > select {
+  visibility: hidden;
+  content-visibility: hidden;
+}
+
+:host(:focus) > #select-field {
+  visibility: visible;
+  content-visibility: visible;
+}
+
+select {
+  top: 100%;
+  width: 100%;
+  border: none;
+  height: unset;
+  position: absolute;
+  visibility: hidden;
+  border-radius: var(--mo-border-radius);
+  box-shadow: var(--mo-box-shadow);
+  z-index: 1;
+  font-size: inherit;
+}
+
+option {
+  padding: var(--mo-size-2);
+  font-size: var(--mo-size-5);
+  background-color: color-mix(in srgb, var(--mo-green-500) 30%, white);
+}
+
+option:nth-child(odd) {
+  background-color: color-mix(in srgb, var(--mo-green-500) 10%, white);
+}
+
+option:hover, option:focus, option:active, option::selection {
+  background-color: color-mix(in srgb, var(--mo-blue-500) 25%, white);
+}
+
+option:disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+input {
+  width: 100%;
+  height: inherit;
+  background: unset;
+  border: none;
+  outline: none;
+  font-size: inherit;
+}
+

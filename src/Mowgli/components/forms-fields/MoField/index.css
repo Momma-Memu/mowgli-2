@@ -7,17 +7,23 @@
   padding: 0rem var(--mo-size-2);
   margin-top: var(--mo-size-8);
   background-color: color-mix(in srgb, var(--mo-blue-500) 35%, white);
+  width: 100%;
 }
 
-:host(:last-child) {
-  margin-bottom: var(--mo-size-8);
+:host(:state(half-width)) {
+  width: 45%;
+  flex-grow: 1;
 }
 
-:host(:focus) > .field-container > #field-label {
+:host(:state(half-width):nth-child(odd)) {
+  margin-right: 1rem;
+}
+
+:host(:focus) > .field-container > #field-label, :host(:state(valid)) > .field-container > #field-label {
   transform: translateY(-1.25em);
 }
 
-:host(:not(:state(empty))) > .field-container > #field-label {
+:host(:not(:state(empty))) > .field-container > #field-label, :host(:state(:valid)) #field-label {
   transform: translateY(-1.25em);
 }
 
@@ -57,77 +63,6 @@
   transition: transform 400ms ease;
   pointer-events: none;
   /* 400ms ease font-size; */
-}
-
-/* -------------- SELECT STYLES -------------- */
-
-:host([type="select"]) #field-input {
-  content-visibility: hidden;
-}
-
-:host([type="select"]) #field-input:focus {
-  content-visibility: visible;
-}
-
-:host([type="select"]:not(:state(empty))) #field-input {
-  content-visibility: visible;
-}
-
-option {
-  background-color: color-mix(in srgb, var(--mo-green-500) 30%, white);
-}
-
-option:nth-child(odd) {
-  background-color: color-mix(in srgb, var(--mo-green-500) 10%, white);
-}
-
-/* ------------ SEARCH SELECT STYLES ----------- */
-
-:host([type="search-select"]) option:hover {
-  background-color: color-mix(in srgb, var(--mo-blue-500) 30%, white);
-}
-
-#hidden-field {
-  visibility: hidden;
-  position: absolute;
-  pointer-events: none;
-  z-index: 10;
-  top: 100%;
-  border-radius: var(--mo-border-radius);
-  border: none;
-  box-shadow: var(--mo-box-shadow);
-  font-size: var(--mo-size-5);
-  width: 100%;
-  left: 0;
-}
-
-#hidden-field > option {
-  padding: var(--mo-size-2);
-}
-
-:host(:focus) #hidden-field, :host(:focus-within) #hidden-field {
-  visibility: visible;
-  pointer-events: unset;
-}
-
-#hidden-field > option:hover {
-  background-color: color-mix(in srgb, var(--mo-blue-500) 30%, white);
-}
-
-.placeholder-option {
-  pointer-events: none !important;
-}
-
-.placeholder-option:focus {
-  background-color: color-mix(in srgb, var(--mo-blue-500) 30%, white) !important;
-}
-
-.placeholder-option:active {
-  background-color: color-mix(in srgb, var(--mo-blue-500) 30%, white) !important;
-}
-
-.placeholder-option::selection {
-  background-color: color-mix(in srgb, var(--mo-blue-500) 30%, white) !important;
 }
 
 /* --------------- SWITCH STYLES --------------- */

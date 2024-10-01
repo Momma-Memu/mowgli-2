@@ -11,9 +11,12 @@ import MoAccordian from "../navigation/accordian/index";
 import MoForm from "../forms-fields/MoForm";
 
 import MoField from "../forms-fields/MoField";
-import MoMultiSelect from "../forms-fields/MoMultiSelect/index";
-import MoSelectItem from "../forms-fields/MoMultiSelect/MoSelectItem/index";
-import MoSelectedItem from "../forms-fields/MoMultiSelect/MoSelectedItem/index";
+import MoSelect from "../forms-fields/MoSelect/index";
+import MoSelectOption from "../forms-fields/MoSelect/MoSelectOption/index";
+
+// import MoMultiSelect from "../forms-fields/MoMultiSelect/index";
+// import MoSelectItem from "../forms-fields/MoMultiSelect/MoSelectItem/index";
+// import MoSelectedItem from "../forms-fields/MoMultiSelect/MoSelectedItem/index";
 
 
 import MoChart from "../dashboard/chart/index";
@@ -27,16 +30,20 @@ export default class MoComponentManager {
   MoButton = MoButton;
   MoNav = MoNav;
 
-  MoMultiSelect = MoMultiSelect;
-  MoSelectItem = MoSelectItem;
-  MoSelectedItem = MoSelectedItem;
+  // MoMultiSelect = MoMultiSelect;
+  // MoSelectItem = MoSelectItem;
+  // MoSelectedItem = MoSelectedItem;
 
   MoSwitch = MoSwitch;
   MoModal = MoModal;
   MoDropdown = MoDropdown;
   MoAccordian = MoAccordian;
+  
+  MoSelectOption = MoSelectOption;
+  MoSelect = MoSelect;
   MoField = MoField;
   MoForm = MoForm;
   MoTable = MoTable;
+
   useMowgli() {}
 }

@@ -9,6 +9,9 @@ import FieldDefinition from "../../../builders/FieldDefinition";
 import MoField from "../MoField/index";
 
 export default class MoForm extends MoComponent {
+  /** @type {FieldDefinition[]}  */
+  #fields;
+
   constructor() {
     super(styles, template);
   }
@@ -18,16 +21,17 @@ export default class MoForm extends MoComponent {
     return this.shadow.getElementById("form");
   }
 
-  /** @returns {MoField[]} */
-  get fields() {
-    return this.getElementsByName("mo-field");
-  }
-
   /** @returns {{}} */
   get values() {
     const rawValue = {};
     
-    this.fields.forEach(field => rawValue[field.name] = field.value);
+    this.#fields.forEach(fieldDef => {
+      rawValue[fieldDef.name] = fieldDef.field.value;
+
+      if (fieldDef.hiddenIdField) {
+        rawValue[fieldDef.hiddenIdField.name] = fieldDef.hiddenIdField.field.value;
+      }
+    });
 
     return rawValue;
   }
@@ -38,7 +42,10 @@ export default class MoForm extends MoComponent {
 
   /** @param {FieldDefinition[]} fields  */
   build(fields) {
-    fields.forEach((field) => {
+    this.#fields = fields;
+
+    this.#fields.forEach((field) => {
+      
       this.shadow.appendChild(field.buildHTML());
     });
   }

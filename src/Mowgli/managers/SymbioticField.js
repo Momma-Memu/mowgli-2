@@ -4,18 +4,22 @@ import FieldDefinition from "../builders/FieldDefinition";
 export default class SymbioticFieldManager {
   #parent;
   #child;
-  #prop;
+  #childProp;
+  #parentProp;
+
   /** 
    * @param {FieldDefinition} parent
    * @param {FieldDefinition} child
-   * @param {string} prop
+   * @param {string} parentProp
+   * @param {string} childProp
    */
-  constructor(parent, child, prop = "") {
+  constructor(parent, child, parentProp = "value", childProp = "value") {
     this.#parent = parent;
     this.#child = child;
-    this.#prop = prop;
+    this.#parentProp = parentProp;
+    this.#childProp = childProp;
 
-    this.#parent.field.parent = true;
+    // this.#parent.field.parent = true;
     this.#child.field.disabled = true;
 
     this.#parent.field.symbioticCallback = () => this.updateDependency();
@@ -33,8 +37,8 @@ export default class SymbioticFieldManager {
   updateDependency() {
     this.child.field.disabled = !this.parent.field.valid;
     
-    if (this.#prop) {
-      this.child.field[this.#prop] = this.parent.field.value || "";
+    if (this.#childProp) {
+      this.child.field[this.#childProp] = this.parent.field[this.#parentProp] || "";
     }
   }
 

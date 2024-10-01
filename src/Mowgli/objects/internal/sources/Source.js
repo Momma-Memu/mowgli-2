@@ -6,18 +6,27 @@ export default class MowgliSources extends MowgliObject {
   options = new MowgliSourceType();
 
   constructor() {
-    const name = new FieldDefinition("name", true, "Name", "text");
+    const name = new FieldDefinition("name", true, "Name", "text", "", "");
     const description = new FieldDefinition("description", true, "Description", "text");
-    const type = new FieldDefinition("type", true, "Source Type", "select", "Select a type", null, false);
-    const tag = new FieldDefinition("tag", true, "Source Value", "search-select", "Search...", null, false, "source-options/subtypes");
-    const normalize = new FieldDefinition("normalize", true, "Normalize Data", "switch", "", null, false);
+    const sourceName = new FieldDefinition("sourceName", true, "Source Type", "select", "Select a type", null, true);
+    const sourceValue = new FieldDefinition("sourceValue", true, "Source Value", "search-select", "Search...", null, true, "source-options/subtypes");
+    const normalize = new FieldDefinition("normalized", true, "Normalize Data", "switch", "", null, false);
+    const sourceId = new FieldDefinition("sourceId", true, "Source ID", "switch", "", null, false, null, null, true);
 
-    super("sources", [name, description, type, tag, normalize]);
+    super("sources", [
+      name,
+      description,
+      sourceName,
+      sourceValue,
+      normalize,
+    ]);
 
-    type.options = this.options.state;
-    this.buildDependency(type, tag, "apiParams");
-    // type.addDependentField(tag);
-    // tag.addControllingField(type);
+    sourceValue.hiddenIdField = sourceId;
+    sourceName.options = this.options.state;
+
+    this.buildDependency(sourceName, sourceValue, "value", "apiParams");
+    this.buildDependency(sourceValue, sourceId, "valueId", "value");
+
     window.mowgliSource = this;
   }
 }

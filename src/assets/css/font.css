@@ -1,8 +1,9 @@
 html {
   /* Font Variables */
-  --mo-font-family: "Roboto", Verdana, Geneva, sans-serif;
   /* --mo-font-family: "Noto Sans", sans-serif; */
-
+  
+  --mo-font-family: "Roboto", Verdana, Geneva, sans-serif;
+  
   /* Font Styles */
   font-size: var(--mo-size-4);
   font-family: var(--mo-font-family) !important;

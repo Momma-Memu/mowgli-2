@@ -89,9 +89,18 @@ export default class MoComponent extends HTMLElement {
 
   /**
    * @param {string} className
-   * @returns {Element | null} */
+   * @returns {Element | null}
+  */
   getByClass(className) {
     return this.shadow.querySelector(`.${className}`);
+  }
+
+  /**
+   * @param {string} query
+   * @returns {Element | null} 
+  */
+  getBySearch(query) {
+    return this.shadow.querySelector(query);
   }
 
   /**

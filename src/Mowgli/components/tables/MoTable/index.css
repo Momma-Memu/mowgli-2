@@ -5,9 +5,9 @@
   padding: 1rem;
   background-color: white;
   width: 100%;
-  border-radius: 0.5rem;
+  border-radius: var(--mo-border-radius);
   box-shadow: rgba(0, 0, 0, 0.32) 0.1rem 0.5rem 0.5rem;
-  color: var(--mo-blue-800);
+  user-select: none;
 }
 
 .head {
@@ -15,6 +15,7 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  color: var(--mo-blue-600);
 }
 
 .head-title {
@@ -22,6 +23,86 @@
   color: var(--mo-blue-700);
 }
 
+#foot {
+  color: var(--mo-blue-600);
+}
+
 #modal-body {
   width: 100%;
+}
+
+/* ---------------- TABLE STYLES ---------------- */
+
+.table-container {  
+  overflow: hidden;
+  border-radius: var(--mo-border-radius);
+  box-shadow: var(--mo-box-shadow);
+}
+
+table, thead, tbody, tr, th, td {
+  font-family: inherit;
+  padding: 0px;
+  margin: 0px;
+  border: none;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+/* -------------- TABLE ROW STYLES -------------- */
+
+tr:hover {
+  cursor: pointer;
+}
+
+thead > tr {
+  box-shadow: 0rem 0.15rem 0.45rem 0.1rem #00000026;
+  position: relative;
+}
+
+tbody > tr {
+  background-color: color-mix(in srgb, var(--mo-green-500) 30%, white);
+}
+
+tbody > tr:not(:last-child) {
+  border-bottom: solid 1px var(--mo-blue-100);
+}
+
+tbody > tr:hover {
+  background-color: color-mix(in srgb, var(--mo-blue-500) 35%, white);
+}
+
+tr:nth-child(even) {
+  background-color: color-mix(in srgb, var(--mo-green-500) 10%, white);
+}
+
+/* -------------- TABLE CELL STYLES -------------- */
+
+th {
+  color: white;
+  text-align: left;
+  position: relative;
+  background-color: var(--mo-green-400);
+}
+
+th:not(:last-child) {
+  border-right: solid 1px color-mix(in srgb, var(--mo-blue-600) 95%, white);
+}
+
+th, td {
+  padding: var(--mo-size-4);
+}
+
+tr > td:not(:last-child) {
+  border-right: solid 1px var(--mo-blue-100);
+}
+
+
+/* -------------- FOOTER STYLES -------------- */
+#foot {
+  display: flex;
+  padding: 0 var(--mo-size-2);
+  justify-content: space-between;
 }

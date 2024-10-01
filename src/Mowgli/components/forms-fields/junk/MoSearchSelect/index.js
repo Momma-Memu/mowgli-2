@@ -1,4 +1,4 @@
-import MoComponent from "../../index";
+import MoComponent from "../../../index";
 import styles from "./index.css?inline";
 import template from "./index.html?raw";
 

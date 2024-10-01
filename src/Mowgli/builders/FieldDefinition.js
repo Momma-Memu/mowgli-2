@@ -17,6 +17,10 @@ export default class FieldDefinition {
   #controllingField = null;
   #disabled = false;
 
+  
+  /** @type {FieldDefinition} */
+  hiddenIdField;
+
   /** @type {MoField} */
   #field = new MoField();;
 
@@ -40,7 +44,7 @@ export default class FieldDefinition {
     defaultValue = "",
     halfWidth = false,
     apiRoute = "",
-    options = []
+    options = [],
   ) {
     this.#name = name;
     this.#required = required;
@@ -54,7 +58,7 @@ export default class FieldDefinition {
   }
 
   /* --------------- Getters / Setters --------------- */
-  
+
   get name() {
     return this.#name;
   }

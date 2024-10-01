@@ -7,6 +7,9 @@ import MoComponent from "../../index";
 import styles from "./index.css?inline";
 import template from "./index.html?raw";
 
+// eslint-disable-next-line no-unused-vars
+import MoSelect from "../MoSelect/index";
+
 export default class MoField extends MoComponent {
   #dirty = this.addInternal("dirty");
   #empty = this.addInternal("empty");
@@ -27,9 +30,10 @@ export default class MoField extends MoComponent {
   #apiManager;
   #options = this.addState();
   #timeout = this.addTimeout(500);
-  #value = this.addState();
+  #value = this.addState("");
+  #valueId = this.addState("");
   #apiParams = this.addState("");
-  #selectedData = this.addState({ id: "", value: "" });
+  #lastQuery = this.addState("");
 
   /** @type {function | undefined} */
   symbioticCallback;
@@ -93,6 +97,14 @@ export default class MoField extends MoComponent {
 
   set disabled(value) {
     this.#disabled.state = value;
+    
+    // if (value && this.fieldEl) {
+    //   this.fieldEl.removeAttribute("tabindex");
+    // } else if (!value && this.fieldEl) {
+    //   this.fieldEl.setAttribute("tabindex", 0);
+    // } else if (value) {
+    //   this.setAttribute("tabindex", -1);
+    // }
   }
 
   get dirty() {
@@ -127,6 +139,14 @@ export default class MoField extends MoComponent {
     this.#halfWidth.state = halfWidth;
   }
 
+  get lastQuery() {
+    return this.#lastQuery.state;
+  }
+
+  set lastQuery(queryString) {
+    this.#lastQuery.state = queryString;
+  }
+
   // =================== State ===================
 
   get options() {
@@ -145,6 +165,15 @@ export default class MoField extends MoComponent {
     this.#value.state = data;
   }
 
+  get valueId() {
+    return this.#valueId.state;
+  }
+
+  set valueId(data) {
+    this.#valueId.state = data;
+  }
+
+
   get apiRoute() {
     return this.#apiRoute.state;
   }
@@ -152,6 +181,10 @@ export default class MoField extends MoComponent {
   set apiRoute(data) {
     this.#apiRoute.state = data || "";
     this.#apiManager = new MowgliAPI(`${this.apiRoute}`);
+
+    if (this.fieldEl) {
+      this.fieldEl.apiRoute = this.apiRoute;
+    }
   }
 
   get apiParams() {
@@ -160,17 +193,10 @@ export default class MoField extends MoComponent {
 
   set apiParams(data) {
     this.#apiParams.state = data || "";
-    this.#fetchOptions();
-  }
 
-  /** @returns {{ id: string, value: string }} */
-  get selectedData() {
-    return this.#selectedData.state;
-  }
-
-  set selectedData(data) {
-    this.#selectedData.state = data || {};
-    this.#fetchOptions();
+    if (this.fieldEl) {
+      this.fieldEl.apiParams = this.apiParams;
+    }
   }
 
   // ================== Elements ==================
@@ -180,7 +206,7 @@ export default class MoField extends MoComponent {
     return this.getElementById("field-label");
   }
 
-  /** @returns {HTMLInputElement | HTMLSelectElement} */
+  /** @returns {HTMLInputElement | MoSelect} */
   get fieldEl() {
     return this.getElementById("field-input");
   }
@@ -193,109 +219,76 @@ export default class MoField extends MoComponent {
   // =============== Public Methods ===============
 
   connectedCallback() {
+    const changeTypes = ["date", "select", "search-select", "switch"];
     this.#createField(this.type);
-    this.#updateAttributes();
+    this.#initAttributes();
+    
+    // if (this.type === "select" || this.type === "search-select") {
+    //   this.addListener("search-change", this.#fetchOptions())
+    // }
 
-    if (this.type === "search-select") {
-      this.addListener("keyup", (event) => this.#changeHandler(event, true), this.fieldEl);
-      this.addListener("change", (event) => this.#changeHandler(event), this.hiddenFieldEl);
-      
-    } else if (this.type === "date" || this.type === "select" || this.type === "switch") {
+    if (changeTypes.includes(this.type)) {
       this.addListener("change", (event) => this.#changeHandler(event), this.fieldEl);
-    } else {
-      this.addListener("keyup", (event) => this.#changeHandler(event, true), this.fieldEl);
+    } else if (this.type !== "select") {
+      this.addListener("keyup", (event) => this.#changeHandler(event), this.fieldEl);
     }
   }
 
-  #updateAttributes() {
+  #initAttributes() {
     const field = this.fieldEl;
     const label = this.labelEl;
 
-    if (this.type === "switch") {
-      this.fieldEl.innerHTML = this.label;
-    }
-
-    if (label) {
+    if (label && field) {
       this.ariaLabel = this.label;
 
       label.setAttribute("for", this.name);
       label.innerHTML = this.label;
-    }
 
-    if (field) {
+      if (this.type === "switch") {
+        this.fieldEl.innerHTML = this.label;
+      }
+
       if (this.required) {
         field.setAttribute("required", this.required);
       }
 
-      // if (this.disabled) {
-      //   field.setAttribute("disabled", this.required);
-      // }
-
-      if (this.type !== "select") {
+      if (this.type !== "select" && this.type !== "search-select") {
         field.setAttribute("name", this.name);
         field.setAttribute("type", this.type);
       }
 
       field.setAttribute("placeholder", this.placeholder);
     }
+
+    if (this.apiRoute) {
+      this.fieldEl.apiRoute = this.apiRoute;
+    }
   }
 
-  /**
-   * @param {KeyboardEvent} event
-   * @param {boolean} timeout
-   */
-  #changeHandler(event, timeout) {
+  /** @param {Event} event */
+  #changeHandler(event) {
     event.stopPropagation();
+
     this.dirty = true;
-    
+    this.value = event.target.value;
+    this.valueId = event.target.valueId;
+    this.empty = this.value === "";
+    this.valid = this.type === "switch" ? true : this.#checkValidity();
 
-    if (event.target === this.fieldEl) {
-      this.value = event.target.value;
-    } else if (event.target === this.hiddenFieldEl) {
-      this.value = event.target.querySelector(`[value='${event.target.value}']`).innerHTML;
-      this.fieldEl.value = this.value;
-      
-      this.selectedData.id = event.target.value;
-      this.selectedData.value = this.value;
-
-      console.log(this.selectedData);
-    }
-    
-    if (this.value) {
-      this.empty = false;
-    } else {
-      this.empty = true;
-    }
-
-    if (timeout) {
+    if (event.type === "keyup" && !this.empty) {
       this.#timeout.sleep(() => {
-        this.#updateValue(event, this.type === "search-select");
-        this.emitEvent(this.createEvent("field-changed", this.value));
+        // this.emitEvent(this.createEvent("field-changed", this.value));
+
+        if (this.symbioticCallback) {
+          this.symbioticCallback();
+        }
       });
-    } else {
-      this.#updateValue(event, this.type === "search-select");
+    } else if(!this.empty) {
+      if (this.symbioticCallback) {
+        this.symbioticCallback();
+      }
     }
   }
-
-  /**
- * @param {Event} event
- */
-  #updateValue(event) {
-    if (this.type === "search-select" && event.type === "keyup") {
-      // Hanlde API Call to populate select menu
-      this.#fetchOptions(this.value);
-    } else if (this.type === "search-select" && event.type === "change") {
-      // Handle Actual value selection.
-
-    }
-
-    this.valid = this.#checkValidity();
-
-    if (this.symbioticCallback) {
-      this.symbioticCallback();
-    }
-  }
-  
 
   /**
    * - Returns True if this field is valid, else returns false.
@@ -330,36 +323,26 @@ export default class MoField extends MoComponent {
       fieldWrapper.appendChild(clone);
     }
 
-    if (this.type === "select") {
-      // this.fieldEl.options = this.options;
-      this.#buildOptions()
-    }
-  }
-
-  #buildOptions(containerId = "field-input") {
-    const container = this.shadow.getElementById(containerId);
-    
-    if (this.options && this.options.length) {
-      this.options.forEach((option) => {
-        const item = document.createElement("option");
-        item.setAttribute("value", option.id);
-        item.setAttribute("data", option.displayName);
-
-        item.innerHTML = option.displayName;
-
-        container.appendChild(item);
-      });
+    if (this.type === "select" && this.options) {
+      this.fieldEl.options = this.options;
+      // this.#buildOptions()
     }
   }
 
   async #fetchOptions() {
-    const [res, data] = await this.#apiManager.GET(this.#buildQuery());
+    const queryString = this.#buildQuery();
 
-    if (res.ok) {
-      this.options = data;
-      
-      this.#updateHiddenFieldStyles();
-      this.#buildOptions("hidden-field");
+    if (queryString !== this.lastQuery && !this.disabled) {
+      this.lastQuery = queryString;
+
+      const [res, data] = await this.#apiManager.GET(this.#buildQuery());
+  
+      if (res.ok) {
+        this.options = data;
+        
+        // this.#updateHiddenFieldStyles();
+        this.fieldEl.options = this.options;
+      }
     }
   }
 
