@@ -19,21 +19,34 @@ export default class MowgliObject {
   #api;
   #state;
   #name;
+
+  /** @type {ListManager} */
   #listManager;
+
+  #fields;
+  #columns;
 
   /** 
    * @param {string} api 
    * @param {FieldDefinition[]} fields 
+   * @param {FieldDefinition[]} columns 
    * @param {string} name
    */
-  constructor(api, fields = [], name = "") {
+  constructor(api, fields = [], columns = [], name = "") {
     this.#api = new MowgliAPI(api);
     this.#state = new MowgliCache(api);
 
     /** @type {FieldDefinition[]} */
-    this.fields = fields;
+    this.#fields = fields;
+
+    /** @type {FieldDefinition[]} */
+    this.#columns = columns;
 
     this.#name = name || api[0].toUpperCase() + api.slice(1);
+  }
+
+  get fields() {
+    return this.#fields;
   }
 
   get name() {
@@ -41,7 +54,15 @@ export default class MowgliObject {
   }
 
   get state() {
+    if (this.#state.cache && !Array.isArray(this.#state.cache) && typeof this.#state.cache === "object") {
+      return Object.values(this.#state.cache);
+    }
+
     return this.#state.cache;
+  }
+
+  set state(state) {
+    this.#state.cache = state;
   }
 
   /** @type {ListManager} */
@@ -51,6 +72,15 @@ export default class MowgliObject {
 
   set listManager(lm) {
     this.#listManager = lm;
+  }
+
+  /** @type {FieldDefinition[]} */
+  get columns() {
+    return this.#columns;
+  }
+
+  set columns(fields) {
+    this.#columns = fields;
   }
 
   buildQueryString(obj) {
@@ -79,7 +109,10 @@ export default class MowgliObject {
     }
 
     const [response, data] = await this.#api.GET(params);
-    this.#append(data);
+
+    if (response.ok) {
+      this.#updateCache(data);
+    }
 
     return [response, data];
   }
@@ -92,7 +125,7 @@ export default class MowgliObject {
     const [response, data] = await this.#api.POST(params, body);
 
     if (response.ok) {
-      this.#append(data);
+      this.#updateCache(data);
     }
 
     return [response, data];
@@ -106,7 +139,7 @@ export default class MowgliObject {
     const [response, data] = await this.#api.PUT(params, body);
 
     if (response.ok) {
-      this.#append(data);
+      this.#updateCache(data);
     }
     
     return [response, data];
@@ -145,37 +178,40 @@ export default class MowgliObject {
   }
 
   buildListTable() {
-    this.#listManager = new ListManager(this.#name, this.fields, "sources");
+    this.#listManager = new ListManager(this.#name, this.columns, "sources");
     this.#listManager.records = this.state || [];
 
     return this.#listManager.build();
   }
 
-  #append(data) {
+  #updateCache(data) {
     if (typeof data === "boolean") {
-      return;
-    }
-
-    this.#state.cache = this.#combineWithCache();
-  }
-
-  #combineWithCache(data) {
-    const dataMap = {...this.#state.cache};
-
-    if (Array.isArray(data)) {
-      data.forEach(item => {
-        dataMap[item.id] = item;
-      });
-    } else if (typeof data === "object") {
-      dataMap[data.id] = data;
+      this.state = data;
+    } else if (!this.state) {
+      this.state = data;
+    } else {
+      const dataMap = {...this.state};
+  
+      if (Array.isArray(data)) {
+        // Add each key/value pair to the new cache object.
+        data.forEach(item => {
+          dataMap[item.id] = item;
+        });
+      } else if (typeof data === "object" && data.id) {
+        dataMap[data.id] = data;
+      }
+  
+      if (Object.keys(dataMap)) {
+        this.state = dataMap;
+      }
     }
   }
 
   #remove(id) {
-    const dataMap = {...this.#state.cache};
+    const dataMap = {...this.state};
     delete dataMap[id];
     
-    this.#state.cache = dataMap;
+    this.state = dataMap;
   }
 
   // #handleAuthEvent(state) {

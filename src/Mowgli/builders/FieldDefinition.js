@@ -163,7 +163,7 @@ export default class FieldDefinition {
       this.field.options = this.#options;
     }
 
-    if (this.#type === "search-select") {
+    if (this.apiRoute) {
       this.field.apiRoute = this.apiRoute;
     }
 

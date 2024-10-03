@@ -7,7 +7,7 @@ Chart.defaults.font.size = 16;
 import enums from "./enums";
 
 export default class MoChart extends MoComponent {
-  chart = null;
+  #chart = this.addState(null);
 
   constructor() {
     super(styles, template);
@@ -15,6 +15,14 @@ export default class MoChart extends MoComponent {
 
   get canvas() {
     return this.getElementById("mo-chart");
+  }
+
+  get chart() {
+    return this.#chart.state;
+  }
+
+  set chart(chart) {
+    this.#chart.state = chart;
   }
 
   connectedCallback() {

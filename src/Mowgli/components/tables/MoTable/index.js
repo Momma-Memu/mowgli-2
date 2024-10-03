@@ -8,11 +8,20 @@ import MowgliObject from "@/Mowgli/objects/index";
 export default class MoTable extends MoComponent {
   
   /** @type {MowgliObject} */
-  moObject;
+  #mobject = this.addState();
   #records = this.addState([]);
 
   constructor() {
     super(styles, template);
+  }
+
+  /** @type {MowgliObject} */
+  get mobject() {
+    return this.#mobject.state;
+  }
+
+  set mobject(mobject) {
+    this.#mobject.state = mobject;
   }
 
   /** @type {any[]} */
@@ -33,32 +42,40 @@ export default class MoTable extends MoComponent {
   }
 
   connectedCallback() {
-    if (this.moObject) {
-      this.form = this.moObject.buildForm();
+    if (this.mobject && this.getElementById("table-modal")) {
+      this.form = this.mobject.buildForm();
       this.modalBody.appendChild(this.form);
 
-      this.build();
+      this.#init();
     }
 
     this.addListener("submit", () => this.#createNew(), this.getElementById("table-modal"));
   }
   
   build() {
-    this.tableContainer.appendChild(this.moObject.buildListTable());
+    this.tableContainer.appendChild(this.mobject.buildListTable());
     this.shadow.getElementById("head-title-subtext").innerHTML = this.#getSubHeader();
 
     this.shadow.appendChild(this.#getFooter());
   }
 
+  #init() {
+    if (this.mobject.state) {
+      this.build();
+    } else {
+      this.#fetch();
+    }
+  }
+
   #getSubHeader() {
     return (`
-      Click "Create", to make your new ${this.moObject.name}. Select any ${this.moObject.name} from the list below to edit or remove it.
+      Click "Create", to make your new ${this.mobject.name}. Select any ${this.mobject.name} from the list below to edit or remove it.
     `);
   }
 
   #getFooter() {
     const supportTxt = "Columns may be hidden to support your device. This is configurable by your administrator.";
-    const results = `Results: ${this.moObject.listManager.records.length}`;
+    const results = `Results: ${this.mobject.listManager.records.length}`;
 
     const footerDiv = document.createElement("div");
     footerDiv.setAttribute("id", "foot");
@@ -69,7 +86,12 @@ export default class MoTable extends MoComponent {
 
   #createNew() {
     console.log(this.form.values);
-    this.moObject.post("", this.form.values);
+    this.mobject.post("", this.form.values);
+  }
+
+  async #fetch() {
+    await this.mobject.get();
+    this.build();
   }
 }
 

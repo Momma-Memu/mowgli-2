@@ -4,6 +4,7 @@ import MowgliError from "../../error/index";
 export default class MowgliCache {
   #key;
   #errorName = "Cache";
+  #data = null;
 
   /** @param {string} key - Key to reference the stored data. */
   constructor(key) {
@@ -12,10 +13,15 @@ export default class MowgliCache {
 
   /** - Current value of the cache.*/
   get cache() {
+    if (this.#data) {
+      return this.#data;
+    }
+
     return this.#getSessionStorage();
   }
 
   set cache(value) {
+    this.#data = value;
     this.#setSessionStorage(value);
   }
 

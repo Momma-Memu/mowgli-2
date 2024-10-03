@@ -31,9 +31,13 @@ export default class MoSelect extends MoComponent {
     return this.#apiRoute.state;
   }
 
-  set apiRoute(state = "") {
+  set apiRoute(state) {
     this.#apiRoute.state = state;
     this.#apiManager = new MowgliAPI(state);
+
+    if (!this.options || !this.options.length) {
+      this.#fetchOptions();
+    }
   }
 
   /** @type {string} */
@@ -43,7 +47,10 @@ export default class MoSelect extends MoComponent {
 
   set apiParams(state) {
     this.#apiParams.state = state;
-    this.#fetchOptions();
+
+    if (this.apiRoute && this.#apiManager) {
+      this.#fetchOptions();
+    }
   }
 
   /** @type {keyof FieldType} */
@@ -78,8 +85,8 @@ export default class MoSelect extends MoComponent {
     return this.#options.state;
   }
 
-  set options(state = []) {
-    this.#options.state = state;
+  set options(state) {
+    this.#options.state = state || [];
     this.buildOptions();
   }
   
@@ -121,6 +128,26 @@ export default class MoSelect extends MoComponent {
 
   buildOptions() {
     if (this.selectField && this.options && this.options.length) {
+      // const groups = {};
+
+      // this.options.forEach((option) => {
+      //   const parts = option.displayName.split("/");
+      //   const group = parts[0];
+      //   const name = parts.slice(1).join("/");
+
+      //   if (!groups[group]) {
+      //     groups[group] = [];
+      //   }
+
+      //   groups[group].push(name);
+
+
+      // });
+
+      // for(const key in groups) {
+      //   console.log(key, groups[key])
+      // }
+
       const container = this.selectField;
       container.setAttribute("size", this.#getSize());
       container.innerHTML = "";
@@ -160,12 +187,21 @@ export default class MoSelect extends MoComponent {
   }
 
   #buildQuery() {
+    if (!this.#apiRoute) {
+      return;
+    }
+    
+    if (!this.#apiManager) {
+      this.#apiManager = new MowgliAPI(this.#apiRoute);
+    }
+
+
     const queryParams = this.#apiManager.buildQueryString({ 
       page: 0, 
       search: this.searchField.value || "", 
     });
 
-    return `${this.apiParams}/${queryParams}`;
+    return `${this.apiParams}${queryParams}`;
   }
 
   async #fetchOptions() {
@@ -174,7 +210,7 @@ export default class MoSelect extends MoComponent {
     if (queryString !== this.lastQuery && !this.disabled) {
       this.lastQuery = queryString;
 
-      const [res, data] = await this.#apiManager.GET(this.#buildQuery());
+      const [res, data] = await this.#apiManager.GET(queryString);
   
       if (res.ok) {
         this.options = data;
