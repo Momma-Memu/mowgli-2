@@ -75,8 +75,18 @@ export default class ListManager {
 
   #buildRecords() {
     const keys = this.#getColNames();
+
     const rows = this.#records.map(record => {
-      return this.#buildRow(keys.map(key => this.#buildCell(record[key])).join(""));
+
+      const row = this.#buildRow(keys.map(key => {
+
+        const fieldDef = this.#fields.find(field => field.name === key);
+        const value = fieldDef.getFormattedValue(record[key]);
+        
+        return this.#buildCell(value);
+      }).join(""));
+
+      return row;
     }).join("");
 
     return `<tbody id="mo-table-body">${rows}</tbody>`;

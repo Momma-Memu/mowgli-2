@@ -2,4 +2,5 @@
   display: flex;
   flex-wrap: wrap;
   padding-bottom: var(--mo-size-4);
+  gap: 0rem 1rem;
 }

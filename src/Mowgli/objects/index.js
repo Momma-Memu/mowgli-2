@@ -29,10 +29,10 @@ export default class MowgliObject {
   /** 
    * @param {string} api 
    * @param {FieldDefinition[]} fields 
-   * @param {FieldDefinition[]} columns 
+   * @param {FieldDefinition[] | null} columns 
    * @param {string} name
    */
-  constructor(api, fields = [], columns = [], name = "") {
+  constructor(api, fields = [], columns = null, name = "") {
     this.#api = new MowgliAPI(api);
     this.#state = new MowgliCache(api);
 
@@ -40,7 +40,7 @@ export default class MowgliObject {
     this.#fields = fields;
 
     /** @type {FieldDefinition[]} */
-    this.#columns = columns;
+    this.#columns = columns || fields;
 
     this.#name = name || api[0].toUpperCase() + api.slice(1);
   }

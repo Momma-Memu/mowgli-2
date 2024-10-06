@@ -26,7 +26,12 @@ export default class MoForm extends MoComponent {
     const rawValue = {};
     
     this.#fields.forEach(fieldDef => {
-      rawValue[fieldDef.name] = fieldDef.field.value;
+      if (fieldDef.useValueID) {
+        rawValue[fieldDef.name] = fieldDef.field.valueId;
+      } else {
+        rawValue[fieldDef.name] = fieldDef.field.value;
+      }
+      
 
       if (fieldDef.hiddenIdField) {
         rawValue[fieldDef.hiddenIdField.name] = fieldDef.hiddenIdField.field.value;

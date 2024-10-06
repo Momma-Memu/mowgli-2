@@ -1,6 +1,9 @@
 import MoField from "../components/forms-fields/MoField/index";
+import MowgliDateManager from "../managers/DateManager";
 
 export default class FieldDefinition {
+  #dateManager = new MowgliDateManager();
+
   #name = "";
   #displayName = "";
 
@@ -20,6 +23,9 @@ export default class FieldDefinition {
   
   /** @type {FieldDefinition} */
   hiddenIdField;
+
+  /** @type {boolean} */ 
+  useValueID = false;
 
   /** @type {MoField} */
   #field = new MoField();;
@@ -168,6 +174,25 @@ export default class FieldDefinition {
     }
 
     return this.field;
+  }
+
+  /** @param {string | boolean} [recordValue=""]  */
+  getFormattedValue(recordValue = "") {
+    try {
+      if (typeof recordValue === "boolean") {
+        return recordValue ? "Yes" : "No";
+      }
+      
+      const value = recordValue || this.field.value || this.#defaultValue;
+
+      if (this.type === "date") {
+        return this.#dateManager.toField(value);
+      } else {
+        return value;
+      }
+    } catch(err) {
+      return "";
+    }
   }
 }
 

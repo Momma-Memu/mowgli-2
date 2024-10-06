@@ -152,10 +152,10 @@ export default class MoSelect extends MoComponent {
       container.setAttribute("size", this.#getSize());
       container.innerHTML = "";
       
-      this.options.forEach(({id, displayName}) => {
+      this.options.forEach(({id, displayName, name}) => {
         const option = document.createElement("option");
         option.value = id;
-        option.innerHTML = displayName;
+        option.innerHTML = displayName || name;
 
         container.appendChild(option);
       });

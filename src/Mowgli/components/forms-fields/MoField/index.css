@@ -7,6 +7,7 @@
   padding: 0rem var(--mo-size-2);
   margin-top: var(--mo-size-8);
   background-color: color-mix(in srgb, var(--mo-blue-500) 35%, white);
+  outline: none;
   width: 100%;
 }
 
@@ -14,10 +15,10 @@
   width: 45%;
   flex-grow: 1;
 }
-
-:host(:state(half-width):nth-child(odd)) {
+/* 
+:host(:state(half-width):nth-child(even)) {
   margin-right: 1rem;
-}
+} */
 
 :host(:focus) > .field-container > #field-label, :host(:state(valid)) > .field-container > #field-label {
   transform: translateY(-1.25em);
@@ -91,3 +92,17 @@
 :host(:state(disabled)) > .field-container {
   pointer-events: none;
 }
+
+
+:host([type="date"]) #field-label {
+  transform: translateY(-1.25em);
+}
+
+
+/* :host([type="date"]:focus) #field-input {
+  content-visibility: visible;
+}
+
+:host([type="date"]:focus-within) #field-input {
+  content-visibility: visible;
+} */
