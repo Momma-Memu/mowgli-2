@@ -7,6 +7,7 @@ export default class MoSwitch extends MoComponent {
 
   constructor() {
     super(styles, template);
+    this.#value.state = false;
   }
 
   /** @returns {boolean} */

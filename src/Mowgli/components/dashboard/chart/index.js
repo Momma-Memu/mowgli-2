@@ -33,7 +33,7 @@ export default class MoChart extends MoComponent {
 
   buildChart() {
     this.chartEl = new Chart(this.canvas, {
-      type: this.chart.type,
+      type: this.chart.type.toLowerCase(),
       data: {
         labels: this.#getLabels(),
         datasets: [{

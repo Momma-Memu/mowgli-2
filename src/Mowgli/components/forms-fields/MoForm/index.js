@@ -5,9 +5,6 @@ import template from "./index.html?raw";
 // eslint-disable-next-line no-unused-vars
 import FieldDefinition from "../../../builders/FieldDefinition";
 
-// eslint-disable-next-line no-unused-vars
-import MoField from "../MoField/index";
-
 export default class MoForm extends MoComponent {
   /** @type {FieldDefinition[]}  */
   #fields;
