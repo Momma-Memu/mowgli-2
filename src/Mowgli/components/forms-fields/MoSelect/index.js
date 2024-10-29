@@ -13,12 +13,11 @@ export default class MoSelect extends MoComponent {
   #apiRoute = this.addState("");
   #apiParams = this.addState("");
   #type = this.addState("");
-  
 
   #value = this.addState("");
   #valueId = this.addState("");
   #options = this.addState([]);
-  
+
   #placeholder = this.addAttribute("");
   #timeout = this.addTimeout(500);
 
@@ -89,12 +88,12 @@ export default class MoSelect extends MoComponent {
     this.#options.state = state || [];
     this.buildOptions();
   }
-  
+
   /** @type {string} */
   get placeholder() {
     return this.#placeholder.attribute;
   }
-  
+
   set placeholder(state = "Select an Option") {
     this.#placeholder.attribute = state;
   }
@@ -119,7 +118,9 @@ export default class MoSelect extends MoComponent {
 
   connectedCallback() {
     this.addListener("click", (event) => this.#select(event), this.selectField);
-    this.addListener("keyup", (event) => this.#timeout.sleep(() => this.#search(event), this.searchField));
+    this.addListener("keyup", (event) =>
+      this.#timeout.sleep(() => this.#search(event), this.searchField)
+    );
   }
 
   // #emitSearchParams() {
@@ -141,7 +142,6 @@ export default class MoSelect extends MoComponent {
 
       //   groups[group].push(name);
 
-
       // });
 
       // for(const key in groups) {
@@ -150,9 +150,9 @@ export default class MoSelect extends MoComponent {
 
       const container = this.selectField;
       container.setAttribute("size", this.#getSize());
-      container.innerHTML = "";
-      
-      this.options.forEach(({id, displayName, name}) => {
+      container.innerHTML = `<option disabled selected value="">${this.placeholder || "Select an option"}</option>`;
+
+      this.options.forEach(({ id, displayName, name }) => {
         const option = document.createElement("option");
         option.value = id;
         option.innerHTML = displayName || name;
@@ -170,7 +170,7 @@ export default class MoSelect extends MoComponent {
     this.valueId = option.value;
     this.searchField.value = this.value;
 
-    this.emitEvent(this.createEvent("change", { value: this.value, id: this.valueId  }));
+    this.emitEvent(this.createEvent("change", { value: this.value, id: this.valueId }));
   }
 
   /** @param {Event} event */
@@ -183,22 +183,21 @@ export default class MoSelect extends MoComponent {
   }
 
   #getSize() {
-    return this.options.length > 5 ? 5 : this.options.length;
+    return this.options.length > 5 ? 5 : this.options.length + 1;
   }
 
   #buildQuery() {
     if (!this.#apiRoute) {
       return;
     }
-    
+
     if (!this.#apiManager) {
       this.#apiManager = new MowgliAPI(this.#apiRoute);
     }
 
-
-    const queryParams = this.#apiManager.buildQueryString({ 
-      page: 0, 
-      search: this.searchField.value || "", 
+    const queryParams = this.#apiManager.buildQueryString({
+      page: 0,
+      search: this.searchField.value || ""
     });
 
     return `${this.apiParams}${queryParams}`;
@@ -211,7 +210,7 @@ export default class MoSelect extends MoComponent {
       this.lastQuery = queryString;
 
       const [res, data] = await this.#apiManager.GET(queryString);
-  
+
       if (res.ok) {
         this.options = data;
       }
