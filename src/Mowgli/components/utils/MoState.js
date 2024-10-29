@@ -1,45 +1,33 @@
-// // @ts-check
-
-// export default class MoState extends MutationObserver {
-//   #attributes = [];
-
-//   /** @param {string[]} attributes  */
-//   constructor(attributes) {
-//     super((records) => {
-//       this.#stateChanged(records);
-//     });
-
-//     this.#attributes = attributes || [];
-//   }
-
-//   /** @param {MutationRecord[]} state  */
-//   #stateChanged(state) {
-//     console.log(state);
-//   }
-
-//   // /** @param {HTMLElement} element  */
-//   // addState (element, attributes=[], ) {
-//   //   this.observe(element, { attributeFilter: this.#attributes });
-//   // }
-// }
+// @ts-check
 
 export default class MoState {
   #state = null;
+  #callback = null;
 
-  constructor(data = null) {
+  /**
+   * @param {*} [data=null]
+   * @param {null | function} [callback=null]
+   */
+  constructor(data = null, callback = null) {
     this.#state = data;
+    this.#callback = callback;
   }
 
   /** @returns {any} */
   get state() {
     return this.#state;
   }
-  
+
   set state(state) {
     this.#state = state;
+
+    if (this.#callback && typeof this.#callback === "function") {
+      this.#callback();
+    }
   }
 
   clean() {
     this.state = null;
+    this.#callback = null;
   }
 }

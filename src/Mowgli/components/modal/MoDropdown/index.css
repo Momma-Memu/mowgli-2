@@ -30,6 +30,15 @@
   transform: translate(65%, 2rem);
 }
 
+/* Dynamic Positioning Styles */
+:host([mo-position="left"]) .content {
+  transform: translate(65%, 2rem);
+}
+
+:host([mo-position="left"]:state(opened)) .content {
+  transform: translate(calc(50% - 1rem), 2rem);
+}
+
 .container {
   opacity: 0;
 

@@ -8,21 +8,14 @@ window.addEventListener("mo-route-event", (event) => {
   try {
     const newLocation = event.detail;
     router.push(newLocation);
-  } catch(error) {
+  } catch (error) {
     console.log(error);
   }
 });
-
 </script>
 
 <template>
   <mo-nav></mo-nav>
-  <!-- <h1></h1>
-  <mo-icon
-    mo-spin-hov
-    mo-grow-hov
-    mo-fa="fa-sharp-duotone fa-solid fa-gear-complex"
-  ></mo-icon> -->
   <RouterView />
   <footer>
     <FooterComponent></FooterComponent>

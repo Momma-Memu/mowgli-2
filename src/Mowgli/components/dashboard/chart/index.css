@@ -1,8 +1,9 @@
 :host {
   border-radius: var(--mo-border-radius);
   width: 100%;
+  max-width: 50vw;
   box-shadow: var(--mo-box-shadow);
-  overflow: hidden;
+  /* overflow: hidden; */
   display: block;
   background-color: var(--mo-white);
   padding: var(--mo-size-4);
@@ -12,4 +13,17 @@
   position: relative;
   width: inherit;
   aspect-ratio: 2 / 1;
+}
+
+mo-dropdown {
+  height: fit-content;
+}
+
+.dropdown-items {
+  padding: var(--mo-size-4);
+}
+
+.dropdown-item {
+  min-width: max-content;
+  padding: var(--mo-size-1);
 }

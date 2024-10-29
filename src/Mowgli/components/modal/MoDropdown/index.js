@@ -12,6 +12,7 @@ export default class MoDropdown extends MoComponent {
   constructor() {
     super(styles, template);
 
+    this.addAttribute("mo-position");
     this.addAttribute("side-bar");
   }
 
