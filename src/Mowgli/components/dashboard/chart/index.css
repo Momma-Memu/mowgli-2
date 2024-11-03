@@ -1,7 +1,7 @@
 :host {
   border-radius: var(--mo-border-radius);
   width: 100%;
-  max-width: 50vw;
+  /* max-width: 48%; */
   box-shadow: var(--mo-box-shadow);
   /* overflow: hidden; */
   display: block;
@@ -13,6 +13,11 @@
   position: relative;
   width: inherit;
   aspect-ratio: 2 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 0;
 }
 
 mo-dropdown {
@@ -26,4 +31,12 @@ mo-dropdown {
 .dropdown-item {
   min-width: max-content;
   padding: var(--mo-size-1);
+}
+
+mo-icon {
+  display: block;
+  height: 0px;
+  background-color: unset;
+  transform: translateY(calc(-1 * var(--mo-size-2)));
+  padding: 0rem var(--mo-size-3);
 }

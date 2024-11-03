@@ -30,6 +30,13 @@ export default class MoNav extends MoComponent {
   connectedCallback() {
     this.form = this.sessionObject.buildForm();
     this.modalBody.appendChild(this.form);
+    this.addListener("click", () => this.#logoClick(), this.getByClass("logo"));
+  }
+
+  #logoClick() {
+    if (window.location.pathname !== "/dashboard") {
+      this.redirect("/dashboard");
+    }
   }
 
   #setChildren({ detail }) {
@@ -50,8 +57,6 @@ export default class MoNav extends MoComponent {
       this.authenticated.state = true;
       this.emitEvent(this.createEvent("mo-route-event", "/dashboard"));
     }
-
-    console.log(res.ok, data);
   }
 }
 

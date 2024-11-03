@@ -1,11 +1,11 @@
-import MowgliEvent from "./state/event/index";
+// import MowgliEvent from "./state/event/index";
 import MowgliSession from "./objects/internal/Session";
+import MoEvent from "./components/utils/MoEvent";
 
 export default class Mowgli {
   #listener;
   session = new MowgliSession();
-  event = new MowgliEvent("get-state", { key: "session" });
-  // event = new MowgliEvent("global-click", { key: "session" });
+  // event = this.#createEvent("get-state", { key: "session" });
 
   constructor() {
     window.mowgli = this;
@@ -14,15 +14,25 @@ export default class Mowgli {
     this.#init();
   }
 
-  // #routeHandler() {
+  /** @param {string} url  */
+  redirect(url) {
+    if (url) {
+      window.dispatchEvent(this.#createEvent("mo-route-event", url));
+    }
+  }
 
-  // }
+  async #init() {
+    // eslint-disable-next-line no-unused-vars
+    const [response, data] = await this.session.get();
+    
+    if (response.ok && data && window.location.pathname === "/") {
+      this.redirect("/dashboard");
+    } else if (!data && window.location.pathname !== "/") {
+      this.redirect("/");
+    }
+  }
 
-  #init() {
-    // this.#listener.addEventListener("get-state", (e) => {
-    //   console.log(e, "HELLO!");
-    // });
-
-    // window.addEventListener("click", () => console.log("I've been clicked!"));
+  #createEvent(name, data) {
+    return new MoEvent(name, data);
   }
 }

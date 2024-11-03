@@ -32,11 +32,19 @@
 
 /* Dynamic Positioning Styles */
 :host([mo-position="left"]) .content {
-  transform: translate(65%, 2rem);
+  transform: translate(calc(-50% + 1rem), 6rem);
 }
 
 :host([mo-position="left"]:state(opened)) .content {
   transform: translate(calc(50% - 1rem), 2rem);
+}
+
+:host([mo-position="right"]) .content {
+  transform: translate(calc(-50% + 1rem), 6rem);
+}
+
+:host([mo-position="right"]:state(opened)) .content {
+  transform: translate(calc(-50% + 1rem), 2rem);
 }
 
 .container {

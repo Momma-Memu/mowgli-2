@@ -49,15 +49,15 @@ form {
 .logo {
   height: 100%;
   display: flex;
+  margin-right: auto;
   align-items: center;
   font-size: var(--mo-size-14);
   filter: var(--mo-drop-shadow-bottom);
   cursor: pointer;
-  margin-right: auto;
 }
 
 img {
-  height: 80%;
+  height: var(--mo-size-16);
   margin: -0.75rem;
 }
 
@@ -127,7 +127,6 @@ mo-accordian {
 .logout:hover {
   background-color: color-mix(in srgb, var(--mo-blue-500) 15%, white);
 }
-
 
 #sign-in {
   width: 100%;

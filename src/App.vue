@@ -1,13 +1,15 @@
 <script setup>
-import { RouterView, useRouter } from "vue-router";
+import { RouterView, useRouter, useRoute } from "vue-router";
 import FooterComponent from "./components/FooterComponent.vue";
 
 const router = useRouter();
+const route = useRoute();
 
-window.addEventListener("mo-route-event", (event) => {
+window.addEventListener("mo-route-event", ({ detail }) => {
   try {
-    const newLocation = event.detail;
-    router.push(newLocation);
+    if (route.path !== detail) {
+      router.push(detail);
+    }
   } catch (error) {
     console.log(error);
   }

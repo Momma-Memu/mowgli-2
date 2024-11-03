@@ -19,8 +19,7 @@ export default class MoNavLink extends MoComponent {
   }
 
   get currentURL() {
-    const urlParts = window.location.href.split("/");
-    return "/" + urlParts[urlParts.length - 1];
+    return window.location.pathname;
   }
 
   get active() {
@@ -58,12 +57,13 @@ export default class MoNavLink extends MoComponent {
   /** @param {Event} event  */
   #route(event) {
     event.preventDefault();
-
-    const destination = event.target.getAttribute("mo-href");
-    this.active = false;
-
-    this.emitEvent(this.createEvent("mo-route-event", destination));
-    this.emitEvent(this.createEvent("mo-route-event-notify-siblings", destination));
+    
+    if (this.currentURL !== this.href) {
+      this.active = false;
+  
+      this.emitEvent(this.createEvent("mo-route-event", this.href));
+      this.emitEvent(this.createEvent("mo-route-event-notify-siblings", this.href));
+    }
   }
 }
 

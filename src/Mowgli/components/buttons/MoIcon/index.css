@@ -69,9 +69,9 @@ i {
 
 /* ------------ Click ------------ */
 
-:host(:active) > i {
+/* :host([mo-shrink-clk]:active) > i {
   transform: var(--mo-shrink) !important;
-}
+} */
 
 :host([mo-flip-x-clk]:active) > i {
   transform: var(--mo-shrink) var(--mo-flipX) !important;

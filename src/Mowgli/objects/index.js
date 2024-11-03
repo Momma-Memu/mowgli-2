@@ -104,7 +104,7 @@ export default class MowgliObject {
    * @param {string} params - URL Route/Path parameters.
   */
   async get(params = "") {
-    if (this.state) {
+    if (this.state || typeof this.state === "boolean") {
       return [{ ok: true, status: 200 }, this.state];
     }
 
@@ -112,6 +112,8 @@ export default class MowgliObject {
 
     if (response.ok) {
       this.#updateCache(data);
+    } else if (response.url.includes("session")) {
+      this.#updateCache(false);
     }
 
     return [response, data];

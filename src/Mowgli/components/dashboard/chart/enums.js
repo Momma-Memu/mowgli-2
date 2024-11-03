@@ -44,7 +44,13 @@ const options = {
     tooltip: {
       padding: 16,
       boxPadding: 8,
-    }
+    },
+    legend: { 
+      labels: {
+         boxWidth: 0, 
+         boxHeight: 0 
+        } 
+    },
   },
 
   scales: {

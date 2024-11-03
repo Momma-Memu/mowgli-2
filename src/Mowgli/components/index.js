@@ -277,6 +277,13 @@ export default class MoComponent extends HTMLElement {
     return template !== null ? template.content.cloneNode(true) : null;
   }
 
+  /** @param {string} url  */
+  redirect(url) {
+    if (url) {
+      this.emitEvent(this.createEvent("mo-route-event", url));
+    }
+  }
+
   // ====================== Private Methods ======================
 
   /** @returns {string} */

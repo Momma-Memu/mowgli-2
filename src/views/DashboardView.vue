@@ -16,17 +16,28 @@ onMounted(async () => {
 });
 
 </script>
-
-v-if="sources && sources.length" 
-
 <template>
-  <div ref="container" class="container"  v-for="chart in charts" :key="chart.id">
-    <mo-chart v-bind:chart=chart></mo-chart>
+  <div class="charts">
+    <div ref="container" class="container"  v-for="chart in charts" :key="chart.id">
+      <mo-chart v-bind:chart=chart></mo-chart>
+    </div>
   </div>
 </template>
 <style>
-.container {
-  padding: var(--mo-size-4);
+
+.charts {
   width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--mo-size-6);
+  padding: var(--mo-size-6);
+}
+
+.container {
+  width: 49%;
+  min-width: 320px;
+  max-width: 1200px;
+  flex-grow: 1;
 }
 </style>
