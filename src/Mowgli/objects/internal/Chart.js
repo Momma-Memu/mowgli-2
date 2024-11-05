@@ -37,7 +37,5 @@ export default class MowgliChart extends MowgliObject {
 
     prefix.options = this.#source.state;
     prefix.useValueID = true;
-
-    window.mowgliCharts = this;
   }
 }

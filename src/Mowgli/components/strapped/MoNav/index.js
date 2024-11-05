@@ -30,10 +30,13 @@ export default class MoNav extends MoComponent {
   connectedCallback() {
     this.form = this.sessionObject.buildForm();
     this.modalBody.appendChild(this.form);
-    this.addListener("click", () => this.#logoClick(), this.getByClass("logo"));
+    this.addListener("click", (event) => this.#logoClick(event), this.getByClass("logo"));
   }
 
-  #logoClick() {
+  /** @param {Event} event  */
+  #logoClick(event) {
+    event.preventDefault();
+
     if (window.location.pathname !== "/dashboard") {
       this.redirect("/dashboard");
     }

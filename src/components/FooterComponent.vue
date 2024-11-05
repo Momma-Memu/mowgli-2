@@ -32,7 +32,7 @@
 .footer-content {
   display: flex;
   justify-content: space-between;
-  padding: var(--mo-size-4);
+  padding: 0 var(--mo-size-4) var(--mo-size-4) var(--mo-size-4);
   color: var(--mo-white);
   flex-wrap: wrap;
   gap: var(--mo-size-4);
@@ -69,10 +69,10 @@
 }
 
 .waves {
-  margin-bottom: -2em;
+  /* margin-bottom: -2rem; */
   min-width: 320px;
   width: 100%;
-  aspect-ratio: 960/240;
+  aspect-ratio: 960/185;
   background-image: url("/waves.svg");
   background-position: top;
   background-repeat: no-repeat;

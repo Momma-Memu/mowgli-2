@@ -4,6 +4,7 @@ import DashboardView from "../views/DashboardView.vue";
 import ObjectsView from "../views/ObjectsView.vue";
 import SourcesView from "../views/SourcesView.vue";
 import ChartsView from "../views/ChartsView.vue";
+import CompanyView from "../views/CompanyView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,6 +13,16 @@ const router = createRouter({
       path: "/",
       name: "login",
       component: LoginView
+    },
+    {
+      path: "/charts",
+      name: "charts",
+      component: ChartsView
+    },
+    {
+      path: "/company",
+      name: "company",
+      component: CompanyView
     },
     {
       path: "/dashboard",
@@ -27,11 +38,6 @@ const router = createRouter({
       path: "/sources",
       name: "sources",
       component: SourcesView
-    },
-    {
-      path: "/charts",
-      name: "charts",
-      component: ChartsView
     },
   ]
 });
