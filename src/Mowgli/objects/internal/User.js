@@ -9,13 +9,10 @@ export default class MowgliChart extends MowgliObject {
     const email = new FieldDefinition("email", true, "Email", "email");
     const password = new FieldDefinition("password", true, "Password", "password");
     const confirmPassword = new FieldDefinition("confirmPassword", true, "Confirm Password", "password");
+    const companyId = new FieldDefinition("companyId", false, "Company ID", "text");
 
-    // const logo = new FieldDefinition("logo", true, "logo", "file", "", null, true);
-
-    super("charts", [
-      firstName, lastName, email, password,  confirmPassword
+    super("user", [
+      firstName, lastName, email, password,  confirmPassword, companyId
     ]);
-
-    window.mowgliCharts = this;
   }
 }

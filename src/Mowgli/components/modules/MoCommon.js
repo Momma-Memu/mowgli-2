@@ -14,6 +14,8 @@ import MoField from "../forms-fields/MoField";
 import MoSelect from "../forms-fields/MoSelect/index";
 import MoSelectOption from "../forms-fields/MoSelect/MoSelectOption/index";
 
+import MoBanner from "../page/banner/index";
+
 // import MoMultiSelect from "../forms-fields/MoMultiSelect/index";
 // import MoSelectItem from "../forms-fields/MoMultiSelect/MoSelectItem/index";
 // import MoSelectedItem from "../forms-fields/MoMultiSelect/MoSelectedItem/index";
@@ -44,6 +46,7 @@ export default class MoComponentManager {
   MoField = MoField;
   MoForm = MoForm;
   MoTable = MoTable;
+  MoBanner = MoBanner;
 
   useMowgli() {}
 }

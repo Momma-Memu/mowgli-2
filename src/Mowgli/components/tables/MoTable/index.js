@@ -68,9 +68,7 @@ export default class MoTable extends MoComponent {
   }
 
   #getSubHeader() {
-    return (`
-      Click "Create", to make your new ${this.mobject.name}. Select any ${this.mobject.name} from the list below to edit or remove it.
-    `);
+    return this.mobject.description;
   }
 
   #getFooter() {

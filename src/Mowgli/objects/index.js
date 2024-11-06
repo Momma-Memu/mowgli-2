@@ -53,6 +53,12 @@ export default class MowgliObject {
     return this.#name;
   }
 
+  get description () {
+    return (`
+      Click "Create", to make your new ${this.name}. Select any ${this.name} from the list below to edit or remove it.
+    `);
+  }
+
   get state() {
     if (this.#state.cache && !Array.isArray(this.#state.cache) && typeof this.#state.cache === "object") {
       return Object.values(this.#state.cache);
@@ -189,10 +195,10 @@ export default class MowgliObject {
   #updateCache(data) {
     if (typeof data === "boolean") {
       this.state = data;
-    } else if (!this.state) {
-      this.state = data;
+    // } else if (!this.state) {
+    //   this.state = data;
     } else {
-      const dataMap = {...this.state};
+      const dataMap = typeof this.state === "object" ? {...this.state} : {};
   
       if (Array.isArray(data)) {
         // Add each key/value pair to the new cache object.
