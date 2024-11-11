@@ -48,8 +48,8 @@ export default class MoNav extends MoComponent {
     });
   }
 
-  #resetForm() {
-    // console.log(event.target);
+  #resetForm(event) {
+    console.log(event, "============");
   }
 
   async #submitForm() {

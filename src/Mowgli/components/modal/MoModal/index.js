@@ -28,6 +28,14 @@ export default class MoModal extends MoComponent {
     return ["modal-name"];
   }
 
+  get title() {
+    return this.getElementById("title").innerHTML;
+  }
+  
+  set title(title = "") {
+    this.getElementById("title").innerHTML = title;
+  }
+
   open() {
     this.opened.state = true;
     this.modal.show();

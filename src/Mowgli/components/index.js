@@ -104,6 +104,14 @@ export default class MoComponent extends HTMLElement {
   }
 
   /**
+   * @param {string} query
+   * @returns {Element[]} 
+  */
+  getAllBySearch(query) {
+    return Object.values(this.shadow.querySelectorAll(query)) || [];
+  }
+
+  /**
    * @param {string} name
    * @returns {Element | null} */
   getSlotByName(name) {

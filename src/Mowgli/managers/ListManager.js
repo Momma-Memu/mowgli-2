@@ -84,7 +84,7 @@ export default class ListManager {
         const value = fieldDef.getFormattedValue(record[key]);
         
         return this.#buildCell(value);
-      }).join(""));
+      }).join(""), record.id);
 
       return row;
     }).join("");
@@ -92,12 +92,15 @@ export default class ListManager {
     return `<tbody id="mo-table-body">${rows}</tbody>`;
   }
 
-  /** @param {HTMLTableCellElement[]} cells */
-  #buildRow(cells) {
+  /** 
+   * @param {HTMLTableCellElement[]} cells 
+   * @param {string} [id=""] 
+  */
+  #buildRow(cells, id = "") {
     const row = document.createElement("tr");
     row.append(...cells);
-
-    return `<tr>${cells}</tr>`;
+    
+    return id ? `<tr id="${id}">${cells}</tr>` : `<tr>${cells}</tr>`;
   }
 
   /**

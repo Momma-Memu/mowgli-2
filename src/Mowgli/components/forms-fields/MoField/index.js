@@ -163,6 +163,13 @@ export default class MoField extends MoComponent {
 
   set value(data) {
     this.#value.state = data;
+
+    if (this.fieldEl) {
+      this.fieldEl.value = data;
+    }
+
+    this.empty = this.value === "";
+    this.valid = this.#checkValidity();
   }
 
   get valueId() {
@@ -172,7 +179,6 @@ export default class MoField extends MoComponent {
   set valueId(data) {
     this.#valueId.state = data;
   }
-
 
   get apiRoute() {
     return this.#apiRoute.state;
@@ -234,6 +240,18 @@ export default class MoField extends MoComponent {
     }
   }
 
+  reset() {
+    this.value = "";
+    // this.#value.state = "";
+    // this.empty = false;
+    // this.valid = true;
+    this.dirty = false;
+
+    // if (this.fieldEl) {
+    //   this.fieldEl.value = "";
+    // }
+  }
+
   #initAttributes() {
     const field = this.fieldEl;
     const label = this.labelEl;
@@ -272,8 +290,8 @@ export default class MoField extends MoComponent {
     this.dirty = true;
     this.value = event.target.value;
     this.valueId = event.target.valueId;
-    this.empty = this.value === "";
-    this.valid = this.type === "switch" ? true : this.#checkValidity();
+    // this.empty = this.value === "";
+    // this.valid = this.#checkValidity();
 
     if (event.type === "keyup" && !this.empty) {
       this.#timeout.sleep(() => {

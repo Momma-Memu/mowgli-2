@@ -52,10 +52,27 @@ export default class MoForm extends MoComponent {
     });
   }
 
+  /** @param {{}} item */
+  patch(item) {
+    // const { id } = item;
+    const fields = this.#fields.map(field => field.field);
+    
+    fields.forEach(field => {
+      const value = item[field.name];
+      field.value = value;
+    });
+    
+    console.log(item, fields);
+  }
+
   /** - Resets each internal MoField to the initial state.  */
   reset() {
-    // const fields = this.getElementsByName("mo-field");
-    // console.log(fields);
+    const fields = this.#fields.map(field => field.field);
+    
+    fields.forEach(field => {
+      field.reset();
+    });
+    
   }
 }
 
