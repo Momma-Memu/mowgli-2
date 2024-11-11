@@ -19,7 +19,7 @@ form {
 }
 
 :host(:state(authenticated)) .authenticated {
-  display: block;
+  display: flex;
 }
 
 :host(:state(authenticated)) .unauthenticated {

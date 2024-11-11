@@ -22,14 +22,13 @@ export default class Mowgli {
   }
 
   async #init() {
-    // eslint-disable-next-line no-unused-vars
-    const [response, data] = await this.session.get();
-    
-    if (response.ok && data && window.location.pathname === "/") {
-      this.redirect("/dashboard");
-    } else if (!data && window.location.pathname !== "/") {
-      this.redirect("/");
-    }
+    // // eslint-disable-next-line no-unused-vars
+    // const [response, data] = await this.session.get();
+    // if (response.ok && data && window.location.pathname === "/") {
+    //   this.redirect("/dashboard");
+    // } else if (!data && window.location.pathname !== "/") {
+    //   this.redirect("/");
+    // }
   }
 
   #createEvent(name, data) {

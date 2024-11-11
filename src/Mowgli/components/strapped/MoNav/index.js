@@ -9,9 +9,8 @@ import MoNavLink from "../../navigation/MoNavLink/index";
 export default class MoNav extends MoComponent {
   constructor() {
     super(styles, template);
-    this.sessionObject = new MowgliSession();
+    this.session = new MowgliSession();
     this.authenticated = this.addInternal("authenticated");
-    this.authenticated.state = this.sessionObject.state || false;
 
     this.addListener("closed", this.#resetForm);
     this.addListener("submit", this.#submitForm);
@@ -28,9 +27,10 @@ export default class MoNav extends MoComponent {
   }
 
   connectedCallback() {
-    this.form = this.sessionObject.buildForm();
+    this.form = this.session.buildForm();
     this.modalBody.appendChild(this.form);
     this.addListener("click", (event) => this.#logoClick(event), this.getByClass("logo"));
+    this.#checkSession();
   }
 
   /** @param {Event} event  */
@@ -43,7 +43,7 @@ export default class MoNav extends MoComponent {
   }
 
   #setChildren({ detail }) {
-    this.navItems.forEach(nav => {
+    this.navItems.forEach((nav) => {
       nav.active = detail === nav.href;
     });
   }
@@ -54,11 +54,23 @@ export default class MoNav extends MoComponent {
 
   async #submitForm() {
     const formData = this.form.values;
-    const [res, data] = await this.sessionObject.post("", formData);
+    const [res, data] = await this.session.post("", formData);
 
     if (res.ok && data) {
       this.authenticated.state = true;
       this.emitEvent(this.createEvent("mo-route-event", "/dashboard"));
+    }
+  }
+
+  async #checkSession() {
+    const [response, data] = await this.session.get();
+
+    this.authenticated.state = this.session.state || false;
+
+    if (response.ok && data && window.location.pathname === "/") {
+      this.redirect("/dashboard");
+    } else if (!data && window.location.pathname !== "/") {
+      this.redirect("/");
     }
   }
 }
