@@ -30,10 +30,10 @@ export default class MowgliObject {
   #fields;
   #columns;
 
-  /** 
-   * @param {string} api 
-   * @param {FieldDefinition[]} fields 
-   * @param {FieldDefinition[] | null} columns 
+  /**
+   * @param {string} api
+   * @param {FieldDefinition[]} fields
+   * @param {FieldDefinition[] | null} columns
    * @param {string} name
    */
   constructor(api, fields = [], columns = null, name = "") {
@@ -57,10 +57,10 @@ export default class MowgliObject {
     return this.#name;
   }
 
-  get description () {
-    return (`
+  get description() {
+    return `
       Click "Create", to make your new ${this.name}. Select any ${this.name} from the list below to edit or remove it.
-    `);
+    `;
   }
 
   /** @type {{}} */
@@ -105,36 +105,36 @@ export default class MowgliObject {
 
   buildQueryString(obj) {
     const keys = Object.keys(obj);
-    return "?" + keys.map(key => `${key}=${obj[key]}`).join("&");
+    return "?" + keys.map((key) => `${key}=${obj[key]}`).join("&");
   }
-  
-  /** 
+
+  /**
    * @param {MowgliObject} mowgliObject - The MowgliObject that is responsible for interfacing with the API.
    * @param {string} routeParams - Optional API params.
    * @returns {Any[]} Returns a list of Select field options.
-  */
+   */
   async fetchOptions(mowgliObject, routeParams = "") {
     const [res, data] = await mowgliObject.get(routeParams);
-    
+
     return res.ok ? data : [];
   }
 
   /**
    * - GET Method Fetch Request.
    * @param {string} params - URL Route/Path parameters.
-  */
+   */
   async get(params = "") {
     if (this.state && params !== this.#prevParams) {
       return [{ ok: true, status: 200 }, this.state];
     } else {
       this.#prevParams = params;
       const [response, data] = await this.#api.GET(params);
-  
+
       if (response.ok && data) {
         // this.state = data;
         this.#updateCache(data);
       }
-  
+
       return [response, data];
     }
   }
@@ -142,7 +142,7 @@ export default class MowgliObject {
   /**
    * - POST Method Fetch Request.
    * @param {string} params - URL Route/Path parameters.
-  */
+   */
   async post(params = "", body) {
     const [response, data] = await this.#api.POST(params, body);
 
@@ -156,28 +156,28 @@ export default class MowgliObject {
   /**
    * - PUT Method Fetch Request.
    * @param {string} params - URL Route/Path parameters.
-  */
+   */
   async put(params = "", body) {
     const [response, data] = await this.#api.PUT(params, body);
 
     if (response.ok) {
       this.#updateCache(data);
     }
-    
+
     return [response, data];
   }
 
   /**
    * - DELETE Method Fetch Request.
    * @param {string} params - URL Route/Path parameters.
-  */
+   */
   async delete(params = "") {
     const [response, data] = await this.#api.DELETE(params);
 
     if (response.ok) {
       this.#remove(data);
     }
-    
+
     return [response, data];
   }
 
@@ -189,12 +189,12 @@ export default class MowgliObject {
     return form;
   }
 
-  /** 
+  /**
    * @param {FieldDefinition} parent
    * @param {FieldDefinition} child
    * @param {string} parentProp
    * @param {string} childProp
-  */
+   */
   buildDependency(parent, child, parentProp = "value", childProp = "value") {
     return new SymbioticField(parent, child, parentProp, childProp);
   }
@@ -224,9 +224,9 @@ export default class MowgliObject {
   }
 
   #remove(id) {
-    const dataMap = {...this.state};
+    const dataMap = { ...this.state };
     delete dataMap[id];
-    
+
     this.state = dataMap;
   }
 

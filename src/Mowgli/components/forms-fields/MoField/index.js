@@ -19,7 +19,6 @@ export default class MoField extends MoComponent {
   #required = this.addInternal("required");
   #halfWidth = this.addInternal("half-width");
 
-
   #name = this.addAttribute("name");
   #label = this.addAttribute("label");
   #placeholder = this.addAttribute("placeholder");
@@ -97,7 +96,7 @@ export default class MoField extends MoComponent {
 
   set disabled(value) {
     this.#disabled.state = value;
-    
+
     // if (value && this.fieldEl) {
     //   this.fieldEl.removeAttribute("tabindex");
     // } else if (!value && this.fieldEl) {
@@ -162,6 +161,7 @@ export default class MoField extends MoComponent {
   }
 
   set value(data) {
+    data = data === undefined || data === null ? "" : data;
     this.#value.state = data;
 
     if (this.fieldEl) {
@@ -217,10 +217,10 @@ export default class MoField extends MoComponent {
     return this.getElementById("field-input");
   }
 
-    /** @returns {HTMLSelectElement} */
-    get hiddenFieldEl() {
-      return this.getElementById("hidden-field");
-    }
+  /** @returns {HTMLSelectElement} */
+  get hiddenFieldEl() {
+    return this.getElementById("hidden-field");
+  }
 
   // =============== Public Methods ===============
 
@@ -228,7 +228,7 @@ export default class MoField extends MoComponent {
     const changeTypes = ["date", "select", "search-select", "switch"];
     this.#createField(this.type);
     this.#initAttributes();
-    
+
     // if (this.type === "select" || this.type === "search-select") {
     //   this.addListener("search-change", this.#fetchOptions())
     // }
@@ -301,7 +301,7 @@ export default class MoField extends MoComponent {
           this.symbioticCallback();
         }
       });
-    } else if(!this.empty) {
+    } else if (!this.empty) {
       if (this.symbioticCallback) {
         this.symbioticCallback();
       }
@@ -333,8 +333,11 @@ export default class MoField extends MoComponent {
 
   #createField() {
     const fieldWrapper = this.getByClass("field-container");
-    
-    const templateId = (this.type === "select" || this.type === "switch" || this.type === "search-select") ? this.type : "default";
+
+    const templateId =
+      this.type === "select" || this.type === "switch" || this.type === "search-select"
+        ? this.type
+        : "default";
     const clone = this.buildTemplate(templateId);
 
     if (fieldWrapper) {
@@ -354,10 +357,10 @@ export default class MoField extends MoComponent {
       this.lastQuery = queryString;
 
       const [res, data] = await this.#apiManager.GET(this.#buildQuery());
-  
+
       if (res.ok) {
         this.options = data;
-        
+
         // this.#updateHiddenFieldStyles();
         this.fieldEl.options = this.options;
       }
@@ -365,9 +368,9 @@ export default class MoField extends MoComponent {
   }
 
   #buildQuery() {
-    const queryParams = this.#apiManager.buildQueryString({ 
-      page: 0, 
-      search: this.value || "", 
+    const queryParams = this.#apiManager.buildQueryString({
+      page: 0,
+      search: this.value || ""
     });
 
     return `${this.apiParams}/${queryParams}`;
@@ -378,7 +381,7 @@ export default class MoField extends MoComponent {
     const size = this.options.length > 5 ? 5 : this.options.length;
 
     if (hiddenField) {
-      hiddenField.style.display = size ? "" : "none"; 
+      hiddenField.style.display = size ? "" : "none";
       hiddenField.setAttribute("size", size);
       hiddenField.innerHTML = "";
     }
