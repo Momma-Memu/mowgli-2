@@ -7,9 +7,9 @@ const dashData = ref(null);
 
 onMounted(async () => {
   const dashboard = new MowgliDashboard();
-  const [, data] = await dashboard.get();
+  await dashboard.get();
 
-  dashData.value = data;
+  dashData.value = dashboard.stateArray;
 });
 </script>
 

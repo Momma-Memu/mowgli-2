@@ -23,7 +23,7 @@ export default class MowgliSources extends MowgliObject {
     super("sources", fields, [...fields, sourceId]);
 
     sourceValue.hiddenIdField = sourceId;
-    sourceName.options = this.options.state;
+    sourceName.options = this.options.stateArray;
 
     this.buildDependency(sourceName, sourceValue, "value", "apiParams");
     this.buildDependency(sourceValue, sourceId, "valueId", "value");

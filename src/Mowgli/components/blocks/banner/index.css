@@ -1,0 +1,16 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  
+  user-select: none;
+  color: var(--mo-blue-600);
+  background-color: white;
+  border-radius: var(--mo-border-radius);
+}
+
+#head-title {
+  color: var(--mo-blue-700);
+  font-size: var(--mo-size-10);
+  margin-bottom: var(--mo-size-2);
+}

@@ -6,8 +6,6 @@ import template from "./index.html?raw";
 import MowgliObject from "@/Mowgli/objects/index";
 
 export default class MoTable extends MoComponent {
-  
-  /** @type {MowgliObject} */
   #mobject = this.addState();
   #records = this.addState([]);
 

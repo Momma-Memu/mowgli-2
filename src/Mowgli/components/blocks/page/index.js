@@ -2,13 +2,9 @@ import MoComponent from "../../index";
 import styles from "./index.css?inline";
 import template from "./index.html?raw";
 
-export default class MoBanner extends MoComponent {
+export default class MoPage extends MoComponent {
   constructor() {
     super(styles, template);
-  }
-
-  static get observedAttributes() {
-    return ["mo-obj-name", "mo-obj-description"];
   }
 
   connectedCallback() {
@@ -16,4 +12,4 @@ export default class MoBanner extends MoComponent {
   }
 }
 
-customElements.define("mo-banner", MoBanner);
+customElements.define("mo-page", MoPage);

@@ -35,7 +35,7 @@ export default class MowgliChart extends MowgliObject {
       { id: "hour", displayName: "Hour" }
     ];
 
-    prefix.options = this.#source.state;
+    prefix.options = this.#source.stateArray;
     prefix.useValueID = true;
   }
 }

@@ -8,31 +8,33 @@ const companyData = ref(null);
 onMounted(async () => {
   const [, data] = await company.get();
   companyData.value = data;
-
-  console.log(company.state)
 });
 
 </script>
 
 <template>
-  <div class="wrapper">
-    <mo-banner>
-      {{ company.name }}
-      <span slot="description">
-        Click "Edit", to alter your Company information.
-      </span>
+  <mo-page>
+    <mo-banner 
+      v-bind:mo-title="company.name" 
+      mo-description='Click "Edit", to alter your Company information.'>
     </mo-banner>
-  </div>
+    <div class="card">
+      <div>Title: {{ companyData ? companyData.name : "" }}</div>
+      <div>Description: {{ companyData ? companyData.description : "" }}</div>
+      <div>Address: {{ companyData ? companyData.address : "" }}</div>
+    </div>
+  </mo-page>
 </template>
 
 <style>
-.wrapper {
-  width: 100%;
-  padding: 1rem;
+.card {
+  max-width: 437px;
+  background-color: white;
+  box-shadow: var(--mo-box-shadow);
+  padding: var(--mo-padding);
+  border-radius: var(--mo-border-radius);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
-
-/* .banner {
-  font-size: var(--mo-size-10);
-  color: var(--mo-blue-700);
-} */
 </style>

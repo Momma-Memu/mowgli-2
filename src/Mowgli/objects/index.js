@@ -19,6 +19,10 @@ export default class MowgliObject {
   #api;
   #state;
   #name;
+  #prevParams = null;
+
+  /** @type {Boolean} */
+  #editOnly = false;
 
   /** @type {ListManager} */
   #listManager;
@@ -59,16 +63,17 @@ export default class MowgliObject {
     `);
   }
 
+  /** @type {{}} */
   get state() {
-    if (this.#state.cache && !Array.isArray(this.#state.cache) && typeof this.#state.cache === "object") {
-      return Object.values(this.#state.cache);
-    }
-
     return this.#state.cache;
   }
 
   set state(state) {
     this.#state.cache = state;
+  }
+
+  get stateArray() {
+    return this.state ? Object.values(this.state) : [];
   }
 
   /** @type {ListManager} */
@@ -87,6 +92,15 @@ export default class MowgliObject {
 
   set columns(fields) {
     this.#columns = fields;
+  }
+
+  /** @type {Boolean} */
+  get editOnly() {
+    return this.#editOnly;
+  }
+
+  set editOnly(flag) {
+    this.#editOnly = flag;
   }
 
   buildQueryString(obj) {
@@ -110,19 +124,19 @@ export default class MowgliObject {
    * @param {string} params - URL Route/Path parameters.
   */
   async get(params = "") {
-    if (this.state || typeof this.state === "boolean") {
+    if (this.state && params !== this.#prevParams) {
       return [{ ok: true, status: 200 }, this.state];
+    } else {
+      this.#prevParams = params;
+      const [response, data] = await this.#api.GET(params);
+  
+      if (response.ok && data) {
+        // this.state = data;
+        this.#updateCache(data);
+      }
+  
+      return [response, data];
     }
-
-    const [response, data] = await this.#api.GET(params);
-
-    if (response.ok) {
-      this.#updateCache(data);
-    } else if (response.url.includes("session")) {
-      this.#updateCache(false);
-    }
-
-    return [response, data];
   }
 
   /**
@@ -187,32 +201,26 @@ export default class MowgliObject {
 
   buildListTable() {
     this.#listManager = new ListManager(this.#name, this.columns, "sources");
-    this.#listManager.records = this.state || [];
+    this.#listManager.records = this.stateArray || [];
 
     return this.#listManager.build();
   }
 
   #updateCache(data) {
-    if (typeof data === "boolean") {
-      this.state = data;
-    // } else if (!this.state) {
-    //   this.state = data;
-    } else {
-      const dataMap = typeof this.state === "object" ? {...this.state} : {};
-  
-      if (Array.isArray(data)) {
-        // Add each key/value pair to the new cache object.
-        data.forEach(item => {
-          dataMap[item.id] = item;
-        });
-      } else if (typeof data === "object" && data.id) {
-        dataMap[data.id] = data;
-      }
-  
-      if (Object.keys(dataMap)) {
-        this.state = dataMap;
-      }
+    // TODO: Remove condition after backend API responds consistently.
+    if (Array.isArray(data)) {
+      data = data.reduce((obj, value) => {
+        if (value.id) {
+          obj[value.id] = value;
+        } else if (value.flag) {
+          obj[value.flag] = value;
+        }
+
+        return obj;
+      }, {});
     }
+
+    this.state = this.state ? { ...this.state, ...data } : data;
   }
 
   #remove(id) {
@@ -220,6 +228,11 @@ export default class MowgliObject {
     delete dataMap[id];
     
     this.state = dataMap;
+  }
+
+  /** @param {*} data  */
+  #typeof(data) {
+    return Array.isArray(data) ? "array" : typeof data;
   }
 
   // #handleAuthEvent(state) {

@@ -1,4 +1,9 @@
 :host {
+  width: 100%;
+  padding: 1rem;
+}
+
+.wrapper {
   display: flex;
   flex-direction: column;
   
@@ -7,12 +12,8 @@
   padding: 1rem;
   
   user-select: none;
-  color: var(--mo-blue-600);
+  color: var(--mo-charcoal);
   background-color: white;
   border-radius: var(--mo-border-radius);
   box-shadow: rgba(0, 0, 0, 0.32) 0.1rem 0.5rem 0.5rem;
-}
-.head-title {
-  font-size: var(--mo-size-10);
-  color: var(--mo-blue-700);
 }
