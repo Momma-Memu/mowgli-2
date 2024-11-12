@@ -179,6 +179,10 @@ export default class FieldDefinition {
   /** @param {string | boolean} [recordValue=""]  */
   getFormattedValue(recordValue = "") {
     try {
+      if (this.type === "select") {
+        return recordValue.map(entity => entity.name).join(",") || "";
+      }
+
       if (typeof recordValue === "boolean") {
         return recordValue ? "Yes" : "No";
       }

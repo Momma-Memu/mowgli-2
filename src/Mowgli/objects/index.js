@@ -220,7 +220,16 @@ export default class MowgliObject {
       }, {});
     }
 
-    this.state = this.state ? { ...this.state, ...data } : data;
+    let newState = this.state ? { ...this.state } : {};
+
+    if (data.id) {
+      newState[data.id] = data;
+    } else if (this.#typeof(data) === "object") {
+      newState = { ...newState, ...data };
+    }
+
+    this.state = newState;
+
   }
 
   #remove(id) {

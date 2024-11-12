@@ -21,6 +21,7 @@ export default class MoSwitch extends MoComponent {
   }
 
   connectedCallback() {
+    this.#value.state = false;
     const btn = this.getElementById("switch-field");
 
     this.addListener("click", () => this.#handleChange(), btn);

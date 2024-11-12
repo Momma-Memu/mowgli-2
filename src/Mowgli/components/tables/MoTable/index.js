@@ -8,8 +8,6 @@ import MowgliObject from "@/Mowgli/objects/index";
 // eslint-disable-next-line no-unused-vars
 import MoModal from "@/Mowgli/components/modal/MoModal/index";
 
-// eslint-disable-next-line no-unused-vars
-import MoForm from "../../forms-fields/MoForm/index";
 
 export default class MoTable extends MoComponent {
   #mobject = this.addState();
@@ -64,7 +62,7 @@ export default class MoTable extends MoComponent {
       this.#init();
     }
 
-    this.addListener("submit", () => this.#create(), this.getElementById("table-modal"));
+    this.addListener("submit", (event) => this.#submitForm(event), this.getElementById("table-modal"));
   }
   
   build() {
@@ -106,11 +104,6 @@ export default class MoTable extends MoComponent {
     });
   }
 
-  #create() {
-    console.log(this.form.values);
-    this.mobject.post("", this.form.values);
-  }
-
   /** @param {HTMLTableRowElement} row  */
   #edit(row) {
     this.#editingId = row.getAttribute("id");
@@ -136,15 +129,16 @@ export default class MoTable extends MoComponent {
     });
   }
 
-  async #submitForm() {
+  /** @param {Event} event  */
+  async #submitForm(event) {
+    event.stopPropagation();
     const formData = this.form.values;
-    console.log(this.#editingId, formData, "============");
-    // const [res, data] = await this.session.post("", formData);
 
-    // if (res.ok && data) {
-    //   this.authenticated.state = true;
-    //   this.emitEvent(this.createEvent("mo-route-event", "/dashboard"));
-    // }
+    if (formData.id) {
+      await this.mobject.put("", formData);
+    } else {
+      await this.mobject.post("", formData);
+    }
   }
 }
 

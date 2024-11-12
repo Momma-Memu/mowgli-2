@@ -9,6 +9,9 @@ export default class MoForm extends MoComponent {
   /** @type {FieldDefinition[]}  */
   #fields;
 
+  /** @type {string} */
+  #entityId = "";
+
   constructor() {
     super(styles, template);
   }
@@ -22,11 +25,17 @@ export default class MoForm extends MoComponent {
   get values() {
     const rawValue = {};
 
+    if (this.#entityId) {
+      rawValue.id = this.#entityId;
+    }
+
     this.#fields.forEach((fieldDef) => {
-      if (fieldDef.useValueID) {
-        rawValue[fieldDef.name] = fieldDef.field.valueId;
-      } else {
-        rawValue[fieldDef.name] = fieldDef.field.value;
+      const { value, valueId } = fieldDef.field;
+
+      if (fieldDef.useValueID && valueId) {
+        rawValue[fieldDef.name] = valueId;
+      } else if (value || value === false) {
+        rawValue[fieldDef.name] = value;
       }
 
       if (fieldDef.hiddenIdField) {
@@ -53,16 +62,28 @@ export default class MoForm extends MoComponent {
   /** @param {Object.<string, any>} item */
   patch(item) {
     const fields = this.#fields.map((field) => field.field);
+    this.#entityId = item.id;
 
     fields.forEach((field) => {
-      const value = item[field.name];
-      field.value = value;
+      const entry = item[field.name];
+
+      if (entry) {
+        if (field.type === "select" && Array.isArray(entry) && entry.length) {
+          const { id, name } = entry[0];
+          field.valueId = id;
+          field.value = name;
+        } else if (field.type !== "select") {
+          const value = item[field.name];
+          field.value = value;
+        }
+      }
     });
   }
 
   /** - Resets each internal MoField to the initial state.  */
   reset() {
     const fields = this.#fields.map((field) => field.field);
+    this.#entityId = "";
 
     fields.forEach((field) => {
       field.reset();

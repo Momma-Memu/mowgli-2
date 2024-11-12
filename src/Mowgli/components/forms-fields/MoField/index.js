@@ -164,6 +164,10 @@ export default class MoField extends MoComponent {
     data = data === undefined || data === null ? "" : data;
     this.#value.state = data;
 
+    if (this.type === "select" && this.fieldEl) {
+      this.fieldEl.searchField.value = data;
+    }
+
     if (this.fieldEl) {
       this.fieldEl.value = data;
     }
@@ -178,6 +182,10 @@ export default class MoField extends MoComponent {
 
   set valueId(data) {
     this.#valueId.state = data;
+  
+    if (this.fieldEl) {
+      this.fieldEl.valueId = data;
+    }
   }
 
   get apiRoute() {
@@ -242,14 +250,10 @@ export default class MoField extends MoComponent {
 
   reset() {
     this.value = "";
-    // this.#value.state = "";
-    // this.empty = false;
-    // this.valid = true;
-    this.dirty = false;
+    this.valueId = "";
 
-    // if (this.fieldEl) {
-    //   this.fieldEl.value = "";
-    // }
+    this.dirty = false;
+    this.valid = false;
   }
 
   #initAttributes() {
@@ -347,6 +351,8 @@ export default class MoField extends MoComponent {
     if (this.type === "select" && this.options) {
       this.fieldEl.options = this.options;
       // this.#buildOptions()
+    } else if (this.type === "switch") {
+      this.#value.state = false;
     }
   }
 

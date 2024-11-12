@@ -112,6 +112,13 @@ export default class MoSelect extends MoComponent {
     return this.selectField.validity;
   }
 
+  patch(entity) {
+    const { id, name } = entity;
+    this.valueId = id;
+    this.value = name;
+    this.searchField.value = name;
+  }
+
   reportValidity() {
     return this.selectField.reportValidity();
   }

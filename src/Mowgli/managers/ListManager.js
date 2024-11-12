@@ -79,7 +79,6 @@ export default class ListManager {
     const rows = this.#records.map(record => {
 
       const row = this.#buildRow(keys.map(key => {
-
         const fieldDef = this.#fields.find(field => field.name === key);
         const value = fieldDef.getFormattedValue(record[key]);
         
