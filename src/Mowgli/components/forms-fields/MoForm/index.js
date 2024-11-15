@@ -32,7 +32,9 @@ export default class MoForm extends MoComponent {
     this.#fields.forEach((fieldDef) => {
       const { value, valueId } = fieldDef.field;
 
-      if (fieldDef.useValueID && valueId) {
+      if (fieldDef.type === "date") {
+        rawValue[fieldDef.name] = fieldDef.getFormattedValue(value);
+      } else if (fieldDef.useValueID && valueId) {
         rawValue[fieldDef.name] = valueId;
       } else if (value || value === false) {
         rawValue[fieldDef.name] = value;
@@ -65,15 +67,19 @@ export default class MoForm extends MoComponent {
     this.#entityId = item.id;
 
     fields.forEach((field) => {
-      const entry = item[field.name];
+      const value = item[field.name];
 
-      if (entry) {
-        if (field.type === "select" && Array.isArray(entry) && entry.length) {
-          const { id, name } = entry[0];
-          field.valueId = id;
-          field.value = name;
-        } else if (field.type !== "select") {
-          const value = item[field.name];
+      if (value) {
+        if (field.type === "select" && typeof value === "object") {
+          const entity = Array.isArray(value) ? value[0] : value;
+          if (entity) {
+
+            field.valueId = entity.id;
+            field.value = entity.name;
+          }
+        } else if(field.type === "date") {
+          field.value = value.split("T")[0];
+        } else if (!Array.isArray(value)) {
           field.value = value;
         }
       }

@@ -69,21 +69,25 @@ export default class ListManager {
   }
 
   #buildColumns() {
-    const cells = this.#fields.map(field => this.#buildCell(field.displayName, true)).join("");
+    const cells = this.#fields.map(field => this.#buildCell(field.displayName, true)).join("") + this.#buildCell("Created", true);
     return `<thead>${this.#buildRow(cells)}</thead>`;
   }
 
   #buildRecords() {
     const keys = this.#getColNames();
 
+    // Create each row as a long HTML string.
     const rows = this.#records.map(record => {
-
-      const row = this.#buildRow(keys.map(key => {
+      // Create a long HTML string for each column value in this row.
+      const cells = keys.map(key => {
         const fieldDef = this.#fields.find(field => field.name === key);
         const value = fieldDef.getFormattedValue(record[key]);
         
         return this.#buildCell(value);
-      }).join(""), record.id);
+      }).join("");
+
+      // Next create the HTML Row string, combined with all the data cells and  date cell.
+      const row = this.#buildRow(cells + this.#buildCreateDateCell(record.createdAt), record.id);
 
       return row;
     }).join("");
@@ -115,5 +119,9 @@ export default class ListManager {
 
   #getColNames() {
     return this.#fields.map(field => field.name);
+  }
+
+  #buildCreateDateCell(date) {
+    return this.#buildCell(new Date(date).toLocaleDateString());
   }
 }

@@ -28,10 +28,18 @@
   transform: translateY(-1.25em);
 }
 
+textarea {
+  width: 100%;
+  min-height: var(--mo-size-10);
+  max-height: var(--mo-size-24);
+  resize: vertical;
+  font-family: inherit;
+}
+
 .field-container {
   display: flex;
   flex-direction: column;
-  font: var(--mo-font-family);
+  font-family: var(--mo-font-family);
 }
 
 #field-input {

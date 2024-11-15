@@ -176,11 +176,12 @@ export default class FieldDefinition {
     return this.field;
   }
 
-  /** @param {string | boolean} [recordValue=""]  */
+  /** @param {string | boolean | Array<{}> | {}} [recordValue=""]  */
   getFormattedValue(recordValue = "") {
     try {
-      if (this.type === "select") {
-        return recordValue.map(entity => entity.name).join(",") || "";
+      if (this.type === "select" && typeof recordValue === "object") {
+        return Array.isArray(recordValue) ? recordValue[0].name : recordValue.name;
+        // return recordValue.map(entity => entity.name).join(",") || "";
       }
 
       if (typeof recordValue === "boolean") {
@@ -190,7 +191,7 @@ export default class FieldDefinition {
       const value = recordValue || this.field.value || this.#defaultValue;
 
       if (this.type === "date") {
-        return this.#dateManager.toField(value);
+        return this.#dateManager.toDb(value);
       } else {
         return value;
       }

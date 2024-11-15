@@ -11,6 +11,8 @@ import template from "./index.html?raw";
 import MoSelect from "../MoSelect/index";
 
 export default class MoField extends MoComponent {
+  #templateTypes = ["select", "switch", "search-select", "textarea"]
+
   #dirty = this.addInternal("dirty");
   #empty = this.addInternal("empty");
   #valid = this.addInternal("valid");
@@ -25,8 +27,6 @@ export default class MoField extends MoComponent {
   #type = this.addAttribute("type");
   #apiRoute = this.addAttribute("api-route");
 
-  /** @type {MowgliAPI} */
-  #apiManager;
   #options = this.addState();
   #timeout = this.addTimeout(500);
   #value = this.addState("");
@@ -194,7 +194,6 @@ export default class MoField extends MoComponent {
 
   set apiRoute(data) {
     this.#apiRoute.state = data || "";
-    this.#apiManager = new MowgliAPI(`${this.apiRoute}`);
 
     if (this.fieldEl) {
       this.fieldEl.apiRoute = this.apiRoute;
@@ -319,7 +318,7 @@ export default class MoField extends MoComponent {
    */
   #checkValidity() {
     // By design, a MoSwitch field always has a valid value. (true or false).
-    if (this.type == "switch") {
+    if (this.type == "switch" || !this.fieldEl) {
       return true;
     }
 
@@ -338,58 +337,21 @@ export default class MoField extends MoComponent {
   #createField() {
     const fieldWrapper = this.getByClass("field-container");
 
-    const templateId =
-      this.type === "select" || this.type === "switch" || this.type === "search-select"
-        ? this.type
-        : "default";
+    const templateId = this.#templateTypes.includes(this.type) ? this.type : "default";
     const clone = this.buildTemplate(templateId);
 
     if (fieldWrapper) {
       fieldWrapper.appendChild(clone);
     }
 
+    if (this.type === "date") {
+      // this.fieldEl.setAttribute("format", "yyyy-mm-dd");
+    }
+
     if (this.type === "select" && this.options) {
       this.fieldEl.options = this.options;
-      // this.#buildOptions()
     } else if (this.type === "switch") {
-      this.#value.state = false;
-    }
-  }
-
-  async #fetchOptions() {
-    const queryString = this.#buildQuery();
-
-    if (queryString !== this.lastQuery && !this.disabled) {
-      this.lastQuery = queryString;
-
-      const [res, data] = await this.#apiManager.GET(this.#buildQuery());
-
-      if (res.ok) {
-        this.options = data;
-
-        // this.#updateHiddenFieldStyles();
-        this.fieldEl.options = this.options;
-      }
-    }
-  }
-
-  #buildQuery() {
-    const queryParams = this.#apiManager.buildQueryString({
-      page: 0,
-      search: this.value || ""
-    });
-
-    return `${this.apiParams}/${queryParams}`;
-  }
-
-  #updateHiddenFieldStyles() {
-    const hiddenField = this.hiddenFieldEl;
-    const size = this.options.length > 5 ? 5 : this.options.length;
-
-    if (hiddenField) {
-      hiddenField.style.display = size ? "" : "none";
-      hiddenField.setAttribute("size", size);
-      hiddenField.innerHTML = "";
+      this.value = false;
     }
   }
 }

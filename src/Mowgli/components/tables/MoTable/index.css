@@ -34,7 +34,7 @@
 /* ---------------- TABLE STYLES ---------------- */
 
 .table-container {  
-  overflow: hidden;
+  overflow: scroll;
   border-radius: var(--mo-border-radius);
   box-shadow: var(--mo-box-shadow);
 }
@@ -53,11 +53,16 @@ table {
 
 /* -------------- TABLE ROW STYLES -------------- */
 
+tr {
+  height: var(--mo-size-12);
+}
+
 tr:hover {
   cursor: pointer;
 }
 
 thead > tr {
+  height: var(--mo-size-16);
   box-shadow: 0rem 0.15rem 0.45rem 0.1rem #00000026;
   position: relative;
 }
@@ -85,6 +90,7 @@ th {
   text-align: left;
   position: relative;
   background-color: var(--mo-green-400);
+  white-space: nowrap;
 }
 
 th:not(:last-child) {
@@ -92,7 +98,7 @@ th:not(:last-child) {
 }
 
 th, td {
-  padding: var(--mo-size-4);
+  padding: var(--mo-size-2) var(--mo-size-4);
 }
 
 tr > td:not(:last-child) {

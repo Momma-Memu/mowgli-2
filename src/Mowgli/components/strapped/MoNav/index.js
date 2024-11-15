@@ -30,6 +30,7 @@ export default class MoNav extends MoComponent {
     this.form = this.session.buildForm();
     this.modalBody.appendChild(this.form);
     this.addListener("click", (event) => this.#logoClick(event), this.getByClass("logo"));
+    this.addListener("click", (event) => this.#logout(event), this.getByClass("logout"));
     this.#checkSession();
   }
 
@@ -39,6 +40,19 @@ export default class MoNav extends MoComponent {
 
     if (window.location.pathname !== "/dashboard") {
       this.redirect("/dashboard");
+    }
+  }
+
+  /** @param {Event} event  */
+  async #logout(event) {
+    event.preventDefault();
+    // eslint-disable-next-line no-unused-vars
+    const [res, _] = await this.session.delete();
+    
+    if (res.ok) {
+      sessionStorage.clear();
+      this.authenticated.state = false;
+      this.redirect("/");
     }
   }
 
@@ -58,7 +72,7 @@ export default class MoNav extends MoComponent {
 
     if (res.ok && data) {
       this.authenticated.state = true;
-      this.emitEvent(this.createEvent("mo-route-event", "/dashboard"));
+      this.redirect("/dashboard");
     }
   }
 

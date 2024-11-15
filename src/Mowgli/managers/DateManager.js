@@ -8,6 +8,7 @@ export default class MowgliDateManager {
    */
   toField(dateString) {
     const date = new Date(dateString);
+    date.setMinutes(date.getTimezoneOffset());
 
     if (isNaN(date)) {
       this.#throw(`The provided date string, "${dateString}", is not a valid Date string format.`);
@@ -16,8 +17,11 @@ export default class MowgliDateManager {
     }
   }
 
-  toDb() {
+  toDb(dateString) {
+    const date = new Date(dateString);
+    date.setMinutes(date.getTimezoneOffset());
 
+    return date.toLocaleDateString();
   }
 
   #throw(description = "") {
