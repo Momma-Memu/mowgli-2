@@ -20,11 +20,7 @@
   margin-right: 1rem;
 } */
 
-:host(:focus) > .field-container > #field-label, :host(:state(valid)) > .field-container > #field-label {
-  transform: translateY(-1.25em);
-}
-
-:host(:not(:state(empty))) > .field-container > #field-label, :host(:state(:valid)) #field-label {
+:host(:focus) > .field-container > #field-label, :host(:state(valid)) > .field-container > #field-label, :host(:not(:state(empty))) > .field-container > #field-label {
   transform: translateY(-1.25em);
 }
 

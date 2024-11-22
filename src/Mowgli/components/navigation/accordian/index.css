@@ -11,6 +11,7 @@
 
 .head-container:hover {
   background-color: color-mix(in srgb, var(--mo-blue-500) 35%, white);
+  /* background-color: color-mix(in srgb, var(--mo-purple-100) 65%, white); */
 }
 
 .head-wrapper {

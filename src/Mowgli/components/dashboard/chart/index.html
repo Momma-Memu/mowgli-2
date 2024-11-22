@@ -1,11 +1,27 @@
 <div class="container">
   <mo-dropdown mo-position="right">
-    <mo-icon slot="button" mo-fa="fa-duotone fa-solid fa-ellipsis"></mo-icon>
+    <mo-icon class="menu-btn" slot="button" mo-fa="fa-duotone fa-solid fa-ellipsis"></mo-icon>
     <div slot="content" class="dropdown-items">
-      <div class="dropdown-item">Edit</div>
-      <div class="dropdown-item">Download as CSV</div>
-      <div class="dropdown-item">Download as image</div>
+      <div id="edit" class="dropdown-item">
+        <mo-icon mo-static mo-fa="fa-sharp-duotone fa-solid fa-pen-to-square"></mo-icon>
+        <span>Edit chart</span>
+      </div>
+      <div id="csv" class="dropdown-item">
+        <mo-icon mo-static mo-fa="fa-sharp-duotone fa-solid fa-file-csv"></mo-icon>
+        <span>Save as CSV</span>
+      </div>
+      <div id="img" class="dropdown-item">
+        <mo-icon mo-static mo-fa="fa-sharp-duotone fa-solid fa-image"></mo-icon>
+        <span>Save as image</span>
+      </div>
     </div>
   </mo-dropdown>
   <canvas id="mo-chart"></canvas>
 </div>
+
+
+<mo-modal id="chart-modal">
+  <div slot="open-btn"></div>
+  <div id="head" slot="head">Edit Chart</div>
+  <div id="modal-body" slot="body"></div>
+</mo-modal>

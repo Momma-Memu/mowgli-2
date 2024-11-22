@@ -23,30 +23,36 @@ export default class MoForm extends MoComponent {
 
   /** @returns {{}} */
   get values() {
-    const rawValue = {};
+    const formData = {};
 
     if (this.#entityId) {
-      rawValue.id = this.#entityId;
+      formData.id = this.#entityId;
     }
 
     this.#fields.forEach((fieldDef) => {
-      const { value, valueId } = fieldDef.field;
+      const valueId = fieldDef.field.valueId;
+      let value = fieldDef.field.value;
+      value = value !== "" ? value : fieldDef.field.fieldEl.value
 
       if (fieldDef.type === "date") {
-        rawValue[fieldDef.name] = fieldDef.getFormattedValue(value);
+        formData[fieldDef.name] = fieldDef.getFormattedValue(value);
       } else if (fieldDef.useValueID && valueId) {
-        rawValue[fieldDef.name] = valueId;
-      } else if (value || value === false) {
-        rawValue[fieldDef.name] = value;
+        formData[fieldDef.name] = valueId;
+      } else {
+        formData[fieldDef.name] = value;
       }
-
+      
       if (fieldDef.hiddenIdField) {
-        rawValue[fieldDef.hiddenIdField.name] = fieldDef.hiddenIdField.field.value;
+        formData[fieldDef.hiddenIdField.name] = fieldDef.hiddenIdField.field.value;
       }
     });
 
-    return rawValue;
+    
+
+    return formData;
   }
+
+  
 
   connectedCallback() {
     // this.getElementsByName("mo-field");
@@ -63,10 +69,11 @@ export default class MoForm extends MoComponent {
 
   /** @param {Object.<string, any>} item */
   patch(item) {
-    const fields = this.#fields.map((field) => field.field);
     this.#entityId = item.id;
 
-    fields.forEach((field) => {
+
+    this.#fields.forEach((fieldDef) => {
+      const { field } = fieldDef;
       const value = item[field.name];
 
       if (value) {
@@ -83,6 +90,10 @@ export default class MoForm extends MoComponent {
           field.value = value;
         }
       }
+
+      if (fieldDef.hiddenIdField) {
+        fieldDef.hiddenIdField.field.value = item[fieldDef.hiddenIdField.name];
+      }
     });
   }
 
@@ -93,6 +104,30 @@ export default class MoForm extends MoComponent {
 
     fields.forEach((field) => {
       field.reset();
+    });
+  }
+
+  #getValues() {
+    const formData = {};
+
+    this.#fields.forEach(({ 
+      type, name, getFormattedValue, hiddenIdField, useValueID, field 
+    }) => {
+      const { value, valueId } = field;
+
+      if (type === "date") {
+        formData[name] = getFormattedValue(value);
+
+      } else if (useValueID && valueId) {
+        formData[name] = valueId;
+
+      } else if (value || value === false) {
+        formData[name] = value;
+      }
+
+      if (hiddenIdField) {
+        formData[hiddenIdField.name] = hiddenIdField.field.value;
+      }
     });
   }
 }

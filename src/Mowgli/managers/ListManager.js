@@ -53,6 +53,7 @@ export default class ListManager {
 
     if (res.ok) {
       this.#records = data;
+      console.log(data);
     }
 
     return [res, data];
@@ -81,9 +82,9 @@ export default class ListManager {
       // Create a long HTML string for each column value in this row.
       const cells = keys.map(key => {
         const fieldDef = this.#fields.find(field => field.name === key);
-        const value = fieldDef.getFormattedValue(record[key]);
+        const value = fieldDef.getFormattedValue(record[key], fieldDef.name);
         
-        return this.#buildCell(value);
+        return this.#buildCell(value, false, key);
       }).join("");
 
       // Next create the HTML Row string, combined with all the data cells and  date cell.
@@ -98,23 +99,26 @@ export default class ListManager {
   /** 
    * @param {HTMLTableCellElement[]} cells 
    * @param {string} [id=""] 
+   * @param {string} [selector=""] 
   */
   #buildRow(cells, id = "") {
     const row = document.createElement("tr");
     row.append(...cells);
     
-    return id ? `<tr id="${id}">${cells}</tr>` : `<tr>${cells}</tr>`;
+    return id ? `<tr id="record-${id}">${cells}</tr>` : `<tr>${cells}</tr>`;
   }
 
   /**
    * @param {string} content - Content to display within the innerHTML of the returned element.
    * @param {boolean} isCol - If true, this method returns a <th> element, <td> if false, with the appropriate attributes.
+   * @param {string} name - If true, this method returns a <th> element, <td> if false, with the appropriate attributes.
   */
-  #buildCell(content, isCol = false) {
+  #buildCell(content, isCol = false, name = "") {
     const type = isCol ? "th" : "td";
     const scope = isCol ? "col" : "row";
+    const selector = name ? `class="${name}"` : "";
 
-    return `<${type} scope="${scope}">${content}</${type}>`;
+    return `<${type} ${selector} scope="${scope}">${content}</${type}>`;
   }
 
   #getColNames() {

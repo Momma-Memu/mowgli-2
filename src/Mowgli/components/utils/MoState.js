@@ -1,8 +1,8 @@
 // @ts-check
 
 export default class MoState {
-  #state = null;
-  #callback = null;
+  #state;
+  #callback;
 
   /**
    * @param {*} [data=null]

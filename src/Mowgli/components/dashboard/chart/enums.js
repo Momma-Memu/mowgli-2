@@ -1,3 +1,30 @@
+const commarize = (value) => {
+  const min = 1e3;
+  const units = ["k", "M", "B", "T"];
+
+  if (value >= min) {
+    const order = Math.floor(Math.log(value) / Math.log(1000));
+    const unitName = units[(order - 1)];
+    const num = (value / 1000 ** order);
+
+    return num + unitName;
+  }
+
+  return value.toLocaleString();
+}
+
+const backgroundPlugin = {
+  id: 'customCanvasBackgroundColor',
+  beforeDraw: (chart, args, options) => {
+    const {ctx} = chart;
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-over';
+    ctx.fillStyle = options.color || '#99ffff';
+    ctx.fillRect(0, 0, chart.width, chart.height);
+    ctx.restore();
+  }
+};
+
 const gridColor = "#c6c6c6";
 
 const blue = {
@@ -41,6 +68,7 @@ const options = {
   resizeDelay: 500,
   
   plugins: {
+    customCanvasBackgroundColor: { color: "#FFFFFF" },
     tooltip: {
       padding: 16,
       boxPadding: 8,
@@ -52,20 +80,21 @@ const options = {
         } 
     },
   },
-
   scales: {
     y: {
-      grid: {
-        color: gridColor,
-      },
-      // beginAtZero: true,
+      grid: { color: gridColor }, 
+      title: { display: true, padding: { top: 0, bottom: 0 }  }, 
+      // title: { display: () => size.width <= 500, padding: { top: 0, bottom: 0 }  }, 
+
+      ticks: { display: true, callback: (value) => commarize(value) }
     },
     x: {
-      grid: {
-        color: gridColor,
-      },
-    },
-  }
+      grid: { color: gridColor }, 
+      title: { display: true, padding: { top: 0, bottom: 0 } }, 
+      ticks: { display: false} },
+      // ticks: { maxRotation: 0, minRotation: 0 } },
+  },
+  layout: { padding: { left: -2, right: 0, top: 0, bottom: 0 }}
 }
 
 export default {
@@ -82,23 +111,13 @@ export default {
     options: {
       responsive: true,
       resizeDelay: 500,
-      scales: {
-        y: {
-          grid: {
-            color: gridColor
-          },
-
-        },
-        x: {
-          grid: {
-            color: gridColor
-          }
-        }
-      }
+      ...options,
     }
   },
   line: {
     borderColor: lineColors,
+    backgroundColor: backgroundColors,
+    plugins: [backgroundPlugin],
     options: {
       elements: {
         point: { borderWidth: 5, hoverRadius: 8, hitRadius: 10 },

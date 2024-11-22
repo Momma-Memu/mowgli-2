@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import DashboardView from "../views/DashboardView.vue";
-import ObjectsView from "../views/ObjectsView.vue";
+import FormsView from "../views/FormsView.vue";
+import FieldsView from "../views/FieldsView.vue";
 import SourcesView from "../views/SourcesView.vue";
 import ChartsView from "../views/ChartsView.vue";
 import CompanyView from "../views/CompanyView.vue";
@@ -32,9 +33,14 @@ const router = createRouter({
       component: DashboardView
     },
     {
-      path: "/objects",
-      name: "objects",
-      component: ObjectsView
+      path: "/forms",
+      name: "forms",
+      component: FormsView
+    },
+    {
+      path: "/fields",
+      name: "fields",
+      component: FieldsView
     },
     {
       path: "/roles",

@@ -25,15 +25,32 @@ mo-dropdown {
 }
 
 .dropdown-items {
-  padding: var(--mo-size-4);
+  padding: var(--mo-size-2);
+  color: var(--mo-blue-700);
+  /* background-color: color-mix(in srgb, var(--mo-blue-100) 50%, white); */
+  background-color: color-mix(in srgb, var(--mo-charcoal) 5%, white);
 }
 
 .dropdown-item {
+  display: flex;
+  align-items: center;
   min-width: max-content;
   padding: var(--mo-size-1);
 }
 
-mo-icon {
+.dropdown-item > mo-icon {
+  font-size: var(--mo-size-6);
+  background-color: unset;
+}
+
+.dropdown-item:hover {
+  cursor: pointer;
+  user-select: none;
+  text-decoration: underline;
+  text-underline-offset: var(--mo-size-1);
+}
+
+.menu-btn {
   display: block;
   height: 0px;
   background-color: unset;

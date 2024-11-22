@@ -29,12 +29,23 @@
 <mo-dropdown side-bar class="authenticated">
   <mo-icon slot="button" mo-grow-hov mo-fa="fa-duotone fa-solid fa-bars"> </mo-icon>
   <div class="dropdown-items" slot="content">
+    <!-- <div class="side-bar-head">
+      <img src="/logo.svg" alt="Mowgli App Logo" />
+      <div>Mowgli</div>
+    </div> -->
+
+    <div class="company-context">
+      <div class="company-logo"></div>
+      <div class="company-name"></div>
+    </div>
+    
     <mo-accordian>
       <div class="accordian-head">Records</div>
       <div class="accordian-body" slot="body">
         <mo-nav-link mo-borderless class="accordian-item" mo-href="/charts">Charts</mo-nav-link>
         <mo-nav-link mo-borderless class="accordian-item" mo-href="/sources">Sources</mo-nav-link>
         <mo-nav-link mo-borderless class="accordian-item" mo-href="/forms">Forms</mo-nav-link>
+        <mo-nav-link mo-borderless class="accordian-item" mo-href="/fields">Fields</mo-nav-link>
       </div>
     </mo-accordian>
 
@@ -59,9 +70,23 @@
       </div>
     </mo-accordian>
 
-    <div class="logout">
-      <mo-icon mo-fa="fa-sharp-duotone fa-solid fa-arrow-right-from-bracket"></mo-icon>
-      <span>Logout</span>
+    <div class="session-context">
+      <div class="user-context">
+        <!-- <div class="company-logo"></div> -->
+        <!-- <img src="/logo.svg" alt="Mowgli App Logo" /> -->
+        <mo-icon mo-static mo-fa="fa-duotone fa-solid fa-user"></mo-icon>
+        <div class="user-info">
+          <div class="user-info-name">User Name</div>
+          <div class="user-info-role">Admin</div>
+        </div>
+        </div>
+        <div class="logout">
+          <!-- <mo-icon mo-static mo-fa="fa-sharp-duotone fa-solid fa-arrow-right-from-bracket"></mo-icon> -->
+          <mo-icon mo-static mo-fa="fa-sharp-duotone fa-solid fa-arrow-left-from-bracket"></mo-icon>
+          <span>Logout</span>
+        </div>
+      </div>
     </div>
+
   </div>
 </mo-dropdown>

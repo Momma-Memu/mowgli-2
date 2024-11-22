@@ -9,7 +9,7 @@ onMounted(async () => {
   const dashboard = new MowgliDashboard();
   await dashboard.get();
 
-  dashData.value = dashboard.stateArray;
+  dashData.value = dashboard.state;
 });
 </script>
 

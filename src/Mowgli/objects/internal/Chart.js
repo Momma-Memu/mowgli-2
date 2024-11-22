@@ -1,9 +1,7 @@
 import MowgliObject from "../index";
 import FieldDefinition from "../../builders/FieldDefinition";
-import Source from "./sources/Source";
 
 export default class MowgliChart extends MowgliObject {
-  #source = new Source();
 
   constructor() {
     const name = new FieldDefinition("name", true, "Name", "text", "", "");
@@ -39,22 +37,7 @@ export default class MowgliChart extends MowgliObject {
       { id: "hour", displayName: "Hour" }
     ];
 
-    // if (this.#source.state) {
-    //   this.#getAsyncData();
-    // }
-    
-    // prefix.options = this.#source.stateArray;
     prefix.useValueID = true;
     role.useValueID = true;
   }
-
-  // async #getAsyncData(prefix) {
-
-  //   if (!this.#source.state) {
-      
-  //   }
-
-  //   prefix.options = this.#source.stateArray;
-  //   prefix.useValueID = true;
-  // }
 }

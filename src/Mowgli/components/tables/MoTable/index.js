@@ -3,10 +3,12 @@ import styles from "./index.css?inline";
 import template from "./index.html?raw";
 
 // eslint-disable-next-line no-unused-vars
-import MowgliObject from "@/Mowgli/objects/index";
+import MowgliObject from "../../../objects/index";
 
 // eslint-disable-next-line no-unused-vars
 import MoModal from "@/Mowgli/components/modal/MoModal/index";
+// eslint-disable-next-line no-unused-vars
+import MoForm from "../../forms-fields/MoForm";
 
 
 export default class MoTable extends MoComponent {
@@ -14,6 +16,7 @@ export default class MoTable extends MoComponent {
   #editingId = this.addState("");
   #records = this.addState([]);
   #timeout = this.addTimeout(400);
+  #form = this.addState();
 
   constructor() {
     super(styles, template);
@@ -29,6 +32,19 @@ export default class MoTable extends MoComponent {
 
   set mobject(mobject) {
     this.#mobject.state = mobject;
+  }
+
+  /** @type {MoForm} */
+  get form () {
+    if (!this.#form.state) {
+      this.#form.state = this.mobject.buildForm();
+    }
+
+    return this.#form.state;
+  }
+
+  set form (form) {
+    this.#form.state = form;
   }
 
   /** @type {any[]} */
@@ -56,8 +72,9 @@ export default class MoTable extends MoComponent {
   connectedCallback() {
     if (this.mobject && this.getElementById("table-modal")) {
       this.modal.title = `Create ${this.mobject.name}`;
-      this.form = this.mobject.buildForm();
-      this.modalBody.appendChild(this.form);
+      // this.form = this.mobject.buildForm();
+      this.modalBody.appendChild(this.form);      
+
 
       this.#init();
     }
@@ -106,14 +123,29 @@ export default class MoTable extends MoComponent {
 
   /** @param {HTMLTableRowElement} row  */
   #edit(row) {
-    this.#editingId = row.getAttribute("id");
-    const item = this.mobject.state[this.#editingId];
+    this.#editingId = row.getAttribute("id").split("-")[1];
+    const item = this.mobject.getRecordById(this.#editingId);
 
     const title = item.name ? item.name : this.mobject.name;
     this.modal.title = `Edit ${title}`;
 
     this.form.patch(item);
     this.modal.open();
+  }
+
+  /** @param {Object.<string, any>} record  */
+  #updateRow(record) {
+    const row = this.getElementById(`record-${record.id}`);
+    const columns = Object.values(row.childNodes);
+    columns.forEach(col => {
+      const name = col.getAttribute("class");
+      const fieldDef = this.mobject.fields.find(field => field.name === name);
+
+      const value = fieldDef ? fieldDef.getFormattedValue(record[name]) : "";
+      if (col.innerHTML !== value && fieldDef) {
+        col.innerHTML = value;
+      }
+    });
   }
 
   async #fetch() {
@@ -135,7 +167,11 @@ export default class MoTable extends MoComponent {
     const formData = this.form.values;
 
     if (formData.id) {
-      await this.mobject.put("", formData);
+      const [res, data] = await this.mobject.put("", formData);
+
+      if (res.ok) {
+        this.#updateRow(data);
+      }
     } else {
       await this.mobject.post("", formData);
     }

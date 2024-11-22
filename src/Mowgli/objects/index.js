@@ -6,6 +6,7 @@ import FieldDefinition from "../builders/FieldDefinition";
 import MoForm from "../components/forms-fields/MoForm/index";
 import SymbioticField from "../managers/SymbioticField";
 import ListManager from "../managers/ListManager";
+import MoEvent from "../components/utils/MoEvent";
 
 // import MowgliFormManager from "../MowgliFormManager";
 // import MowgliListManager from "../MowgliListManager/index"
@@ -13,11 +14,17 @@ import ListManager from "../managers/ListManager";
 // import MowgliEvent from "../EventManager/MowgliEvent";
 
 export default class MowgliObject {
+  #HydrateEvent = (data) => new MoEvent(this.name  + data.id, data);
   // #UIFetchReqListener = (event) => this.#processUIFetchRequest(event);
   // #authEvent = new MowgliEvent("mowgli-auth-event");
 
   #api;
+
+  #disableCache = null;
+
   #state;
+  // #state = { list: [], obj: {}, stale: true, };
+  
   #name;
   #prevParams = null;
 
@@ -29,6 +36,10 @@ export default class MowgliObject {
 
   #fields;
   #columns;
+
+
+  /** @type {MowgliObject[]} */
+  #dependencies;
 
   /**
    * @param {string} api
@@ -63,19 +74,34 @@ export default class MowgliObject {
     `;
   }
 
-  /** @type {{}} */
+  get dependencies() {
+    return this.#dependencies;
+  }
+
+  set dependencies(dependencies) {
+    this.#dependencies = dependencies;
+  }
+
   get state() {
-    return this.#state.cache;
+    return this.#disableCache;
+    // return this.#state.cache;
+    // if (this.#state.stale) {
+    //   const cache = this.#cache.cache;
+
+    //   if (cache) {
+    //     this.#state.list = cache;
+    //     this.#state.obj = this.#createStateObj(cache);
+    //     this.#state.stale = false;
+    //   }
+    // }
+    // return this.#state.obj;
   }
 
   set state(state) {
-    this.#state.cache = state;
+    this.#disableCache = state;
+    // this.#state.cache = state;
   }
-
-  get stateArray() {
-    return this.state ? Object.values(this.state) : [];
-  }
-
+  
   /** @type {ListManager} */
   get listManager() {
     return this.#listManager;
@@ -101,6 +127,12 @@ export default class MowgliObject {
 
   set editOnly(flag) {
     this.#editOnly = flag;
+  }
+
+  getRecordById(id) {
+    if (this.state && Array.isArray(this.state)) {
+      return this.state.find(record => record.id === Number(id));
+    }
   }
 
   buildQueryString(obj) {
@@ -131,8 +163,7 @@ export default class MowgliObject {
       const [response, data] = await this.#api.GET(params);
 
       if (response.ok && data) {
-        // this.state = data;
-        this.#updateCache(data);
+        this.state = data;
       }
 
       return [response, data];
@@ -147,7 +178,12 @@ export default class MowgliObject {
     const [response, data] = await this.#api.POST(params, body);
 
     if (response.ok) {
-      this.#updateCache(data);
+      if (this.state && Array.isArray(this.state)) {
+        this.state.push(data);
+      } else {
+        this.state = data;
+      }
+      // this.#updateDependencies(data);
     }
 
     return [response, data];
@@ -161,7 +197,17 @@ export default class MowgliObject {
     const [response, data] = await this.#api.PUT(params, body);
 
     if (response.ok) {
-      this.#updateCache(data);
+      if (this.state && Array.isArray(this.state)) {
+        const index = this.state.findIndex(record => record.id === Number(data.id));
+        const newState = [...this.state];
+        newState[index] = data;
+
+        this.state = newState;
+      } else {
+        this.state = data;
+      }
+      // this.#updateCache(data);
+      // this.#updateDependencies(data);
     }
 
     return [response, data];
@@ -201,7 +247,7 @@ export default class MowgliObject {
 
   buildListTable() {
     this.#listManager = new ListManager(this.#name, this.columns, "sources");
-    this.#listManager.records = this.stateArray || [];
+    this.#listManager.records = this.state || [];
 
     return this.#listManager.build();
   }
@@ -210,6 +256,7 @@ export default class MowgliObject {
     // TODO: Remove condition after backend API responds consistently.
     if (Array.isArray(data)) {
       data = data.reduce((obj, value) => {
+        console.log(value.id)
         if (value.id) {
           obj[value.id] = value;
         } else if (value.flag) {
@@ -229,19 +276,51 @@ export default class MowgliObject {
     }
 
     this.state = newState;
+  }
 
+  #updateDependencies(data) {
+    if (this.dependencies) {
+      this.dependencies.forEach(mobject => {
+        const match = mobject.state[data.id];
+  
+        if (match) {
+          const state = { ...mobject.state };
+          state[data.id] = data;
+          
+          mobject.state = state;
+        }
+      });
+    }
   }
 
   #remove(id) {
-    const dataMap = { ...this.state };
-    delete dataMap[id];
+    if (this.state && Array.isArray(this.state)) {
+      this.state = this.state.filter(record => record.id = id);
+    } else {
+      this.state = null;
+    }
+    // const dataMap = { ...this.state };
+    // delete dataMap[id];
 
-    this.state = dataMap;
+    // this.state = dataMap;
   }
 
   /** @param {*} data  */
   #typeof(data) {
     return Array.isArray(data) ? "array" : typeof data;
+  }
+
+  #createStateObj(state) {
+    return state.reduce((obj, value) => {
+      console.log(value.id)
+      if (value.id) {
+        obj[value.id] = value;
+      } else if (value.flag) {
+        obj[value.flag] = value;
+      }
+
+      return obj;
+    }, {});
   }
 
   // #handleAuthEvent(state) {

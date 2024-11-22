@@ -61,18 +61,18 @@ export default class MoComponent extends HTMLElement {
 
   destroySelf() {
     Object.values(this.#listeners).forEach((listener) => listener.clean());
-    this.#listeners = null;
+    this.#listeners = {};
 
     this.#state.forEach((slice) => slice.clean());
-    this.#state = null;
+    this.#state = [];
 
     this.#timeouts.forEach((timeout) => timeout.clean());
-    this.#timeouts = null;
+    this.#timeouts = [];
 
     this.#cleanUpCallbacks.forEach(callback => callback());
-    this.#cleanUpCallbacks = null;
+    this.#cleanUpCallbacks = [];
 
-    this.#moInternals = null;
+    this.#moInternals = {};
     this.#internals = null;
 
     this.remove();

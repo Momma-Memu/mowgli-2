@@ -79,6 +79,7 @@ img {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: var(--mo-padding);
 }
 
 .accordian-body {
@@ -112,27 +113,68 @@ mo-accordian {
   background-color: color-mix(in srgb, var(--mo-blue-200) 25%, white);
 }
 
-.logout {
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0.5rem;
-  width: 100%;
-  font-size: var(--mo-size-6);
+/* --------- BOTTOM USER CONTEXT STYLES --------- */
+
+.company-context {
   display: flex;
   align-items: center;
-  color: var(--mo-blue-700);
-  gap: var(--mo-size-2);
+  width: 100%;
+  gap: var(--mo-size-8);
+
+  font-weight: 500;
+  font-size: var(--mo-size-6);
+  padding: var(--mo-size-4) var(--mo-size-2) var(--mo-size-6) var(--mo-size-2);
+  border-bottom: solid 1px var(--mo-gray);
+  cursor: default;
 }
 
-.logout > mo-icon {
-  background-color: transparent;
-  font-size: var(--mo-size-6);
+.company-logo {
+  aspect-ratio: 1;
+  width: var(--mo-size-10);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url("/logo.svg");
+}
+
+.session-context {
+  display: flex;
+  width: 100%;
+  padding: var(--mo-size-6) var(--mo-size-2) var(--mo-size-4) var(--mo-size-2);
   color: var(--mo-blue-700);
-  pointer-events: none;
+  cursor: pointer;
+}
+
+.user-context > mo-icon, .logout > mo-icon {
+  background-color: unset;
+  font-size: var(--mo-size-6);
+}
+
+.user-context {
+  display: flex;
+  align-items: center;
+  width: 65%;
+}
+
+.user-info-name {
+  font-weight: 500;
+  font-size: var(--mo-size-5);
+}
+
+.user-info-role {
+  font-size: var(--mo-size-3);
+}
+
+.logout {
+  width: 35%;
+  display: flex;
+  align-items: center;
 }
 
 .logout:hover {
-  background-color: color-mix(in srgb, var(--mo-blue-500) 15%, white);
+  text-decoration: underline;
+  text-underline-offset: var(--mo-size-1);
+  text-decoration-thickness: 2px;
 }
 
 #sign-in {
