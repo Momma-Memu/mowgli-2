@@ -10,7 +10,6 @@ export default class MoButton extends MoComponent {
 
     this.disabled = this.addInternal("disabled");
     this.addAttribute("btn-type");
-    this.addAttribute("tabindex");
   }
 
   connectedCallback() {

@@ -1,6 +1,17 @@
-:host {
+/* :host {
+  display: flex;
+  flex-wrap: wrap;
+  padding-bottom: var(--mo-size-4);
+  gap: 0rem 1rem;
+} */
+
+form {
   display: flex;
   flex-wrap: wrap;
   padding-bottom: var(--mo-size-4);
   gap: 0rem 1rem;
 }
+
+/* mo-field:nth-child(even) {
+  margin-right: 1rem;
+} */

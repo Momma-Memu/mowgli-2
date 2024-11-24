@@ -11,7 +11,8 @@ import template from "./index.html?raw";
 import MoSelect from "../MoSelect/index";
 
 export default class MoField extends MoComponent {
-  #templateTypes = ["select", "switch", "search-select", "textarea"]
+  #disableWhitespace = false;
+  #templateTypes = ["select", "multi-select", "switch", "textarea"];
 
   #dirty = this.addInternal("dirty");
   #empty = this.addInternal("empty");
@@ -34,8 +35,8 @@ export default class MoField extends MoComponent {
   #apiParams = this.addState("");
   #lastQuery = this.addState("");
 
-  /** @type {function | undefined} */
-  symbioticCallback;
+  /** @type {function[]} */
+  symbioticCallbacks = [];
 
   constructor() {
     super(styles, template);
@@ -146,6 +147,14 @@ export default class MoField extends MoComponent {
     this.#lastQuery.state = queryString;
   }
 
+  get disableWhitespace() {
+    return this.#disableWhitespace;
+  }
+
+  set disableWhitespace(disableWhitespace) {
+    this.#disableWhitespace = disableWhitespace;
+  }
+
   // =================== State ===================
 
   get options() {
@@ -164,7 +173,7 @@ export default class MoField extends MoComponent {
     data = data === undefined || data === null ? "" : data;
     this.#value.state = data;
 
-    if (this.type === "select" && this.fieldEl) {
+    if (this.type.includes("select") && this.fieldEl) {
       this.fieldEl.searchField.value = data;
     }
 
@@ -232,7 +241,7 @@ export default class MoField extends MoComponent {
   // =============== Public Methods ===============
 
   connectedCallback() {
-    const changeTypes = ["date", "select", "search-select", "switch"];
+    const changeTypes = ["date", "select", "multi-select", "switch"];
     this.#createField(this.type);
     this.#initAttributes();
 
@@ -242,7 +251,7 @@ export default class MoField extends MoComponent {
 
     if (changeTypes.includes(this.type)) {
       this.addListener("change", (event) => this.#changeHandler(event), this.fieldEl);
-    } else if (this.type !== "select") {
+    } else if (!this.type.includes("select")) {
       this.addListener("keyup", (event) => this.#changeHandler(event), this.fieldEl);
     }
   }
@@ -253,6 +262,10 @@ export default class MoField extends MoComponent {
 
     this.dirty = false;
     this.valid = false;
+
+    if (this.type === "multi-select") {
+      this.fieldEl.reset();
+    }
   }
 
   #initAttributes() {
@@ -260,6 +273,7 @@ export default class MoField extends MoComponent {
     const label = this.labelEl;
 
     if (label && field) {
+      this.fieldEl.title = this.label;
       this.ariaLabel = this.label;
 
       label.setAttribute("for", this.name);
@@ -273,7 +287,7 @@ export default class MoField extends MoComponent {
         field.setAttribute("required", this.required);
       }
 
-      if (this.type !== "select" && this.type !== "search-select") {
+      if (!this.type.includes("select")) {
         field.setAttribute("name", this.name);
         field.setAttribute("type", this.type);
       }
@@ -290,8 +304,10 @@ export default class MoField extends MoComponent {
   #changeHandler(event) {
     event.stopPropagation();
 
+    // const value = event.target.value.replace(/\s/g, "");
+
     this.dirty = true;
-    this.value = event.target.value;
+    this.value = this.#disableWhitespace ? event.target.value.replace(/\s/g, "") : event.target.value;
     this.valueId = event.target.valueId;
     // this.empty = this.value === "";
     // this.valid = this.#checkValidity();
@@ -300,13 +316,17 @@ export default class MoField extends MoComponent {
       this.#timeout.sleep(() => {
         // this.emitEvent(this.createEvent("field-changed", this.value));
 
-        if (this.symbioticCallback) {
-          this.symbioticCallback();
+        if (this.symbioticCallbacks) {
+          for (let cb of this.symbioticCallbacks) {
+            cb();
+          }
         }
       });
     } else if (!this.empty) {
-      if (this.symbioticCallback) {
-        this.symbioticCallback();
+      if (this.symbioticCallbacks) {
+        for (let cb of this.symbioticCallbacks) {
+          cb();
+        }
       }
     }
   }

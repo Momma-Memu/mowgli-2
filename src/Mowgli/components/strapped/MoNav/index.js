@@ -14,7 +14,6 @@ export default class MoNav extends MoComponent {
     this.company = new MowgliCompany();
     this.authenticated = this.addInternal("authenticated");
 
-    this.addListener("closed", this.#resetForm);
     this.addListener("submit", this.#submitForm);
     this.addListener("mo-route-event-notify-siblings", this.#setChildren);
   }
@@ -76,32 +75,22 @@ export default class MoNav extends MoComponent {
     });
   }
 
-  #resetForm(event) {
-    console.log(event, "============");
-  }
-
   async #submitForm() {
     const formData = this.form.values;
-    const [res, data] = await this.session.post("", formData);
-
-    if (res.ok && data) {
-      this.authenticated.state = true;
-      this.redirect("/dashboard");
-    }
+    await this.session.post("", formData);
+    await this.#checkSession();
   }
 
   async #checkSession() {
-    const [response, data] = await this.session.get();
-    await this.company.get();
-
-    this.authenticated.state = response.ok && data;
-
-    if (response.ok && data && window.location.pathname === "/") {
-      this.redirect("/dashboard");
-    } else if (!data && window.location.pathname !== "/") {
-      this.redirect("/");
+    if (!this.session.state) {
+      await this.session.get();
     }
 
+    if (!this.company.state) {
+      await this.company.get();
+    }
+
+    this.authenticated.state = Boolean(this.session.state);
 
     if (this.session.state) {
       this.userName.innerHTML = this.session.state.user.name;
@@ -110,6 +99,16 @@ export default class MoNav extends MoComponent {
 
     if (this.company.state) {
       this.companyName.innerHTML = this.company.state.name;
+    }
+
+    this.#handleRedirects();
+  }
+
+  #handleRedirects() {
+    if (this.session.state && window.location.pathname === "/") {
+      this.redirect("/dashboard");
+    } else if (!this.session.state && window.location.pathname !== "/") {
+      this.redirect("/");
     }
   }
 }

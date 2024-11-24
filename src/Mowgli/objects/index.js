@@ -241,8 +241,8 @@ export default class MowgliObject {
    * @param {string} parentProp
    * @param {string} childProp
    */
-  buildDependency(parent, child, parentProp = "value", childProp = "value") {
-    return new SymbioticField(parent, child, parentProp, childProp);
+  buildDependency(parent, child, parentProp = "value", childProp = "value", callbackOverride = null) {
+    return new SymbioticField(parent, child, parentProp, childProp, callbackOverride);
   }
 
   buildListTable() {

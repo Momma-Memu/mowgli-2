@@ -17,10 +17,12 @@ import MoSelectOption from "../forms-fields/MoSelect/MoSelectOption/index";
 import MoBanner from "../blocks/banner/index";
 import MoPage from "../blocks/page/index";
 
+
 // import MoMultiSelect from "../forms-fields/MoMultiSelect/index";
 // import MoSelectItem from "../forms-fields/MoMultiSelect/MoSelectItem/index";
 // import MoSelectedItem from "../forms-fields/MoMultiSelect/MoSelectedItem/index";
 
+import MoSearch from "../search/index";
 
 import MoChart from "../dashboard/chart/index";
 
@@ -46,6 +48,7 @@ export default class MoComponentManager {
   MoSelect = MoSelect;
   MoField = MoField;
   MoForm = MoForm;
+  MoSearch = MoSearch
   MoTable = MoTable;
 
   MoPage = MoPage;

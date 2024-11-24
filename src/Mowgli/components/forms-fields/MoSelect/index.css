@@ -60,3 +60,46 @@ input {
   outline: none;
   font-size: inherit;
 }
+
+:host([mo-multi="true"]) > input {
+  content-visibility: hidden;
+}
+
+#selected-container {
+  display: flex;
+  gap: var(--mo-size-2);
+  align-items: center;
+}
+
+.selected-item {
+  height: 80%;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  padding: var(--mo-padding);
+  border-radius: var(--mo-border-radius);
+  width: max-content;
+}
+
+.selected-item-icon-container {
+  position: relative;
+  height: inherit;
+}
+
+.selected-item-icon-container > mo-icon {
+  visibility: hidden;
+  position: absolute;
+  font-size: var(--mo-size-5);
+  background-color: unset;
+  --fa-primary-opacity: 1;
+  --fa-secondary-opacity: 1;
+  --fa-primary-color: var(--mo-charcoal);
+  --fa-secondary-color: var(--mo-red-100);
+  filter: var(--mo-icon-shadow);
+  top: -75%;
+  right: calc(-1 * var(--mo-size-2));
+}
+
+.selected-item:hover > .selected-item-icon-container > mo-icon {
+  visibility: visible;
+}

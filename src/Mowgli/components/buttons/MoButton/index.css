@@ -1,3 +1,5 @@
+/* =========== Default Button Styles =========== */
+
 :host {
   display: block;
   user-select: none;
@@ -5,8 +7,9 @@
   height: fit-content;
 }
 
+/* ---- Static ---- */
 .container {
-  color: white;
+  color: var(--mo-white);
   cursor: pointer;
 
   padding: var(--mo-padding);
@@ -19,59 +22,76 @@
 
   box-shadow: var(--mo-box-shadow);
   pointer-events: all;
-  transition:
-    200ms ease background,
-    200ms ease border;
+  transition: 200ms ease background, 200ms ease border;
 }
 
-.container:hover,
-:host([btn-type="border"]) > .container:hover {
-  color: white;
+/* ---- Hover ---- */
+.container:hover {
   border-color: var(--btn-primary-focus);
   background: var(--btn-primary-focus)
-    radial-gradient(circle, transparent 1%, var(--btn-primary-focus) 1%) center /
-    15000%;
+    radial-gradient(circle, transparent 1%, var(--btn-primary-focus) 1%) center / 15000%;
 }
 
-.container:focus,
-:host([btn-type="border"]) > .container:focus {
-  background-color: var(--btn-primary-hover);
+/* ---- Focus ---- */
+.container:focus {
   border-color: var(--btn-primary-focus);
-  color: white;
+  background-color: var(--btn-primary-hover);
+  outline: solid 2px color-mix(in srgb, var(--btn-primary-focus) 50%, transparent);
 }
 
-/* =========== Default Button Styles =========== */
-
-:host(:active:not(:state(disabled))) > .container,
-:host([btn-type="border"]:active:not(:state(disabled))) > .container {
+/* ---- Active ---- */
+:host(:active:not(:state(disabled))) > .container {
   background-size: 100%;
   background-color: var(--mo-white);
   border-color: color-mix(in srgb, var(--btn-primary) 5%, transparent);
-
-  transition:
-    background 0s,
-    100ms border;
+  outline: solid 1px color-mix(in srgb, var(--btn-primary-focus) 50%, transparent);;
+  transition: background 0s, 100ms border;
 }
 
 /* =========== Border Button Styles =========== */
 
+/* ---- Static ---- */
 :host([btn-type="border"]) > .container {
-  border-color: color-mix(in srgb, var(--btn-primary) 56%, black);
-  color: color-mix(in srgb, var(--btn-primary) 35%, black);
-  background-color: color-mix(
-    in srgb,
-    var(--btn-primary-focus) 20%,
-    transparent
-  );
+  color: var(--btn-secondary-color-dark);
+  border-color: color-mix(in srgb, var(--btn-secondary) 60%, transparent);
+  background-color: color-mix(in srgb, var(--btn-secondary-focus) 18%, transparent);
+}
+
+/* ---- Hover ---- */
+:host([btn-type="border"]) > .container:hover {
+  color: var(--mo-white);
+  border-color: var(--btn-secondary-focus);
+  background: var(--btn-secondary-hover)
+    radial-gradient(circle, transparent 1%, var(--btn-secondary-focus) 1%) center / 15000%;
+}
+
+/* ---- Focus ---- */
+:host([btn-type="border"]) > .container:focus {
+  color: var(--mo-white);
+  border-color: var(--btn-secondary-focus);
+  background-color: var(--btn-secondary-hover);
+  outline: solid 2px color-mix(in srgb, var(--btn-secondary-focus) 50%, transparent);
+}
+
+/* ---- Active ---- */
+:host(:active:not(:state(disabled))) > .container,
+:host([btn-type="border"]:active:not(:state(disabled))) > .container {
+  background-size: 100%;
+  background-color: var(--mo-white);
+  border-color: color-mix(in srgb, var(--btn-secondary) 5%, transparent);
+  outline: solid 1px color-mix(in srgb, var(--btn-secondary-focus) 50%, transparent);;
+  transition: background 0s, 100ms border;
 }
 
 /* =========== Negative Button Styles =========== */
 
+/* ---- Static ---- */
 :host([btn-type="negative"]) > .container {
   background-color: var(--btn-negative);
   border-color: var(--btn-negative);
 }
 
+/* ---- Hover ---- */
 :host([btn-type="negative"]) > .container:hover {
   background: var(--btn-negative-focus)
     radial-gradient(circle, transparent 1%, var(--btn-negative-focus) 1%) center /
@@ -79,11 +99,13 @@
   border-color: var(--btn-negative-focus);
 }
 
+/* ---- Focus ---- */
 :host([btn-type="negative"]) > .container:focus {
   background-color: var(--btn-negative-hover);
   border-color: var(--btn-negative-focus);
 }
 
+/* ---- Active ---- */
 :host([btn-type="negative"]:active:not(:state(disabled))) > .container {
   background-color: var(--mo-white);
   background-size: 100%;

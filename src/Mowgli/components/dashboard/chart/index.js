@@ -21,6 +21,7 @@ export default class MoChart extends MoComponent {
   #dateManager = new MowgliDateManager();
   #chart = this.addState(null);
   #timeout;
+  #interval;
   #chartEl;
   enums = JSON.parse(JSON.stringify(enums));
 
@@ -89,7 +90,7 @@ export default class MoChart extends MoComponent {
 
   buildChart() {
     this.enums.line.options.onResize = (chart, size) => this.onResize(chart, size);
-    this.enums.line.options.scales.x.title.text = this.#getXtitle();
+    this.enums.line.options.scales.x.title.text = this.chart.live ? "Real Time" : this.#getXtitle();
     this.enums.line.options.scales.y.title.text = this.chart.valueName;
 
     let colors = { 
@@ -102,21 +103,66 @@ export default class MoChart extends MoComponent {
       colors = { borderColor: this.enums.line.borderColor[0], backgroundColor: this.enums.line.backgroundColor[0]}
     }
 
-    this.#chartEl = new Chart(this.canvas, {
-      type: this.chart.type.toLowerCase(),
-      data: {
-        labels: this.#getLabels(),
-        datasets: [{
-          label: this.chart.name,
-          data: this.#getDataPoints(),
-          fill: true,
-          tension: 0.1,
-          ...colors,
-        }],
-      },
-      options: this.enums.line.options,
-      plugins: this.enums.line.plugins,
-    });
+    if (this.chart.live) {
+      this.#chartEl = new Chart(this.canvas, {
+        type: this.chart.type.toLowerCase(),
+        data: {
+          labels: [],
+          datasets: [{
+            label: this.chart.name,
+            data: [],
+            fill: true,
+            tension: 0.1,
+            ...colors,
+          }],
+        },
+        options: this.enums.line.options,
+        plugins: this.enums.line.plugins,
+      });
+
+      this.#startLivePoll();
+    } else {
+      this.#chartEl = new Chart(this.canvas, {
+        type: this.chart.type.toLowerCase(),
+        data: {
+          labels: this.#getLabels(),
+          datasets: [{
+            label: this.chart.name,
+            data: this.#getDataPoints(),
+            fill: true,
+            tension: 0.1,
+            ...colors,
+          }],
+        },
+        options: this.enums.line.options,
+        plugins: this.enums.line.plugins,
+      });
+    }
+  }
+
+  async #startLivePoll() {
+    this.addInterval(5000, async () => {
+      const [label, data] = await this.#getLiveRecord();
+
+      if (this.#chartEl.data.datasets[0].data.length >= 15) {
+        this.#chartEl.data.labels.shift();
+        this.#chartEl.data.datasets[0].data.shift();
+      }
+  
+      this.#chartEl.data.labels.push(label);
+      this.#chartEl.data.datasets[0].data.push(data);
+
+      this.#chartEl.update();
+    })
+  }
+
+  async #getLiveRecord() {
+    const [res, data] = await this.#mobject.get(`live?sourceId=${this.chart.source.sourceId}`);
+    
+    const label = new Date().toLocaleString();
+    const key = this.#getValueKey(data);
+
+    return res.ok ? [label, data[key]] : []
   }
 
   #getXtitle() {
@@ -142,13 +188,13 @@ export default class MoChart extends MoComponent {
   }
 
   /** @returns {string} */
-  #getValueKey() {
+  #getValueKey(point = null) {
     /*
       Sometimes, data is stored within the floatvalue key, other times it is in the intvalue. 
       Since we can't know which one it will be, we need to run this method to determine
       where the data is.
     */
-    const dataPoint = this.chart.data[0];
+    const dataPoint = point ? point : this.chart.data[0];
     return dataPoint.floatvalue ? "floatvalue" : "intvalue";
   }
 

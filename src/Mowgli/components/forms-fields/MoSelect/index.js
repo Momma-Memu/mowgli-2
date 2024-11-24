@@ -20,6 +20,9 @@ export default class MoSelect extends MoComponent {
 
   #placeholder = this.addAttribute("");
   #timeout = this.addTimeout(500);
+  #multi = this.addAttribute("mo-multi");
+  #selected = {};
+  #selectedEls = [];
 
   constructor() {
     super(styles, template);
@@ -112,11 +115,38 @@ export default class MoSelect extends MoComponent {
     return this.selectField.validity;
   }
 
+  get multi() {
+    return this.#multi.attribute;
+  }
+
+  get selected() {
+    return this.#selected;
+  }
+
+  set selected(selected) {
+    this.#selected = selected;
+  }
+
+  reset() {
+    this.#selectedEls.forEach(div => this.#removeSelectedItem(div));
+    this.#selected = {};
+    this.#selectedEls = [];
+  }
+
   patch(entity) {
     const { id, name } = entity;
     this.valueId = id;
     this.value = name;
     this.searchField.value = name;
+
+    console.log(this.multi, this.valueId, this.value);
+  }
+
+  patchMulti(values) {
+
+    values.forEach(value => {
+      this.#appendSelectedItem(value.label, value.id);
+    });
   }
 
   reportValidity() {
@@ -159,10 +189,10 @@ export default class MoSelect extends MoComponent {
       container.setAttribute("size", this.#getSize());
       container.innerHTML = `<option disabled selected value="">${this.placeholder || "Select an option"}</option>`;
 
-      this.options.forEach(({ id, displayName, name }) => {
+      this.options.forEach(({ id, label, name }) => {
         const option = document.createElement("option");
         option.value = id;
-        option.innerHTML = displayName || name;
+        option.innerHTML = label || name;
 
         container.appendChild(option);
       });
@@ -173,8 +203,17 @@ export default class MoSelect extends MoComponent {
   #select(event) {
     event.stopPropagation();
     const option = this.selectField.selectedOptions[0];
-    this.value = option.innerHTML;
-    this.valueId = option.value;
+    let value = option.innerHTML;
+    let valueId = option.value;
+
+    if (this.multi) {
+      this.#updatedSelected(value, valueId);
+      value = Object.values(this.#selected).join(",");
+      valueId = Object.keys(this.#selected).join(",");
+    }
+
+    this.value = value;
+    this.valueId = valueId;
     this.searchField.value = this.value;
 
     this.emitEvent(this.createEvent("change", { value: this.value, id: this.valueId }));
@@ -208,6 +247,43 @@ export default class MoSelect extends MoComponent {
     });
 
     return `${this.apiParams}${queryParams}`;
+  }
+
+  #updatedSelected(value, valueId) {
+    if (this.#selected[valueId]) {
+      this.#removeSelectedItem(this.getBySearch(`div[value="${valueId}"]`));
+    } else {
+      this.#appendSelectedItem(value, valueId);
+    }
+  }
+
+  #appendSelectedItem(value, valueId)  {
+    this.#selected[valueId] = value;
+    const container = this.getElementById("selected-container");
+    
+    const div = document.createElement("div");
+    div.setAttribute("value", valueId);
+    div.setAttribute("class", "selected-item");
+
+    div.innerHTML = `${value} 
+      <div class="selected-item-icon-container">
+        <mo-icon mo-static mo-fa="fa-sharp-duotone fa-light fa-delete-left"></mo-icon>
+      </div>`;
+
+    container.appendChild(div);
+    
+    this.#selectedEls.push(div);
+    const listenerId = this.addListener("click", () => this.#removeSelectedItem(div), div);
+    div.setAttribute("mo-listener-id", listenerId);
+  }
+
+  /** @param {HTMLDivElement} event  */
+  #removeSelectedItem(itemEl) {
+    const id = itemEl.getAttribute("value");
+    delete this.selected[id];
+
+    this.removeListener(itemEl.getAttribute("mo-listener-id"));
+    itemEl.remove();
   }
 
   async #fetchOptions() {

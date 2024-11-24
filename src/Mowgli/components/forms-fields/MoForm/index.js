@@ -47,11 +47,15 @@ export default class MoForm extends MoComponent {
       }
     });
 
-    
-
     return formData;
   }
 
+  get valid() {
+    return this.#fields.every(fieldDef => {
+      console.log(fieldDef.name, fieldDef.field.valid);
+      return fieldDef.field.valid
+    });
+  }
   
 
   connectedCallback() {
@@ -63,7 +67,7 @@ export default class MoForm extends MoComponent {
     this.#fields = fields;
 
     this.#fields.forEach((field) => {
-      this.shadow.appendChild(field.buildHTML());
+      this.formEl.appendChild(field.buildHTML());
     });
   }
 
@@ -77,6 +81,13 @@ export default class MoForm extends MoComponent {
       const value = item[field.name];
 
       if (value) {
+        if (field.type === "multi-select") {
+          field.value = value.map(value => value.label);
+          field.valueId = value.map(value => value.id);
+
+          field.fieldEl.patchMulti(value);
+        }
+
         if (field.type === "select" && typeof value === "object") {
           const entity = Array.isArray(value) ? value[0] : value;
           if (entity) {

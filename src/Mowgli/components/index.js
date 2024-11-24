@@ -33,6 +33,9 @@ export default class MoComponent extends HTMLElement {
   /** @type {function[]} */
   #cleanUpCallbacks = [];
 
+  /** @type {number[]} */
+  #intervals = [];
+
   /**
    * @param {string | null} [styles=""]
    * @param {string | null} [template=""]
@@ -74,6 +77,9 @@ export default class MoComponent extends HTMLElement {
 
     this.#moInternals = {};
     this.#internals = null;
+
+    this.#intervals.forEach(interval => clearInterval(interval));
+    this.#intervals = [];
 
     this.remove();
   }
@@ -184,6 +190,18 @@ export default class MoComponent extends HTMLElement {
     this.#state.push(slice);
 
     return slice;
+  }
+
+  /** 
+   * @param {number} time 
+   * @param {function} callback
+   */
+  addInterval(time, callback) {
+    const interval = setInterval(() => {
+      callback();
+    }, time);
+
+    this.#intervals.push(interval);
   }
 
   /**

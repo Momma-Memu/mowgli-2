@@ -2,6 +2,20 @@ import MowgliObject from "../index";
 import FieldDefinition from "../../builders/FieldDefinition";
 
 export default class MowgliChart extends MowgliObject {
+  /** @type {FieldDefinition} */
+  #live;
+
+  /** @type {FieldDefinition} */
+  #type;
+  
+  /** @type {FieldDefinition} */
+  #plotBy;
+  
+  /** @type {FieldDefinition} */
+  #from;
+
+  /** @type {FieldDefinition} */
+  #to;
 
   constructor() {
     const name = new FieldDefinition("name", true, "Name", "text", "", "");
@@ -21,23 +35,65 @@ export default class MowgliChart extends MowgliObject {
     const from = new FieldDefinition("fromDate", true, "From Date", "date", "", null, true);
     const to = new FieldDefinition("toDate", true, "To Date", "date", "", null, true);
 
+    type.options = [
+      { id: "Line", label: "Line" },
+      { id: "Bar", label: "Bar" }
+    ];
+
+    plotBy.options = [
+      { id: "month", label: "Month" },
+      { id: "day", label: "Day" },
+      { id: "hour", label: "Hour" }
+    ];
+
+    prefix.useValueID = true;
+    role.useValueID = true;
 
     super("charts", 
       [ name, type, plotBy, prefix, role, live, pinned, valueName, from, to ], 
     );
 
-    type.options = [
-      { id: "Line", displayName: "Line" },
-      { id: "Bar", displayName: "Bar" }
-    ];
+    this.#live = live;
+    this.#type = type;
+    this.#plotBy = plotBy;
+    this.#from = from;
+    this.#to = to;
 
-    plotBy.options = [
-      { id: "month", displayName: "Month" },
-      { id: "day", displayName: "Day" },
-      { id: "hour", displayName: "Hour" }
-    ];
+    this.buildDependency(live, from, "value", "value", () => this.liveCB());
+    this.buildDependency(live, to, "value", "value",  () => this.liveCB());
+    this.buildDependency(live, type, "value", "value",  () => this.liveCB());
+    this.buildDependency(live, plotBy, "value", "value",  () => this.liveCB());
 
-    prefix.useValueID = true;
-    role.useValueID = true;
+    window.charts = this;
+  }
+
+  liveCB() {
+    // const dateStr = new Date().toISOString().split("T")[0];
+    const state = this.#live.field.value;
+
+    this.#type.field.fieldEl.required = !state;
+    this.#plotBy.field.fieldEl.required = !state;
+    this.#from.field.fieldEl.required = !state;
+    this.#to.field.fieldEl.required = !state;
+
+
+    this.#type.field.required = !state;
+    this.#plotBy.field.required = !state;
+    this.#from.field.required = !state;
+    this.#to.field.required = !state;
+
+    this.#type.field.disabled = state;
+    this.#plotBy.field.disabled = state;
+    this.#from.field.disabled = state;
+    this.#to.field.disabled = state;
+
+    this.#plotBy.field.value = state ? "Instant" : "";
+    this.#plotBy.field.valueId = state ? "Instant" : "";
+    this.#type.field.value = state ? "Line" : "";
+    this.#type.field.valueId = state ? "Line" : "";
+
+
+    this.#from.field.value = state ? "" : "";
+    this.#to.field.value = state ? "" : "";
   }
 }

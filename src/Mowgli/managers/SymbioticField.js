@@ -6,6 +6,7 @@ export default class SymbioticFieldManager {
   #child;
   #childProp;
   #parentProp;
+  #callbackOverride = null;
 
   /** 
    * @param {FieldDefinition} parent
@@ -13,16 +14,19 @@ export default class SymbioticFieldManager {
    * @param {string} parentProp
    * @param {string} childProp
    */
-  constructor(parent, child, parentProp = "value", childProp = "value") {
+  constructor(parent, child, parentProp = "value", childProp = "value", callbackOverride = null) {
     this.#parent = parent;
     this.#child = child;
     this.#parentProp = parentProp;
     this.#childProp = childProp;
+    this.#callbackOverride = callbackOverride;
 
     // this.#parent.field.parent = true;
-    this.#child.field.disabled = true;
+    this.#child.field.disabled = this.#callbackOverride ? false : true;
 
-    this.#parent.field.symbioticCallback = () => this.updateDependency();
+    const callback = this.#callbackOverride ? this.#callbackOverride : this.updateDependency;
+
+    this.#parent.field.symbioticCallbacks.push(() => callback());
     this.#parent.field.addCleanUpCallback(() => this.destroy());
   }
 

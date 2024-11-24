@@ -10,6 +10,9 @@ export default class FieldDefinition {
   /** @type {keyof FieldType} */
   #type = "";
 
+  /** @type {string} */
+  #pattern = "";
+
   #placeholder = "";
   #required = true;
   #defaultValue = "";
@@ -19,6 +22,7 @@ export default class FieldDefinition {
   #dependentField = null;
   #controllingField = null;
   #disabled = false;
+  #disableWhitespace = false;
 
   
   /** @type {FieldDefinition} */
@@ -141,6 +145,22 @@ export default class FieldDefinition {
     this.#field = field;
   }
 
+  get pattern() {
+    return this.#pattern
+  }
+
+  set pattern(pattern) {
+    this.#pattern = pattern;
+  }
+
+  get disableWhitespace() {
+    return this.#disableWhitespace
+  }
+
+  set disableWhitespace(disableWhitespace) {
+    this.#disableWhitespace = disableWhitespace;
+  }
+
   /* -------------------- Methods -------------------- */
 
   /**
@@ -173,15 +193,26 @@ export default class FieldDefinition {
       this.field.apiRoute = this.apiRoute;
     }
 
+    if (this.pattern) {
+      this.field.pattern = this.pattern;
+    }
+
+    if (this.disableWhitespace) {
+      this.field.disableWhitespace = true;
+    }
+
     return this.field;
   }
 
   /** @param {string | boolean | Array<{}> | {}} [recordValue=""]  */
   getFormattedValue(recordValue = "") {
     try {
+      if (this.type === "multi-select" && typeof recordValue === "object") {
+        return Array.isArray(recordValue) ? recordValue.map(rec => rec.label).join(", ") : recordValue.name;
+      }
+      
       if (this.type === "select" && typeof recordValue === "object") {
         return Array.isArray(recordValue) ? recordValue[0].name : recordValue.name;
-        // return recordValue.map(entity => entity.name).join(",") || "";
       }
 
       if (typeof recordValue === "boolean") {
