@@ -71,7 +71,7 @@ export default class MoTable extends MoComponent {
 
   connectedCallback() {
     if (this.mobject && this.getElementById("table-modal")) {
-      this.modal.title = `Create ${this.mobject.name}`;
+      // this.modal.title = `Create ${this.mobject.name}`;
       // this.form = this.mobject.buildForm();
       this.modalBody.appendChild(this.form);      
 
@@ -84,7 +84,7 @@ export default class MoTable extends MoComponent {
   
   build() {
     this.tableContainer.appendChild(this.mobject.buildListTable());
-    this.shadow.getElementById("head-title-subtext").innerHTML = this.#getSubHeader();
+    // this.shadow.getElementById("head-title-subtext").innerHTML = this.#getSubHeader();
 
     this.shadow.appendChild(this.#getFooter());
     this.#addEditListeners();
@@ -98,9 +98,9 @@ export default class MoTable extends MoComponent {
     }
   }
 
-  #getSubHeader() {
-    return this.mobject.description;
-  }
+  // #getSubHeader() {
+  //   return this.mobject.description;
+  // }
 
   #getFooter() {
     const supportTxt = "Columns may be hidden to support your device. This is configurable by your administrator.";

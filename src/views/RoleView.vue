@@ -3,18 +3,12 @@ import MowgliRole from '../Mowgli/objects/internal/Role';
 const mowgliRole = new MowgliRole();
 
 </script>
-
 <template>
-  <div class="wrapper">
-    <mo-table v-bind:mobject="mowgliRole">
-      <div class="table-name">Roles</div>
-    </mo-table>
-  </div>
+  <mo-page>
+    <mo-banner
+      v-bind:mo-title="mowgliRole.name" 
+      v-bind:mo-description="mowgliRole.description">
+    </mo-banner>
+    <mo-table v-bind:mobject="mowgliRole"></mo-table>
+  </mo-page>
 </template>
-
-<style>
-.wrapper {
-  width: 100%;
-  padding: 1rem;
-}
-</style>

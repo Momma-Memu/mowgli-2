@@ -6,16 +6,11 @@ window.mowgliUser = mowgliUser;
 </script>
 
 <template>
-  <div class="wrapper">
-    <mo-table v-bind:mobject="mowgliUser">
-      <div class="table-name">Users</div>
-    </mo-table>
-  </div>
+  <mo-page>
+    <mo-banner
+      v-bind:mo-title="mowgliUser.name" 
+      v-bind:mo-description="mowgliUser.description">
+    </mo-banner>
+    <mo-table v-bind:mobject="mowgliUser"></mo-table>
+  </mo-page>
 </template>
-
-<style>
-.wrapper {
-  width: 100%;
-  padding: 1rem;
-}
-</style>

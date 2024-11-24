@@ -5,16 +5,11 @@ const mowgliField = new MowgliField();
 </script>
 
 <template>
-  <div class="wrapper">
-    <mo-table v-bind:mobject="mowgliField">
-      <div class="table-name">Fields</div>
-    </mo-table>
-  </div>
+  <mo-page>
+    <mo-banner      
+        v-bind:mo-title="mowgliField.name" 
+        v-bind:mo-description="mowgliField.description">
+      <mo-table v-bind:mobject="mowgliField"></mo-table>
+    </mo-banner>
+  </mo-page>
 </template>
-
-<style>
-.wrapper {
-  width: 100%;
-  padding: 1rem;
-}
-</style>

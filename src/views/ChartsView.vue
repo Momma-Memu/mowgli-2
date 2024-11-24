@@ -5,16 +5,11 @@ const mowgliChart = new MowgliChart();
 </script>
 
 <template>
-  <div class="wrapper">
-    <mo-table v-bind:mobject="mowgliChart">
-      <div class="table-name">Charts</div>
-    </mo-table>
-  </div>
+  <mo-page>
+    <mo-banner
+      v-bind:mo-title="mowgliChart.name" 
+      v-bind:mo-description="mowgliChart.description">
+    </mo-banner>
+    <mo-table v-bind:mobject="mowgliChart"></mo-table>
+  </mo-page>
 </template>
-
-<style>
-.wrapper {
-  width: 100%;
-  padding: 1rem;
-}
-</style>

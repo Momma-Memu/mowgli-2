@@ -1,4 +1,21 @@
 .search-container {
-  width: 100%;
-  max-width: 300px;
+  width: 100vw;
+  max-width: 325px;
+  margin-top: calc(-1 * var(--mo-size-9));
+}
+
+mo-field {
+  margin-top: 0px;
+  box-shadow: var(--mo-shadow-light-shape);
+}
+
+mo-icon {
+  position: relative;
+  background: unset;
+  z-index: 1;
+  left: calc(100% - 2.75rem);
+  top: 2.3rem;
+  font-size: 1.75rem;
+  --fa-primary-color: var(--mo-blue-700);
+  --fa-secondary-opacity: 0.8;
 }
