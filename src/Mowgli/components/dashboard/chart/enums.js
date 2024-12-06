@@ -83,7 +83,7 @@ const options = {
   scales: {
     y: {
       grid: { color: gridColor }, 
-      title: { display: true, padding: { top: 0, bottom: 0 }  }, 
+      title: { display: true, padding: { top: 0, bottom: 0 }  },
       // title: { display: () => size.width <= 500, padding: { top: 0, bottom: 0 }  }, 
 
       ticks: { display: true, callback: (value) => commarize(value) }

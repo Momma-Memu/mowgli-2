@@ -156,9 +156,9 @@ export default class MowgliObject {
    * @param {string} params - URL Route/Path parameters.
    */
   async get(params = "") {
-    if (this.state && params !== this.#prevParams) {
-      return [{ ok: true, status: 200 }, this.state];
-    } else {
+    // if (this.state && params !== this.#prevParams) {
+    //   return [{ ok: true, status: 200 }, this.state];
+    // } else {
       this.#prevParams = params;
       const [response, data] = await this.#api.GET(params);
 
@@ -167,7 +167,7 @@ export default class MowgliObject {
       }
 
       return [response, data];
-    }
+    // }
   }
 
   /**

@@ -9,6 +9,7 @@ import template from "./index.html?raw";
 
 // eslint-disable-next-line no-unused-vars
 import MoSelect from "../MoSelect/index";
+// import MoEvent from "../../utils/MoEvent";
 
 export default class MoField extends MoComponent {
   #disableWhitespace = false;
@@ -183,6 +184,7 @@ export default class MoField extends MoComponent {
 
     this.empty = this.value === "";
     this.valid = this.#checkValidity();
+    this.emitEvent(this.createEvent("field-changed", data));
   }
 
   get valueId() {
@@ -304,18 +306,12 @@ export default class MoField extends MoComponent {
   #changeHandler(event) {
     event.stopPropagation();
 
-    // const value = event.target.value.replace(/\s/g, "");
-
     this.dirty = true;
     this.value = this.#disableWhitespace ? event.target.value.replace(/\s/g, "") : event.target.value;
     this.valueId = event.target.valueId;
-    // this.empty = this.value === "";
-    // this.valid = this.#checkValidity();
 
     if (event.type === "keyup" && !this.empty) {
       this.#timeout.sleep(() => {
-        // this.emitEvent(this.createEvent("field-changed", this.value));
-
         if (this.symbioticCallbacks) {
           for (let cb of this.symbioticCallbacks) {
             cb();

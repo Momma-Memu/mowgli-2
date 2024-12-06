@@ -69,6 +69,10 @@ export default class MoTable extends MoComponent {
     return this.getByClass("table-container");
   }
 
+  get moSearch() {
+    return this.getElementById("mo-search");
+  }
+
   connectedCallback() {
     if (this.mobject && this.getElementById("table-modal")) {
       // this.modal.title = `Create ${this.mobject.name}`;
@@ -79,6 +83,7 @@ export default class MoTable extends MoComponent {
       this.#init();
     }
 
+    this.addListener("search-changed", (event) => this.#handleSearch(event), this.moSearch);
     this.addListener("submit", (event) => this.#submitForm(event), this.getElementById("table-modal"));
   }
   
@@ -175,6 +180,11 @@ export default class MoTable extends MoComponent {
     } else {
       await this.mobject.post("", formData);
     }
+  }
+
+  async #handleSearch({ detail }) {
+    const [res, data] = await this.mobject.get(detail);
+    console.log(res, data);
   }
 }
 

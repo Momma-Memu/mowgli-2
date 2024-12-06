@@ -101,9 +101,18 @@ export default class MoChart extends MoComponent {
 
     if (this.chart.type.toLowerCase() === "line") {
       colors = { borderColor: this.enums.line.borderColor[0], backgroundColor: this.enums.line.backgroundColor[0]}
+    } else if (this.chart.live && this.chart.type.toLowerCase() === "bar") {
+      this.enums.bar.options.scales.y.grace = "30%";
+      colors = { 
+        borderColor: this.enums.line.borderColor[0], 
+        borderWidth: 1, 
+        backgroundColor: this.enums.line.backgroundColor[0]
+      }
     }
 
     if (this.chart.live) {
+      // this.enums.line.options.scales.y.beginAtZero = true;
+
       this.#chartEl = new Chart(this.canvas, {
         type: this.chart.type.toLowerCase(),
         data: {
