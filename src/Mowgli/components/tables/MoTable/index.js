@@ -109,13 +109,12 @@ export default class MoTable extends MoComponent {
 
   #getFooter() {
     const supportTxt = "Columns may be hidden to support your device. This is configurable by your administrator.";
-    const results = `Results: ${this.mobject.listManager.records.length}`;
 
     const foot = document.createElement("div");
     foot.setAttribute("id", "foot");
-    foot.innerHTML = `<div>${supportTxt}</div><div>${results}</div>`;
+    foot.innerHTML = `<div>${supportTxt}</div><div id="results-count">Results: ${this.mobject.state.length || 0}</div>`;
 
-    return foot
+    return foot;
   }
 
   #addEditListeners() {
@@ -153,6 +152,12 @@ export default class MoTable extends MoComponent {
     });
   }
 
+
+  #setResultCount(count = 0) {
+    const countEl = this.getElementById("results-count");
+    countEl.innerHTML = `Results: ${count}`;
+  }
+
   async #fetch() {
     await this.mobject.get();
     this.build();
@@ -170,6 +175,7 @@ export default class MoTable extends MoComponent {
   async #submitForm(event) {
     event.stopPropagation();
     const formData = this.form.values;
+    
 
     if (formData.id) {
       const [res, data] = await this.mobject.put("", formData);
@@ -178,13 +184,21 @@ export default class MoTable extends MoComponent {
         this.#updateRow(data);
       }
     } else {
-      await this.mobject.post("", formData);
+      const [res, data] = await this.mobject.post("", formData);
+      if (res.ok) {
+        this.mobject.listManager.insertRow(data);
+        this.#setResultCount(this.mobject.state.length);
+      }
     }
   }
 
   async #handleSearch({ detail }) {
-    const [res, data] = await this.mobject.get(detail);
-    console.log(res, data);
+    const [res] = await this.mobject.get(detail);
+
+    if (res.ok) {
+      this.mobject.listManager.refreshRows(this.mobject.state);
+      this.#setResultCount(this.mobject.state.length);
+    }
   }
 }
 

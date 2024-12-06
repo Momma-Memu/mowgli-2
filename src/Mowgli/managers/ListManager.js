@@ -18,6 +18,9 @@ export default class ListManager {
   /** @type {Object.<string, any>[]} */
   #records = [];
 
+  /** @type {HTMLTableElement} */
+  #table;
+
   /**
    * @param {string} name
    * @param {FieldDefinition[]} fields
@@ -61,12 +64,33 @@ export default class ListManager {
 
   /** @returns {HTMLTableElement} */
   build() {
-    const table = document.createElement("table");
-    table.setAttribute("id", "mo-table");
-    table.innerHTML = this.#buildColumns() + this.#buildRecords();
+    this.#table = document.createElement("table");
+    this.#table.setAttribute("id", "mo-table");
+    this.#table.innerHTML = this.#buildColumns() + this.#buildRecords();
 
 
-    return table;
+    return this.#table;
+  }
+
+  //
+  insertRow(record, index = 0) {
+    if (this.#table && index >= 0) {
+      const siblingRow = this.#table.children[1].children[index];
+      siblingRow.insertAdjacentHTML("beforebegin", this.#buildRecord(record));
+    } else {
+      // TODO: throw helpful error...
+    }
+  }
+
+  refreshRows(records = this.#records) {
+    if (this.#records !== records) {
+      this.#records = records;
+    }
+
+    if (this.#table) {
+      const tbody = this.#table.children[1];
+      tbody.innerHTML = this.#buildRecords();
+    }
   }
 
   #buildColumns() {
@@ -78,22 +102,23 @@ export default class ListManager {
     const keys = this.#getColNames();
 
     // Create each row as a long HTML string.
-    const rows = this.#records.map(record => {
-      // Create a long HTML string for each column value in this row.
-      const cells = keys.map(key => {
-        const fieldDef = this.#fields.find(field => field.name === key);
-        const value = fieldDef.getFormattedValue(record[key], fieldDef.name);
-        
-        return this.#buildCell(value, false, key);
-      }).join("");
-
-      // Next create the HTML Row string, combined with all the data cells and  date cell.
-      const row = this.#buildRow(cells + this.#buildCreateDateCell(record.createdAt), record.id);
-
-      return row;
-    }).join("");
+    const rows = this.#records.map(record => this.#buildRecord(record, keys)).join("");
 
     return `<tbody id="mo-table-body">${rows}</tbody>`;
+  }
+
+  #buildRecord(record, keys = this.#getColNames()) {
+    // console.log(record)
+    // Create a long HTML string for each column value in this row.
+    const cells = keys.map(key => {
+      const fieldDef = this.#fields.find(field => field.name === key);
+      const value = fieldDef.getFormattedValue(record[key], fieldDef.name);
+      
+      return this.#buildCell(value, false, key);
+    }).join("");
+    
+    // Next create the HTML Row string, combined with all the data cells and  date cell.
+    return this.#buildRow(cells + this.#buildCreateDateCell(record.createdAt), record.id);
   }
 
   /** 

@@ -9,7 +9,7 @@ export default class MowgliForm extends MowgliObject {
       { id: "text", name: "Text"}, 
       { id: "number", name: "Number"}, 
       { id: "select", name: "Select" }, 
-      { id: "Date", name: "Date" }, 
+      { id: "date", name: "Date" }, 
       { id: "switch", name: "Switch" }, 
       { id: "email", name: "Email" }
     ]);
