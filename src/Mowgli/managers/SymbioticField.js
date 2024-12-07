@@ -21,12 +21,14 @@ export default class SymbioticFieldManager {
     this.#childProp = childProp;
     this.#callbackOverride = callbackOverride;
 
-    // this.#parent.field.parent = true;
     this.#child.field.disabled = this.#callbackOverride ? false : true;
 
-    const callback = this.#callbackOverride ? this.#callbackOverride : this.updateDependency;
+    if (this.#callbackOverride) {
+      this.#parent.field.symbioticCallbacks.push(() => this.#callbackOverride());
+    } else {
+      this.#parent.field.symbioticCallbacks.push(() => this.updateDependency());
+    }
 
-    this.#parent.field.symbioticCallbacks.push(() => callback());
     this.#parent.field.addCleanUpCallback(() => this.destroy());
   }
 
@@ -34,8 +36,16 @@ export default class SymbioticFieldManager {
     return this.#parent;
   }
 
+  set parent(val) {
+    this.#parent = val;
+  }
+
   get child() {
     return this.#child;
+  }
+
+  set child(val) {
+    this.#child = val;
   }
 
   updateDependency() {

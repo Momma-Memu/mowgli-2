@@ -89,8 +89,8 @@ export default class MowgliChart extends MowgliObject {
 
     this.#plotBy.field.value = state ? "Instant" : "";
     this.#plotBy.field.valueId = state ? "Instant" : "";
-    this.#type.field.value = state ? "Line" : "";
-    this.#type.field.valueId = state ? "Line" : "";
+    this.#type.field.value = state ? "Bar" : "";
+    this.#type.field.valueId = state ? "Bar" : "";
 
 
     this.#from.field.value = state ? "" : "";

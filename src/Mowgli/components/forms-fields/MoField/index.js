@@ -174,7 +174,7 @@ export default class MoField extends MoComponent {
     data = data === undefined || data === null ? "" : data;
     this.#value.state = data;
 
-    if (this.type.includes("select") && this.fieldEl) {
+    if (this.type && this.type.includes("select") && this.fieldEl) {
       this.fieldEl.searchField.value = data;
     }
 

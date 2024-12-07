@@ -109,6 +109,10 @@ export default class MoChart extends MoComponent {
         backgroundColor: this.enums.line.backgroundColor[0]
       }
     }
+    
+    if (this.chart.type.toLowerCase() === "bar") {
+      this.enums.line.options.scales.y.beginAtZero = true;
+    }
 
     if (this.chart.live) {
       // this.enums.line.options.scales.y.beginAtZero = true;
