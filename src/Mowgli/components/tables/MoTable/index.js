@@ -7,6 +7,7 @@ import MowgliObject from "../../../objects/index";
 
 // eslint-disable-next-line no-unused-vars
 import MoModal from "@/Mowgli/components/modal/MoModal/index";
+
 // eslint-disable-next-line no-unused-vars
 import MoForm from "../../forms-fields/MoForm";
 
@@ -31,20 +32,28 @@ export default class MoTable extends MoComponent {
   }
 
   set mobject(mobject) {
+    if (this.#mobject.state) {
+      this.tableContainer.innerHTML = "";
+    }
+    
     this.#mobject.state = mobject;
+    this.form = this.mobject.buildForm();
+    this.#buildTable(mobject);
   }
 
   /** @type {MoForm} */
   get form () {
-    if (!this.#form.state) {
-      this.#form.state = this.mobject.buildForm();
-    }
-
     return this.#form.state;
   }
 
   set form (form) {
+    if (this.#form.state) {
+      this.modalBody.innerHTML = "";
+    }
+
     this.#form.state = form;
+    this.modalBody.appendChild(this.#form.state);
+    this.modal.title = `Create ${this.mobject.name}`;
   }
 
   /** @type {any[]} */
@@ -74,45 +83,20 @@ export default class MoTable extends MoComponent {
   }
 
   connectedCallback() {
-    if (this.mobject && this.getElementById("table-modal")) {
-      // this.modal.title = `Create ${this.mobject.name}`;
-      // this.form = this.mobject.buildForm();
-      this.modalBody.appendChild(this.form);      
-
-
-      this.#init();
-    }
+    this.shadow.appendChild(this.#getFooter());
 
     this.addListener("search-changed", (event) => this.#handleSearch(event), this.moSearch);
     this.addListener("submit", (event) => this.#submitForm(event), this.getElementById("table-modal"));
   }
   
-  build() {
-    this.tableContainer.appendChild(this.mobject.buildListTable());
-    // this.shadow.getElementById("head-title-subtext").innerHTML = this.#getSubHeader();
-
-    this.shadow.appendChild(this.#getFooter());
-    this.#addEditListeners();
-  }
-
-  #init() {
-    if (this.mobject.state) {
-      this.build();
-    } else {
-      this.#fetch();
-    }
-  }
-
-  // #getSubHeader() {
-  //   return this.mobject.description;
-  // }
-
   #getFooter() {
     const supportTxt = "Columns may be hidden to support your device. This is configurable by your administrator.";
 
     const foot = document.createElement("div");
+    const count = this.mobject.state ? this.mobject.state.length : 0;
+
     foot.setAttribute("id", "foot");
-    foot.innerHTML = `<div>${supportTxt}</div><div id="results-count">Results: ${this.mobject.state.length || 0}</div>`;
+    foot.innerHTML = `<div>${supportTxt}</div><div id="results-count">Results: ${count}</div>`;
 
     return foot;
   }
@@ -158,12 +142,6 @@ export default class MoTable extends MoComponent {
     countEl.innerHTML = `Results: ${count}`;
   }
 
-  async #fetch() {
-    await this.mobject.get();
-    this.build();
-  }
-
-
   #resetForm() {
     this.#timeout.sleep(() => {
       this.form.reset();
@@ -199,6 +177,16 @@ export default class MoTable extends MoComponent {
       this.mobject.listManager.refreshRows(this.mobject.state);
       this.#setResultCount(this.mobject.state.length);
     }
+  }
+
+  async #buildTable() {
+    if (!this.mobject.state) {
+      await this.mobject.get();
+    }
+
+    this.tableContainer.appendChild(this.mobject.buildListTable());
+    this.#addEditListeners();
+    this.#setResultCount(this.mobject.state.length);
   }
 }
 

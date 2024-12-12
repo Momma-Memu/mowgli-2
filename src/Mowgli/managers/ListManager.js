@@ -51,12 +51,19 @@ export default class ListManager {
     return `Results: ${this.records.length}`;
   }
 
+  get thead() {
+    return this.#table.children[0];
+  }
+
+  get tbody() {
+    return this.#table.children[1];
+  }
+
   async fetch(queryParams = "") {
     const [res, data] = await this.#mowgliAPI.GET(queryParams);
 
     if (res.ok) {
       this.#records = data;
-      console.log(data);
     }
 
     return [res, data];
@@ -68,15 +75,19 @@ export default class ListManager {
     this.#table.setAttribute("id", "mo-table");
     this.#table.innerHTML = this.#buildColumns() + this.#buildRecords();
 
-
     return this.#table;
   }
 
   //
   insertRow(record, index = 0) {
     if (this.#table && index >= 0) {
-      const siblingRow = this.#table.children[1].children[index];
-      siblingRow.insertAdjacentHTML("beforebegin", this.#buildRecord(record));
+      const siblingRow = this.tbody.children[index];
+
+      if (siblingRow) {
+        siblingRow.insertAdjacentHTML("beforebegin", this.#buildRecord(record));
+      } else {
+        this.tbody.innerHTML += this.#buildRecord(record);
+      }
     } else {
       // TODO: throw helpful error...
     }
@@ -100,15 +111,12 @@ export default class ListManager {
 
   #buildRecords() {
     const keys = this.#getColNames();
-
-    // Create each row as a long HTML string.
     const rows = this.#records.map(record => this.#buildRecord(record, keys)).join("");
 
     return `<tbody id="mo-table-body">${rows}</tbody>`;
   }
 
   #buildRecord(record, keys = this.#getColNames()) {
-    // console.log(record)
     // Create a long HTML string for each column value in this row.
     const cells = keys.map(key => {
       const fieldDef = this.#fields.find(field => field.name === key);

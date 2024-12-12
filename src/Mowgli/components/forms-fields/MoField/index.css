@@ -21,6 +21,7 @@
 } */
 
 :host(:focus) > .field-container > #field-label, 
+:host(:state(valid)) > .field-container > #field-label, 
 :host([type="select"]:state(valid)) > .field-container > #field-label, 
 :host([type="multi-select"]:state(valid)) > .field-container > #field-label, 
 :host(:not(:state(empty))) > .field-container > #field-label {
@@ -60,7 +61,7 @@ textarea {
 }
 
 #field-input:focus::placeholder {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 #field-label {

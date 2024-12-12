@@ -207,6 +207,10 @@ export default class FieldDefinition {
   /** @param {string | boolean | Array<{}> | {}} [recordValue=""]  */
   getFormattedValue(recordValue = "") {
     try {
+      if (this.type === "time") {
+        return new Date(`12/1/2024 ${recordValue}`).toLocaleTimeString([], { hour: 'numeric', minute:'2-digit'});
+      }
+
       if (this.type === "multi-select" && typeof recordValue === "object") {
         return Array.isArray(recordValue) ? recordValue.map(rec => rec.label).join(", ") : recordValue.name;
       }
@@ -242,6 +246,7 @@ export class FieldType {
   number = "number";
   date = "date";
   switch = "switch";
+  time = "time";
 
   select = "select";
   "search-select" = "search-select";

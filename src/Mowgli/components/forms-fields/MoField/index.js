@@ -13,7 +13,7 @@ import MoSelect from "../MoSelect/index";
 
 export default class MoField extends MoComponent {
   #disableWhitespace = false;
-  #templateTypes = ["select", "multi-select", "switch", "textarea"];
+  #templateTypes = ["time", "number", "select", "multi-select", "switch", "textarea"];
 
   #dirty = this.addInternal("dirty");
   #empty = this.addInternal("empty");
@@ -368,6 +368,11 @@ export default class MoField extends MoComponent {
       this.fieldEl.options = this.options;
     } else if (this.type === "switch") {
       this.value = false;
+    }
+
+    if (this.type === "time") {
+      this.valid = true;
+      this.dirty = true;
     }
   }
 }

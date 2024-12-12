@@ -4,7 +4,7 @@ import template from "./index.html?raw";
 
 // eslint-disable-next-line no-unused-vars
 import { FieldType } from "../../enums/KeyCodes";
-import MowgliAPI from "@/Mowgli/API/index";
+import MowgliAPI from "../../../API/index";
 
 export default class MoSelect extends MoComponent {
   /** @type {MowgliAPI} */
@@ -17,6 +17,7 @@ export default class MoSelect extends MoComponent {
   #value = this.addState("");
   #valueId = this.addState("");
   #options = this.addState([]);
+  #fetchedOptions = this.addState([]);
 
   #placeholder = this.addAttribute("");
   #timeout = this.addTimeout(500);
@@ -35,9 +36,9 @@ export default class MoSelect extends MoComponent {
 
   set apiRoute(state) {
     this.#apiRoute.state = state;
-    this.#apiManager = new MowgliAPI(state);
-
-    if (!this.options || !this.options.length) {
+    
+    if (state) {
+      this.#apiManager = new MowgliAPI(state);
       this.#fetchOptions();
     }
   }
@@ -92,6 +93,16 @@ export default class MoSelect extends MoComponent {
     this.buildOptions();
   }
 
+  /** @type {{ id: string, displayName: string }[]} */
+  get fetchedOptions() {
+    return this.#fetchedOptions.state;
+  }
+
+  set fetchedOptions(state) {
+    this.#fetchedOptions.state = state || [];
+    this.buildOptions();
+  }
+
   /** @type {string} */
   get placeholder() {
     return this.#placeholder.attribute;
@@ -138,8 +149,6 @@ export default class MoSelect extends MoComponent {
     this.valueId = id;
     this.value = name;
     this.searchField.value = name;
-
-    console.log(this.multi, this.valueId, this.value);
   }
 
   patchMulti(values) {
@@ -158,6 +167,11 @@ export default class MoSelect extends MoComponent {
     this.addListener("keyup", (event) =>
       this.#timeout.sleep(() => this.#search(event), this.searchField)
     );
+
+    // if (this.#apiRoute) {
+
+    // }
+    // this.#fetchOptions();
   }
 
   // #emitSearchParams() {
@@ -165,8 +179,10 @@ export default class MoSelect extends MoComponent {
   // }
 
   buildOptions() {
-    if (this.selectField && this.options && this.options.length) {
-      // const groups = {};
+    const hasOptions = this.options.length || this.fetchedOptions.length;
+
+    if (this.selectField && hasOptions) {
+    // const groups = {};
 
       // this.options.forEach((option) => {
       //   const parts = option.displayName.split("/");
@@ -189,7 +205,9 @@ export default class MoSelect extends MoComponent {
       container.setAttribute("size", this.#getSize());
       container.innerHTML = `<option disabled selected value="">${this.placeholder || "Select an option"}</option>`;
 
-      this.options.forEach(({ id, label, name, displayName }) => {
+      const optionsArray = this.options.concat(this.fetchedOptions);
+
+      optionsArray.forEach(({ id, label, name, displayName }) => {
         const option = document.createElement("option");
         option.value = id;
         option.innerHTML = label || name || displayName;
@@ -229,7 +247,9 @@ export default class MoSelect extends MoComponent {
   }
 
   #getSize() {
-    return this.options.length > 5 ? 5 : this.options.length + 1;
+    const count = this.options.length + this.fetchedOptions.length;
+
+    return count > 5 ? 5 : count + 1;
   }
 
   #buildQuery() {
@@ -238,7 +258,7 @@ export default class MoSelect extends MoComponent {
     }
 
     if (!this.#apiManager) {
-      this.#apiManager = new MowgliAPI(this.#apiRoute);
+      this.#apiManager = new MowgliAPI(this.apiRoute);
     }
 
     const queryParams = this.#apiManager.buildQueryString({
@@ -295,7 +315,7 @@ export default class MoSelect extends MoComponent {
       const [res, data] = await this.#apiManager.GET(queryString);
 
       if (res.ok) {
-        this.options = data;
+        this.fetchedOptions = data;
       }
     }
   }

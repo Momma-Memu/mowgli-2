@@ -23,7 +23,7 @@ export default class MowgliChart extends MowgliObject {
     const valueName = new FieldDefinition("valueName", true, "Value Name", "text", "", null);
     const type = new FieldDefinition("type", true, "Type", "select", null, null, true);
 
-    const plotBy = new FieldDefinition("plotBy", true, "Plot By", "select", "", null, true);
+    const plotBy = new FieldDefinition("plotBy", true, "Plot By", "select", "", null, true, "plots");
     
     const prefix = new FieldDefinition("source", true, "Source", "select", "Select a Source", null, true, "sources");
     const role = new FieldDefinition("roles", true, "Role", "select", "Select a Role", null, true, "roles");
@@ -48,6 +48,7 @@ export default class MowgliChart extends MowgliObject {
 
     prefix.useValueID = true;
     role.useValueID = true;
+    plotBy.useValueID = true;
 
     super("charts", 
       [ name, type, plotBy, prefix, role, live, pinned, valueName, from, to ], 
@@ -95,5 +96,16 @@ export default class MowgliChart extends MowgliObject {
 
     this.#from.field.value = state ? "" : "";
     this.#to.field.value = state ? "" : "";
+  }
+
+  #getPlots() {
+    const staticOptions = [
+      { id: "month", label: "Month" },
+      { id: "day", label: "Day" },
+      { id: "hour", label: "Hour" }
+    ];
+
+    // this.#
+    this.#plotBy.options = staticOptions.concat();
   }
 }

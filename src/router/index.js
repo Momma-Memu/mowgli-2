@@ -1,14 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import DashboardView from "../views/DashboardView.vue";
-import FormsView from "../views/FormsView.vue";
-import FieldsView from "../views/FieldsView.vue";
-import SourcesView from "../views/SourcesView.vue";
-import ChartsView from "../views/ChartsView.vue";
 import CompanyView from "../views/CompanyView.vue";
-import RoleView from "../views/RoleView.vue";
-import UsersView from "../views/UsersView.vue";
 import AccountSettingsView from "../views/AccountSettingsView.vue";
+import ListView from "../views/ListView.vue";
+import SettingsView from "../views/SettingsView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,11 +20,6 @@ const router = createRouter({
       component: AccountSettingsView
     },
     {
-      path: "/charts",
-      name: "charts",
-      component: ChartsView
-    },
-    {
       path: "/company",
       name: "company",
       component: CompanyView
@@ -39,30 +30,15 @@ const router = createRouter({
       component: DashboardView
     },
     {
-      path: "/forms",
-      name: "forms",
-      component: FormsView
+      path: "/list/:object",
+      name: "list",
+      component: ListView
     },
     {
-      path: "/fields",
-      name: "fields",
-      component: FieldsView
+      path: "/settings",
+      name: "settings",
+      component: SettingsView,
     },
-    {
-      path: "/roles",
-      name: "roles",
-      component: RoleView
-    },
-    {
-      path: "/sources",
-      name: "sources",
-      component: SourcesView
-    },
-    {
-      path: "/users",
-      name: "users",
-      component: UsersView
-    }
   ]
 });
 

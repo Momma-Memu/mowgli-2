@@ -57,7 +57,10 @@ export default class MowgliObject {
     /** @type {FieldDefinition[]} */
     this.#columns = columns || fields;
 
+    
     this.#name = name || api[0].toUpperCase() + api.slice(1);
+    
+    this.listManager = new ListManager(this.name, this.#columns, api);
   }
 
   get fields() {
@@ -246,8 +249,9 @@ export default class MowgliObject {
   }
 
   buildListTable() {
-    this.#listManager = new ListManager(this.#name, this.columns, "sources");
+    // this.#listManager = new ListManager(this.#name, this.columns, "sources");
     this.#listManager.records = this.state || [];
+    // this.#listManager.columns = 
 
     return this.#listManager.build();
   }
