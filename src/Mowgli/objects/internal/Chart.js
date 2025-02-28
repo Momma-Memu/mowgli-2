@@ -29,7 +29,7 @@ export default class MowgliChart extends MowgliObject {
     const role = new FieldDefinition("roles", true, "Role", "select", "Select a Role", null, true, "roles");
     
     const live = new FieldDefinition("live", true, "Live Data", "switch", "", null, true);
-    const pinned = new FieldDefinition("pinned", true, "Pin to Dashboard", "switch", "", null, true);
+    const pinned = new FieldDefinition("pinned", true, "Pinned", "switch", "", null, true);
 
 
     const from = new FieldDefinition("fromDate", true, "From Date", "date", "", null, true);
@@ -52,6 +52,7 @@ export default class MowgliChart extends MowgliObject {
 
     super("charts", 
       [ name, type, plotBy, prefix, role, live, pinned, valueName, from, to ], 
+      [ name, type, plotBy, prefix, live, pinned, from, to ], 
     );
 
     this.#live = live;

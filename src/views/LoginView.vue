@@ -1,4 +1,13 @@
 <script setup>
+const openModal = () => {
+  // eslint-disable-next-line no-unused-vars
+  const [signUp, signIn] = document.getElementsByTagName("mo-nav")[0].modals;
+
+  signIn.open();
+
+  // TODO: Replace opening signIn with signUp after form is completed.
+}
+
 </script>
 
 <template>
@@ -12,7 +21,7 @@
             the bare necessities.
           </p>
           
-          <mo-button class="headline-sub-btn">Get Started</mo-button>
+          <mo-button class="headline-sub-btn" @click="openModal">Get Started</mo-button>
         </div>
       </div>
       <img id="hero-svg" class="svg" src="/svg/aio.svg" alt="tech illustration">
@@ -95,7 +104,7 @@
 
 .headline-sub-txt {
   color: white;
-  /* font-size: var(--mo-size-5); */
+  font-size: var(--mo-size-5);
   max-width: 660px;
   align-self: flex-start;
 }

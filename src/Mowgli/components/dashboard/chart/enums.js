@@ -1,3 +1,36 @@
+// /**
+//  * Simple object check.
+//  * @param item
+//  * @returns {boolean}
+//  */
+// const isObject = (item) => {
+//   return (item && typeof item === 'object' && !Array.isArray(item));
+// }
+
+// /**
+//  * Deep merge two objects.
+//  * @param target
+//  * @param ...sources
+//  */
+// const mergeDeep = (target, ...sources) => {
+//   if (!sources.length) return target;
+//   const source = sources.shift();
+
+//   if (isObject(target) && isObject(source)) {
+//     for (const key in source) {
+//       if (isObject(source[key])) {
+//         if (!target[key]) Object.assign(target, { [key]: {} });
+//         mergeDeep(target[key], source[key]);
+//       } else {
+//         Object.assign(target, { [key]: source[key] });
+//       }
+//     }
+//   }
+
+//   return mergeDeep(target, ...sources);
+// }
+
+
 const commarize = (value) => {
   const min = 1e3;
   const units = ["k", "M", "B", "T"];
@@ -16,10 +49,10 @@ const commarize = (value) => {
 const backgroundPlugin = {
   id: 'customCanvasBackgroundColor',
   beforeDraw: (chart, args, options) => {
-    const {ctx} = chart;
+    const { ctx } = chart;
     ctx.save();
     ctx.globalCompositeOperation = 'destination-over';
-    ctx.fillStyle = options.color || '#99ffff';
+    ctx.fillStyle = options.color || '#FFFFFF';
     ctx.fillRect(0, 0, chart.width, chart.height);
     ctx.restore();
   }
@@ -63,6 +96,15 @@ const backgroundColors = [blue.light, red.light, purple.light, brown.light, gree
 
 const lineColors = [blue.line, red.line, purple.line, brown.line, green.line];
 
+// const barOptions = {
+//   scales: {
+//     y: {
+//       grace: "30%",
+//       beginAtZero: false,
+//     }
+//   }
+// };
+
 const options = {
   responsive: true,
   resizeDelay: 500,
@@ -82,10 +124,12 @@ const options = {
   },
   scales: {
     y: {
+      type: "linear",
       grid: { color: gridColor }, 
       title: { display: true, padding: { top: 0, bottom: 0 }  },
       // title: { display: () => size.width <= 500, padding: { top: 0, bottom: 0 }  }, 
-
+      grace: '25%', 
+      beginAtZero: true,
       ticks: { display: true, callback: (value) => commarize(value) }
     },
     x: {
@@ -108,10 +152,12 @@ export default {
     }
   },
   bar: {
+    plugins: [backgroundPlugin],
     options: {
       responsive: true,
       resizeDelay: 500,
       ...options,
+      // ...barOptions,
     }
   },
   line: {
@@ -127,3 +173,4 @@ export default {
     }
   }
 };
+

@@ -8,6 +8,14 @@ html {
 
   /* yellow? #ffe88d*/
 
+  --mo-yellow-100: hsl(55, 100%, 80%);
+  --mo-yellow-200: hsl(55, 95%, 75%);
+  --mo-yellow-300: hsl(55, 90%, 70%);
+  --mo-yellow-400: hsl(55, 85%, 65%);
+  --mo-yellow-500: hsl(55, 80%, 60%);
+  --mo-yellow-600: hsl(55, 75%, 55%);
+  --mo-yellow-700: hsl(55, 70%, 55%);
+
   --mo-purple-100: hsl(240, 15%, 70%);
   --mo-purple-200: hsl(240, 20%, 65%);
   --mo-purple-300: hsl(240, 15%, 45%);

@@ -53,6 +53,10 @@ export default class MoChart extends MoComponent {
     this.#chart.state = chart;
   }
 
+  get chartEl() {
+    return this.#chartEl;
+  }
+
   /** @type {MoModal} */
   get modal() {
     return this.getBySearch("mo-modal");
@@ -102,7 +106,7 @@ export default class MoChart extends MoComponent {
     if (this.chart.type.toLowerCase() === "line") {
       colors = { borderColor: this.enums.line.borderColor[0], backgroundColor: this.enums.line.backgroundColor[0]}
     } else if (this.chart.live && this.chart.type.toLowerCase() === "bar") {
-      this.enums.bar.options.scales.y.grace = "30%";
+      // this.enums.bar.options.scales.y.grace = "30%";
       colors = { 
         borderColor: this.enums.line.borderColor[0], 
         borderWidth: 1, 
@@ -110,9 +114,9 @@ export default class MoChart extends MoComponent {
       }
     }
     
-    if (this.chart.type.toLowerCase() === "bar") {
-      this.enums.line.options.scales.y.beginAtZero = true;
-    }
+    // if (this.chart.type.toLowerCase() === "bar") {
+    //   this.enums.line.options.scales.y.beginAtZero = true;
+    // }
 
     if (this.chart.live) {
       // this.enums.line.options.scales.y.beginAtZero = true;
@@ -129,8 +133,18 @@ export default class MoChart extends MoComponent {
             ...colors,
           }],
         },
-        options: this.enums.line.options,
-        plugins: this.enums.line.plugins,
+        options: { ...this.enums.line.options, ...this.enums.bar.options },
+        plugins: [{
+          id: 'customCanvasBackgroundColor',
+          beforeDraw: (chart, args, options) => {
+            const { ctx } = chart;
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = options.color || '#FFFFFF';
+            ctx.fillRect(0, 0, chart.width, chart.height);
+            ctx.restore();
+          }
+        }],
       });
 
       this.#startLivePoll();
@@ -148,34 +162,65 @@ export default class MoChart extends MoComponent {
           }],
         },
         options: this.enums.line.options,
-        plugins: this.enums.line.plugins,
+        plugins: [{
+          id: 'customCanvasBackgroundColor',
+          beforeDraw: (chart, args, options) => {
+            const { ctx } = chart;
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-over';
+            ctx.fillStyle = options.color || '#FFFFFF';
+            ctx.fillRect(0, 0, chart.width, chart.height);
+            ctx.restore();
+          }
+        }],
       });
     }
   }
 
   async #startLivePoll() {
+    let minHeight = null;
+    let maxHeight = null;
+
     this.addInterval(5000, async () => {
       const [label, data] = await this.#getLiveRecord();
+
+      if (minHeight === null || maxHeight === null) {
+        minHeight = (Math.ceil(data / 5) * 5) - 5;
+        maxHeight = (Math.floor(data / 5) * 5) + 5;
+      } else if (data >= maxHeight) {
+        maxHeight = (Math.floor(data / 5) * 5) + 5;
+      }
 
       if (this.#chartEl.data.datasets[0].data.length >= 15) {
         this.#chartEl.data.labels.shift();
         this.#chartEl.data.datasets[0].data.shift();
+        
+        const nextMin = this.#chartEl.data.datasets[0].data[0];
+  
+        if (nextMin + 20 <= maxHeight) {
+          minHeight = (Math.ceil(nextMin / 5) * 5) - 5;
+        }
       }
   
       this.#chartEl.data.labels.push(label);
       this.#chartEl.data.datasets[0].data.push(data);
 
+      this.#chartEl.config.options.scales.y.min = minHeight;
+      this.#chartEl.config.options.scales.y.max = maxHeight;
+
+
       this.#chartEl.update();
-    })
+    });
   }
 
+  /** @returns {[string, number]} */
   async #getLiveRecord() {
     const [res, data] = await this.#mobject.get(`live?sourceId=${this.chart.source.sourceId}`);
     
-    const label = new Date().toLocaleString();
+    const label = new Date().toLocaleTimeString("en-US", { timeStyle: "medium" })
     const key = this.#getValueKey(data);
 
-    return res.ok ? [label, data[key]] : []
+    return res.ok ? [label, data[key]] : [label, 0]
   }
 
   #getXtitle() {

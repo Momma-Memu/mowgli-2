@@ -39,6 +39,10 @@ export default class MoNav extends MoComponent {
     return this.getByClass("company-name")
   }
 
+  get modals() {
+    return this.getElementsByName("mo-modal");
+  }
+
   connectedCallback() {
     this.form = this.session.buildForm();
     this.modalBody.appendChild(this.form);
